@@ -34,7 +34,7 @@ public class MakeBowlerFirmware {
 		return contents;
 	}
 	private static void writeFile(String filename, String contents) throws IOException{
-		  // Create file 
+		  System.out.println("Writing file: "+filename);
 		  FileWriter fstream = new FileWriter(filename);
 		  BufferedWriter out = new BufferedWriter(fstream);
 		  out.write(contents);
@@ -51,23 +51,21 @@ public class MakeBowlerFirmware {
 			String oFilename = "BowlerFirmware";
 			ArrayList<String> cores = new ArrayList<String>();
 			for(int i=0;i<args.length;i++){
-				if(args[i].toLowerCase().contains("-pic")){
+				if(args[i].toLowerCase().contains("--pic")){
 					String filename = args[i+1].substring(0,args[i+1].indexOf("."));
-					System.out.println("Making file: "+filename+".xml");
 					String hexContents =  readFile(filename+".hex");
 					cores.add( XmlSkeleton.getPic(0, hexContents));
 				}
-				if(args[i].toLowerCase().contains("-avr")){
+				if(args[i].toLowerCase().contains("--avr")){
 					String filename = args[i+1].substring(0,args[i+1].indexOf("."));
-					System.out.println("Making file: "+filename+".xml");
 					String hexContents =  readFile(filename+".hex");
 					cores.add(XmlSkeleton.getAvr(1, hexContents));						
 				}
-				if(args[i].toLowerCase().contains("-output")){
+				if(args[i].toLowerCase().contains("--output")){
 					oFilename = args[i+1].substring(0,args[i+1].indexOf("."));
 				}
-				if(args[i].toLowerCase().contains("-revision")){
-					oFilename = args[i+1];
+				if(args[i].toLowerCase().contains("--rev")){
+					revision = args[i+1];
 				}
 			}
 			String xmlContents = XmlSkeleton.getTop(revision);
