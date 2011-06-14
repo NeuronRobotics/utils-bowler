@@ -5,8 +5,8 @@
  *      Author: hephaestus
  */
 
-#include "Compiler.h"
-#include "GenericTypeDefs.h"
+#include "p32xxxx.h"
+#include "plib.h"
 
 	#define initLed()		LATE = 0xFFF0; TRISE = 0xFFF0;
 	#define initButton() 	((_TRISE7)=1)

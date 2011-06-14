@@ -1,4 +1,4 @@
-INCLUDE="/home/hephaestus/.wine/drive_c/Microchip Solutions/Microchip/Include/"
+INCLUDE="/home/hephaestus/.wine/drive_c/Program Files/Microchip/MPLAB C32/pic32mx/include/"
 
 all: xml
 	echo OK
