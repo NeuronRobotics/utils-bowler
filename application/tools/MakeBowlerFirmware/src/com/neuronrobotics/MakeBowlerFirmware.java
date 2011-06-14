@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class MakeBowlerFirmware {
 	private static String readFile(String filename) throws IOException{
@@ -46,29 +47,35 @@ public class MakeBowlerFirmware {
 	public static void main(String[] args) {
 		System.out.println("Making Bowler Firmware");
 		try{
+			String revision = "1.0.0";
+			String oFilename = "BowlerFirmware";
+			ArrayList<String> cores = new ArrayList<String>();
 			for(int i=0;i<args.length;i++){
 				if(args[i].toLowerCase().contains("-pic")){
 					String filename = args[i+1].substring(0,args[i+1].indexOf("."));
 					System.out.println("Making file: "+filename+".xml");
 					String hexContents =  readFile(filename+".hex");
-					String xmlContents = XmlSkeleton.getTop("1.0.0");
-					xmlContents += XmlSkeleton.getPic(0, hexContents);
-					xmlContents += XmlSkeleton.getBottom();
-					writeFile(filename+".xml", xmlContents);
-					return;
+					cores.add( XmlSkeleton.getPic(0, hexContents));
 				}
 				if(args[i].toLowerCase().contains("-avr")){
 					String filename = args[i+1].substring(0,args[i+1].indexOf("."));
 					System.out.println("Making file: "+filename+".xml");
 					String hexContents =  readFile(filename+".hex");
-					String xmlContents = XmlSkeleton.getTop("1.0.0");
-					xmlContents += XmlSkeleton.getAvr(0, hexContents);
-					xmlContents += XmlSkeleton.getBottom();
-					writeFile(filename+".xml", xmlContents);
-					return;
+					cores.add(XmlSkeleton.getAvr(1, hexContents));						
+				}
+				if(args[i].toLowerCase().contains("-output")){
+					oFilename = args[i+1].substring(0,args[i+1].indexOf("."));
+				}
+				if(args[i].toLowerCase().contains("-revision")){
+					oFilename = args[i+1];
 				}
 			}
-			throw new RuntimeException();
+			String xmlContents = XmlSkeleton.getTop(revision);
+			for(String c:cores){
+				xmlContents+=c;
+			}
+			xmlContents += XmlSkeleton.getBottom();
+			writeFile(oFilename+".xml", xmlContents);
 		}catch(Exception e){
 			System.err.println("Usage: \n {-pic firmware.hex} {-avr firmware2.hex}");
 		}
