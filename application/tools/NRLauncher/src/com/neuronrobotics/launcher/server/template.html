@@ -3,9 +3,19 @@
 		<title>Neuron Robotics Launcher</title>
 	</head>
 	<body>
+		
 		<h1>Select a file to run:</h1>
 		
-		<form class="link" action="" method="post">
+		<form action="upload"enctype="multipart/form-data" method="post">
+			<p>Upload a ner .JAR file:<br>
+				<input type="file" name="datafile" size="40">
+			</p>
+			<div>
+				<input type="submit" value="Send">
+			</div>
+		</form>
+		
+		<form class="link" action="control" method="post">
 		    <div>
 		    	<p>
 					<p><input type="radio" name="JarSel" value="one.jar" > one.jar</input></p>
@@ -14,13 +24,17 @@
 				</p>
 				<p>
 					<input type="submit" name="Run" value="Run" />
-					<input type="submit" name="Stop" value="Stop" />
 				</p>
 
 		    </div>
 		</form>
 		<p>
 			<textarea name="output" rows="10" cols="50">Output from jar...</textarea>
+			<form class="link" action="" method="post">
+				<div>
+					<input type="submit" name="Refresh" value="Refresh" />
+				</div>
+			</form>
 		</p>
 	</body>
 </html>

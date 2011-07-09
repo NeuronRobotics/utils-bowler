@@ -15,8 +15,9 @@ public class LauncherWindow extends JFrame {
 	private static final long serialVersionUID = -5668856972512694750L;
 	private RunnerWidget runner;
 	private JScrollPane scrollPanel;
+	private String launchDirectory =".";
 	public LauncherWindow (String launchDir){
-		
+		launchDirectory=launchDir;
 		runner = new RunnerWidget(this,launchDir);
 		getContentPane().addHierarchyBoundsListener(new HierarchyBoundsListener(){
 			@Override
@@ -43,5 +44,11 @@ public class LauncherWindow extends JFrame {
 	}
 	public void refresh() {
 		runner.refreshJars();
+	}
+	public void setLaunchDirectory(String launchDirectory) {
+		this.launchDirectory = launchDirectory;
+	}
+	public String getLaunchDirectory() {
+		return launchDirectory;
 	}
 }

@@ -3,11 +3,13 @@ package com.neuronrobotics.launcher.server;
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import com.neuronrobotics.launcher.NRLauncher;
+import com.neuronrobotics.sdk.common.ByteList;
 
 
 public class ServerApp extends Thread{
@@ -32,18 +34,39 @@ public class ServerApp extends Thread{
 			if(dis != null && dos != null) {
 				try {
 					if(dis.available()>0) {
-						dis.read(b);
-						incoming = new String(b);
-						System.out.println("Server got:\r\n"+incoming);
+						ByteList bl = new ByteList();
+						do{
+							int read = dis.read(b);
+							for(int i=0;i<read;i++){
+								bl.add(b[i]);
+							}
+						}while(dis.available()>0);
+						incoming = new String(bl.getBytes());
+						
+						//System.out.println("Server got:\r\n"+incoming);
 						if(incoming.contains("GET /")) {
-							//System.out.println("Sending Image:\r\n"+incoming);
-							while(dis.available()>0)
-								dis.read(b);
 
-						}else {
-							System.out.println("Not a refresh:\r\n"+incoming);
+						}else if(incoming.contains("POST /control")){
+							System.out.println(incoming);
+						}else if(incoming.contains("POST /upload")){
+							int headIndex = incoming.indexOf("\r\n\r\n")+4;
+
+							int bodyIndex = incoming.substring(headIndex).indexOf("\r\n\r\n")+2+headIndex;
+							byte [] jar = bl.getBytes(bodyIndex);
+							String head = incoming.substring(0,bodyIndex);
+							System.out.println("Jar length: "+jar.length);
+							System.out.println("##Upload is coming: \n"+head);
+							int startOfFileName = head.indexOf("filename=\"")+"filename=\"".length();
+							int endOfFilename  = head.indexOf("filename=\"");
+							String fileName = head.substring(startOfFileName,endOfFilename);
+							FileOutputStream fos = new FileOutputStream(launcher.getWindow().getLaunchDirectory()+"/uploaded.jar");
+							fos.write(jar);
+							fos.flush();
+							fos.close(); 
+							
+						}else{
+							System.out.println(incoming);
 						}
-						System.out.println("Server sending:\r\n"+getContent());	
 						dos.writeBytes(getContent());
 						dos.flush();
 					}
@@ -64,14 +87,15 @@ public class ServerApp extends Thread{
 	}
 	public String getBody(){
 		String s="";
-		InputStream is = ServerApp.class.getResourceAsStream( "template.html");
-		BufferedReader br = new BufferedReader(new InputStreamReader(is));
-		String line;
+		
 		try {
+			InputStream is = ServerApp.class.getResourceAsStream( "template.html");
+			BufferedReader br = new BufferedReader(new InputStreamReader(is));
+			String line;
 			while (null != (line = br.readLine())) {
 			     s+=line+"\r\n";
 			}
-		} catch (IOException e) {
+		} catch (Exception e) {
 		}
 
 		return	s;

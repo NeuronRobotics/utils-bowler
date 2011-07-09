@@ -16,7 +16,7 @@ import com.neuronrobotics.launcher.NRLauncher;
 public class NRLauncherServer {
 	
 	private static String address;
-	private  int port=8081;
+	private  int port=8888;
 	private ServerSocket tcpSock = null;
 	private DataInputStream dis=null;
 	private DataOutputStream dos=null;
