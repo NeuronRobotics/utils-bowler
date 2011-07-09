@@ -1,8 +1,14 @@
 package com.neuronrobotics.launcher.server;
 
+import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
+import com.neuronrobotics.launcher.NRLauncher;
+
 
 public class ServerApp extends Thread{
 	private DataInputStream dis=null;
@@ -11,11 +17,15 @@ public class ServerApp extends Thread{
 	private String incoming;
 	private byte [] b = new byte[1024];
 	boolean run = true;
-	
+	NRLauncher launcher;
 	private String header = "HTTP/1.0 200 OK\r\n"+
 							"Content-Type: text/html; charset=ISO-8859-1\r\n"+
 							"Content-Length: ";
 	
+	public ServerApp(NRLauncher l) {
+		launcher = l;
+	}
+
 	public void run(){
 		//System.out.println("Server starting");
 		while(run){
@@ -29,14 +39,13 @@ public class ServerApp extends Thread{
 							//System.out.println("Sending Image:\r\n"+incoming);
 							while(dis.available()>0)
 								dis.read(b);
-							
-							System.out.println("Server sending:\r\n"+getContent());	
-							dos.writeBytes(getContent());
-							dos.flush();
 
 						}else {
-							//System.out.println("Fail:\r\n"+incoming);
+							System.out.println("Not a refresh:\r\n"+incoming);
 						}
+						System.out.println("Server sending:\r\n"+getContent());	
+						dos.writeBytes(getContent());
+						dos.flush();
 					}
 				} catch (IOException e) {
 				}
@@ -54,14 +63,18 @@ public class ServerApp extends Thread{
 		return header+b.length()+"\r\n\r\n"+b;
 	}
 	public String getBody(){
-		return	"<html><head>\r\n"+
-				"<title>200 Ok</title>\r\n"+
-				"</head><body>\r\n"+
-				"<h1>200 ok</h1>\r\n"+
-				"<p>Everything is ok<br />\r\n"+
-				"</p>\r\n"+
-				"<hr>\r\n"+
-				"</body></html>\r\n";
+		String s="";
+		InputStream is = ServerApp.class.getResourceAsStream( "template.html");
+		BufferedReader br = new BufferedReader(new InputStreamReader(is));
+		String line;
+		try {
+			while (null != (line = br.readLine())) {
+			     s+=line+"\r\n";
+			}
+		} catch (IOException e) {
+		}
+
+		return	s;
 	}
 
 	public void kill(){

@@ -10,25 +10,28 @@ import java.net.Socket;
 import java.net.URL;
 import java.util.Enumeration;
 
+import com.neuronrobotics.launcher.NRLauncher;
+
 
 public class NRLauncherServer {
 	
 	private static String address;
-	private  int port=8080;
+	private  int port=8081;
 	private ServerSocket tcpSock = null;
 	private DataInputStream dis=null;
 	private DataOutputStream dos=null;
 	private TCPConnectionManager tcp = null;
 	private ServerApp serve = null;
 	
-	public NRLauncherServer() throws IOException{
+	public NRLauncherServer(NRLauncher l) throws IOException{
 		setTCPSocket(port);
 		tcp = new TCPConnectionManager(this);
 		tcp.start();
-		serve = new  ServerApp ();
+		serve = new  ServerApp (l);
 		serve.start();
 	}
-	
+
+
 	public void kill(){
 		if(tcp != null){
 			tcp.kill();
@@ -107,8 +110,9 @@ public class NRLauncherServer {
 	public static void main(String args []){
 		System.out.println("Starting Launcher Server");
 		try {
-			new NRLauncherServer();
-		} catch (IOException e) {
+			NRLauncher l =new NRLauncher(args[0]);
+			new NRLauncherServer(l);
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			System.exit(1);

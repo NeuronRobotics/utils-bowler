@@ -8,22 +8,23 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 public class NRLauncher {
+	private LauncherWindow window;
 	public NRLauncher(String args) throws InterruptedException{
 		File f = new File(args);
 		if(!f.exists() || !f.isDirectory()){
 			throw new RuntimeException("Directory does not exist!"+f.getAbsolutePath());
 		}
 		System.out.println("Starting with jar directory: "+f.getAbsolutePath());
-		LauncherWindow window = new LauncherWindow(args);
+		 setWindow(new LauncherWindow(args));
 		//window.setSize(new Dimension(300,200));
 		//window.setExtendedState(Frame.MAXIMIZED_BOTH);
-		window.pack();
-		reSize(window);
+		getWindow().pack();
+		reSize(getWindow());
 		//window.setUndecorated(true); 
-		window.setVisible(true);
-		window.repaint();
-		window.refresh();
-		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		getWindow().setVisible(true);
+		getWindow().repaint();
+		getWindow().refresh();
+		getWindow().setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 	}
 	private void reSize(JFrame f){
@@ -44,6 +45,12 @@ public class NRLauncher {
 			System.exit(0);
 		}
 
+	}
+	private void setWindow(LauncherWindow window) {
+		this.window = window;
+	}
+	public LauncherWindow getWindow() {
+		return window;
 	}
 
 }
