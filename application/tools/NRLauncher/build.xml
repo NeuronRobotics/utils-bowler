@@ -73,6 +73,7 @@
         <include name="**/*.class"/>
       	<include name="**/*.png"/>
       	<include name="**/*.xml"/>
+      	<include name="**/*.html"/>
       	<include name="**/*.properties"/>
         <exclude name="test/*.class"/>
       </fileset>
