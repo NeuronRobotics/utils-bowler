@@ -1,22 +1,25 @@
 package com.neuronrobotics.launcher.server;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.util.StringTokenizer;
 
 import com.neuronrobotics.launcher.NRLauncher;
 import com.neuronrobotics.sdk.common.ByteList;
+import com.neuronrobotics.sdk.util.ThreadUtil;
 
 
 public class ServerApp extends Thread{
 	private DataInputStream dis=null;
 	private DataOutputStream dos=null;
 	
-	private String incoming;
 	private byte [] b = new byte[1024];
 	boolean run = true;
 	NRLauncher launcher;
@@ -36,36 +39,94 @@ public class ServerApp extends Thread{
 					if(dis.available()>0) {
 						ByteList bl = new ByteList();
 						do{
-							int read = dis.read(b);
-							for(int i=0;i<read;i++){
-								bl.add(b[i]);
-							}
+							bl.add(dis.read());
 						}while(dis.available()>0);
-						incoming = new String(bl.getBytes());
 						
-						//System.out.println("Server got:\r\n"+incoming);
-						if(incoming.contains("GET /")) {
+						String currentLine = null, filename = null, contentLength = null;
+						PrintWriter fout = null;
+						BufferedReader inFromClient = new BufferedReader(new InputStreamReader (new ByteArrayInputStream(bl.getBytes())));						
+						currentLine = inFromClient.readLine();
 
-						}else if(incoming.contains("POST /control")){
-							System.out.println(incoming);
-						}else if(incoming.contains("POST /upload")){
-							int headIndex = incoming.indexOf("\r\n\r\n")+4;
+						System.out.println(currentLine);
+						
 
-							int bodyIndex = incoming.substring(headIndex).indexOf("\r\n\r\n")+2+headIndex;
-							byte [] jar = bl.getBytes(bodyIndex);
-							String head = incoming.substring(0,bodyIndex);
-							System.out.println("Jar length: "+jar.length);
-							System.out.println("##Upload is coming: \n"+head);
-							int startOfFileName = head.indexOf("filename=\"")+"filename=\"".length();
-							int endOfFilename  = head.indexOf("filename=\"");
-							String fileName = head.substring(startOfFileName,endOfFilename);
-							FileOutputStream fos = new FileOutputStream(launcher.getWindow().getLaunchDirectory()+"/uploaded.jar");
-							fos.write(jar);
-							fos.flush();
-							fos.close(); 
-							
-						}else{
-							System.out.println(incoming);
+						if(currentLine .contains("GET /")) {
+
+						}else if(currentLine .contains("POST /control")){
+							System.out.println(currentLine );
+						}else if(currentLine.contains("POST /upload")){
+							System.out.println("POST request"); 
+							boolean haveLen = false;
+							boolean haveBound = false;
+							boolean haveName = false;
+							String boundary="";
+							do {
+								currentLine = inFromClient.readLine();
+								if(currentLine.indexOf("Content-Length:") != -1){
+						    		contentLength = currentLine.split(" ")[1];
+							  		System.out.println("Content Length = " + contentLength);
+							  		haveLen=true;
+						    	}
+						    	if(currentLine.indexOf("Content-Type: multipart/form-data") != -1){
+						    		boundary = currentLine.split("boundary=")[1];
+						    		haveBound=true;
+						    	}
+								if (currentLine.indexOf("--" + boundary) != -1) {
+									filename = inFromClient.readLine().split("filename=")[1].replaceAll("\"", ""); 				  			 		
+									String [] filelist = filename.split("\\" + System.getProperty("file.separator"));
+									filename = filelist[filelist.length - 1];				  		
+									System.out.println("File to be uploaded = " + filename);
+									break;
+								}
+							}while((!haveBound && !haveLen & !haveName) && inFromClient.ready());
+
+//							do{
+//							    if ((currentLine.indexOf("Content-Type: multipart/form-data") != -1) || (currentLine.indexOf("Content-Length:") != -1))  {
+//							    	
+//				  			 
+//							    	if( !(haveBound && haveLen)){
+//							    		break;
+//							    	}
+//								  
+//								  
+//									while (true) {
+//										currentLine = inFromClient.readLine();
+//										if (currentLine.indexOf("--" + boundary) != -1) {
+//											filename = inFromClient.readLine().split("filename=")[1].replaceAll("\"", ""); 				  			 		
+//											String [] filelist = filename.split("\\" + System.getProperty("file.separator"));
+//											filename = filelist[filelist.length - 1];				  		
+//											System.out.println("File to be uploaded = " + filename);
+//											break;
+//										}				  	
+//									}
+//
+//									String fileContentType = inFromClient.readLine().split(" ")[1];
+//									System.out.println("File content type = " + fileContentType);
+//
+//									inFromClient.readLine(); //assert(inFromClient.readLine().equals("")) : "Expected line in POST request is "" ";
+//									
+//									fout = new PrintWriter(launcher.getWindow().getLaunchDirectory()+"/UPLOADED_"+filename);
+//									String prevLine = inFromClient.readLine();
+//									currentLine = inFromClient.readLine();			  
+//									
+//									//Here we upload the actual file contents
+//									while (true) {
+//										if (currentLine.equals("--" + boundary + "--")) {
+//											fout.print(prevLine);
+//											break;
+//										}
+//										else {
+//											fout.println(prevLine);
+//										}	
+//										prevLine = currentLine;			  		
+//										currentLine = inFromClient.readLine();
+//									}
+//									fout.close();				   
+//								} else{
+//									//System.out.println(currentLine);
+//								}
+//							}while (inFromClient.ready()); //End of do-while 
+							System.out.println("File uploaded!");
 						}
 						dos.writeBytes(getContent());
 						dos.flush();
