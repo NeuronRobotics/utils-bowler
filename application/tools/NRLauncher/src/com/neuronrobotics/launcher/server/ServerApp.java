@@ -47,7 +47,8 @@ public class ServerApp{
 "	<body>\n"+
 		
 "		<h1>Neuron Robotics Launcher</h1>\n"+
-		
+
+"		<link rel=\"shortcut icon\" HREF=\"http://media.neuronrobotics.com/favicon.ico\">\n"+
 "		<form action=\"upload\"enctype=\"multipart/form-data\" method=\"post\">\n"+
 "			<p>Upload a new .JAR file:<br>\n"+
 "				<input type=\"file\" name=\"datafile\" size=\"40\">\n"+
@@ -80,7 +81,7 @@ public class ServerApp{
 	}
 	
 	private String getJarRadio(String name){
-		return "<p><input type=\"radio\" name=\"JarSel\" value=\""+name+"\" >"+name+"</input></p>";
+		return "\n<p><input type=\"radio\" name=\"JarSel\" value=\""+name+"\" >"+name+"</input></p>";
 	}
 	private String getRunStop(){
 		if(isRunning()){
