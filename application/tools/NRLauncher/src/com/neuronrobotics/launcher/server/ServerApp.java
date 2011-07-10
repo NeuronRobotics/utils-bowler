@@ -46,7 +46,7 @@ public class ServerApp{
 "	</head>\n"+
 "	<body>\n"+
 		
-"		<h1>Select a file to run:</h1>\n"+
+"		<h1>Neuron Robotics Launcher</h1>\n"+
 		
 "		<form action=\"upload\"enctype=\"multipart/form-data\" method=\"post\">\n"+
 "			<p>Upload a new .JAR file:<br>\n"+
