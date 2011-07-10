@@ -4,6 +4,7 @@ import java.io.IOException;
 import com.neuronrobotics.launcher.NRLauncher;
 import com.neuronrobotics.launcher.server.servlet.ControlServlet;
 import com.neuronrobotics.launcher.server.servlet.GetUiServlet;
+import com.neuronrobotics.launcher.server.servlet.UploadServlet;
 
 
 public class NRLauncherServer {
@@ -42,8 +43,9 @@ public class NRLauncherServer {
 		//srv.addDefaultServlets(null); // optional file servlet
 		//srv.addServlet("/myservlet", new MyServlet()); // optional
 		ServerApp manager = new ServerApp(l);
-		srv.addServlet("/", new GetUiServlet(manager)); // optional
-		srv.addServlet("/control", new ControlServlet(manager)); // optional
+		srv.addServlet("/", new GetUiServlet(manager)); // 
+		srv.addServlet("/control", new ControlServlet(manager)); // 
+		srv.addServlet("/upload", new UploadServlet(manager)); // 
 		
 		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
 			public void run() {

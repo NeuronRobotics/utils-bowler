@@ -17,15 +17,15 @@ public class GetUiServlet extends HttpServlet{
 	 * 
 	 */
 	private static final long serialVersionUID = -292827055777011528L;
-
-	public GetUiServlet(ServerApp manager) {
-		// TODO Auto-generated constructor stub
+	ServerApp manager;
+	public GetUiServlet(ServerApp m) {
+		manager=m;
 	}
 
 	@Override
 	protected void doGet(HttpServletRequest req,HttpServletResponse resp)throws ServletException, IOException{
 		PrintWriter out = resp.getWriter();
-		out.print(ServerApp.getBody());
+		out.print(manager.getBody());
 	}
 
 }

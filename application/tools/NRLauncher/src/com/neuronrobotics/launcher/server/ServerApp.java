@@ -18,16 +18,17 @@ import com.neuronrobotics.sdk.util.ThreadUtil;
 
 public class ServerApp{
 	boolean run = true;
-	private static NRLauncher launcher;
+	private NRLauncher launcher;
 
 	
 	public ServerApp(NRLauncher l) {
 		launcher = l;
 	}
-	
-	public static String getBody(){
+	public String getLaunchDirectory(){
+		return launcher.getWindow().getLaunchDirectory();
+	}
+	public String getBody(){
 		String s="";
-		
 		try {
 			InputStream is = ServerApp.class.getResourceAsStream( "template.html");
 			BufferedReader br = new BufferedReader(new InputStreamReader(is));

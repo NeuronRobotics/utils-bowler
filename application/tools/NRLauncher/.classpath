@@ -13,5 +13,7 @@
 	<classpathentry kind="lib" path="WebServer/lib/servlet.jar"/>
 	<classpathentry kind="lib" path="WebServer/lib/war.jar"/>
 	<classpathentry kind="lib" path="WebServer/lib/webserver.jar"/>
+	<classpathentry kind="lib" path="commons-fileupload-1.2.2-src/commons-io-2.0.1.jar"/>
+	<classpathentry kind="lib" path="commons-fileupload-1.2.2-src/portlet-api-2.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

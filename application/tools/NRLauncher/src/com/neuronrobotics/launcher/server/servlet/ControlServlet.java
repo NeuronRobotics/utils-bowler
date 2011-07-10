@@ -1,19 +1,32 @@
 package com.neuronrobotics.launcher.server.servlet;
 
-import javax.servlet.http.HttpServlet;
+import java.io.IOException;
+import java.io.PrintWriter;
 
-import com.neuronrobotics.launcher.NRLauncher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import com.neuronrobotics.launcher.server.ServerApp;
 
 public class ControlServlet extends HttpServlet {
-
-	public ControlServlet(ServerApp manager) {
-		// TODO Auto-generated constructor stub
-	}
-
+	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -9038751269579917469L;
+
+	
+	ServerApp manager;
+	public ControlServlet(ServerApp m) {
+		manager=m;
+	}
+	@Override
+	protected void doPost(HttpServletRequest req,HttpServletResponse resp)throws ServletException, IOException{
+		System.out.println("Control called");
+		PrintWriter out = resp.getWriter();
+		out.print(manager.getBody());
+	}
 
 }
