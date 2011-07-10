@@ -4,6 +4,8 @@ package com.neuronrobotics.launcher;
 import java.awt.Dimension;
 import java.awt.event.HierarchyBoundsListener;
 import java.awt.event.HierarchyEvent;
+import java.util.ArrayList;
+
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 
@@ -51,4 +53,27 @@ public class LauncherWindow extends JFrame {
 	public String getLaunchDirectory() {
 		return launchDirectory;
 	}
+	public ArrayList<String> getJarNames(){
+		return runner.getJarNames();
+	}
+	public ArrayList<String> getShortJarNames() {
+		// TODO Auto-generated method stub
+		return runner.getShortJarNames();
+	}
+	public boolean isRunning(){
+		return runner.isRunning();
+	}
+	public void selectJar(String name){
+		
+	}
+	public void refreshJars(){
+		runner.refreshJars();
+	}
+	public String getJarOutput(){
+		if(!isRunning()){
+			return "No jar running...";
+		}else
+			return "Running";
+	}
+	
 }

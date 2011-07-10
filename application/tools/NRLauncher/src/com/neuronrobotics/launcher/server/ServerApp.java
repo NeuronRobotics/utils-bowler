@@ -38,8 +38,67 @@ public class ServerApp{
 			}
 		} catch (Exception e) {
 		}
+		
+		try{
+			String html = "<html>\n"+
+"	<head>\n"+
+"		<title>Neuron Robotics Launcher</title>\n"+
+"	</head>\n"+
+"	<body>\n"+
+		
+"		<h1>Select a file to run:</h1>\n"+
+		
+"		<form action=\"upload\"enctype=\"multipart/form-data\" method=\"post\">\n"+
+"			<p>Upload a ner .JAR file:<br>\n"+
+"				<input type=\"file\" name=\"datafile\" size=\"40\">\n"+
+"				<input type=\"submit\" value=\"Send\">\n"+
+"			</p>\n"+
+"		</form>\n";
+			html+=getJarForm();
+			html+=getOutputBox(launcher.getWindow().getJarOutput());
+			html+="\n</body></html>";
+			s=html;
+		}catch(Exception e){
+			e.printStackTrace();
+		}
 
 		return	s;
+	
 	}
-
+	
+	private String getJarForm(){
+		String s="<form class=\"link\" action=\"control\" method=\"post\">\n"+
+"		      <div>\n"+
+"		    	<p>\n";
+		for(String j:launcher.getWindow().getShortJarNames()){
+			s+=getJarRadio(j);
+		}
+		s+="</p>\n";
+		s+=getRunStop(launcher.getWindow().isRunning());
+		s+="\n</div>\n</form>\n";
+		return s;
+	}
+	
+	private String getJarRadio(String name){
+		return "<p><input type=\"radio\" name=\"JarSel\" value=\""+name+"\" >"+name+"</input></p>";
+	}
+	private String getRunStop(boolean running){
+		if(running){
+			return "<p><input type=\"submit\" name=\"Stop\" value=\"Stop\" /></p>";
+		}else
+			return "<p><input type=\"submit\" name=\"Run\" value=\"Run\" /></p>";
+	}
+	private String getOutputBox(String content){
+		return "<p>\n"+
+"					<textarea name=\"output\" rows=\"10\" cols=\"50\">"+content+"</textarea>\n"+
+"					<form class=\"link\" action=\"\" method=\"post\">\n"+
+"						<div>\n"+
+"							<input type=\"submit\" name=\"Refresh\" value=\"Refresh\" />\n"+
+"						</div>\n"+
+"					</form>\n"+
+"				</p>";
+	}
+	public void refresh() {
+		launcher.getWindow().refreshJars();
+	}
 }

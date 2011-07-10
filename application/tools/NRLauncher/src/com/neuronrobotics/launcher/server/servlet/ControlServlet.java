@@ -28,5 +28,10 @@ public class ControlServlet extends HttpServlet {
 		PrintWriter out = resp.getWriter();
 		out.print(manager.getBody());
 	}
+	@Override
+	protected void doGet(HttpServletRequest req,HttpServletResponse resp)throws ServletException, IOException{
+		PrintWriter out = resp.getWriter();
+		out.print(manager.getBody());
+	}
 
 }

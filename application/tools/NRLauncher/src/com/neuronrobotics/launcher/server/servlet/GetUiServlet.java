@@ -21,6 +21,12 @@ public class GetUiServlet extends HttpServlet{
 	public GetUiServlet(ServerApp m) {
 		manager=m;
 	}
+	@Override
+	protected void doPost(HttpServletRequest req,HttpServletResponse resp)throws ServletException, IOException{
+		System.out.println("Control called");
+		PrintWriter out = resp.getWriter();
+		out.print(manager.getBody());
+	}
 
 	@Override
 	protected void doGet(HttpServletRequest req,HttpServletResponse resp)throws ServletException, IOException{

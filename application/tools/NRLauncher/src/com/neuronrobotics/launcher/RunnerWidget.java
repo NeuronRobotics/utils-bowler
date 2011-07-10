@@ -169,7 +169,7 @@ public class RunnerWidget extends JPanel {
 		refreshJars();
 	}
 	
-	private ArrayList<String> getJarNames(){
+	public ArrayList<String> getJarNames(){
 		ArrayList<String> tmp = new  ArrayList<String> ();
 		File dir = new File(getLaunchDir());
 
@@ -186,6 +186,23 @@ public class RunnerWidget extends JPanel {
 		}
 		return tmp;
 	}
+	public ArrayList<String> getShortJarNames() {
+		ArrayList<String> tmp = new  ArrayList<String> ();
+		File dir = new File(getLaunchDir());
+
+		String[] children = dir.list();
+		if (children == null) {
+		    // Either dir does not exist or is not a directory
+		} else {
+		    for (int i=0; i<children.length; i++) {
+		        if(children[i].contains(".jar") && !children[i].contains("nr-console.jar")){
+		        	tmp.add(children[i]);
+		        }
+
+		    }
+		}
+		return tmp;
+	}
 	public void refreshJars(){
 		System.out.println("Refreshing...");
 		clearFile();
@@ -193,7 +210,7 @@ public class RunnerWidget extends JPanel {
 		jarPanel.removeAll();
 		JPanel control = new JPanel(new MigLayout());
 		//control.add(refresh,"wrap");
-		jars.add(new JarWidget(this, "/usr/local/NeuronRobotics/RDK/bin/nr-console.jar"));
+		//jars.add(new JarWidget(this, "/usr/local/NeuronRobotics/RDK/bin/nr-console.jar"));
 		
 		
 		ArrayList<String> tmp = getJarNames();
@@ -240,6 +257,11 @@ public class RunnerWidget extends JPanel {
 		if(getFrame().isVisible())
 			getFrame().setVisible(b);
 	}
+	
+	public void setFile(String fileName){
+		
+	}
+	
 	public void setFile(File file2) {
 		run.setEnabled(true);
 		file =file2;
@@ -281,6 +303,9 @@ public class RunnerWidget extends JPanel {
 			run.setEnabled(true);
 			stop.setEnabled(false);
 		}
+	}
+	public boolean isRunning(){
+		return isRunning;
 	}
 	private synchronized void addText(String s){
 		//System.out.print(s);
@@ -416,4 +441,6 @@ public class RunnerWidget extends JPanel {
 	public String getLaunchDir() {
 		return launchDir;
 	}
+
+	
 }

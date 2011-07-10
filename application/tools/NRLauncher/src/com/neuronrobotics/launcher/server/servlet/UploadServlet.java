@@ -67,7 +67,12 @@ public class UploadServlet extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+		manager.refresh();
+		PrintWriter out = resp.getWriter();
+		out.print(manager.getBody());
+	}
+	@Override
+	protected void doGet(HttpServletRequest req,HttpServletResponse resp)throws ServletException, IOException{
 		PrintWriter out = resp.getWriter();
 		out.print(manager.getBody());
 	}
