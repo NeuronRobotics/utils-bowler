@@ -1,5 +1,0 @@
-Release 1.81
-
-The release contains minor code improvement.
-Perhaps next release will be greater and introduces clustering configuration.
-  
