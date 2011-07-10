@@ -1,112 +1,64 @@
 package com.neuronrobotics.launcher.server;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.URL;
-import java.util.Enumeration;
-
 import com.neuronrobotics.launcher.NRLauncher;
+import com.neuronrobotics.launcher.server.servlet.ControlServlet;
+import com.neuronrobotics.launcher.server.servlet.GetUiServlet;
 
 
 public class NRLauncherServer {
-	
-	private static String address;
-	private  int port=8888;
-	private ServerSocket tcpSock = null;
-	private DataInputStream dis=null;
-	private DataOutputStream dos=null;
-	private TCPConnectionManager tcp = null;
-	private ServerApp serve = null;
+
+	private  int port=8081;
+
 	
 	public NRLauncherServer(NRLauncher l) throws IOException{
-		setTCPSocket(port);
-		tcp = new TCPConnectionManager(this);
-		tcp.start();
-		serve = new  ServerApp (l);
-		serve.start();
-	}
+		//http://tjws.sourceforge.net/
+		class MyServ extends Acme.Serve.Serve {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+						// Overriding method for public access
+                        public void setMappingTable(PathTreeDictionary mappingtable) { 
+                              super.setMappingTable(mappingtable);
+                        }
+                        // add the method below when .war deployment is needed
+                        public void addWarDeployer(String deployerFactory, String throttles) {
+                              super.addWarDeployer(deployerFactory, throttles);
+                        }
+         };
 
-
-	public void kill(){
-		if(tcp != null){
-			tcp.kill();
-			tcp=null;
-		}
-		if(serve != null){
-			serve.kill();
-			serve = null;
-		}
-		try{
-			if(dos != null){
-				dos.flush();
-				dos.close();
-				dos=null;
-			}if(dis != null){
-				dis.close();
-				dis=null;
-			}	
-			if(tcpSock != null){
-				tcpSock.close();
-				tcpSock = null;
+		final MyServ srv = new MyServ();
+ 		// setting aliases, for an optional file servlet
+        Acme.Serve.Serve.PathTreeDictionary aliases = new Acme.Serve.Serve.PathTreeDictionary();
+        aliases.put("/", new java.io.File("/tmp"));
+		//  note cast name will depend on the class name, since it is anonymous class
+        srv.setMappingTable(aliases);
+		// setting properties for the server, and exchangeable Acceptors
+		java.util.Properties properties = new java.util.Properties();
+		properties.put("port",port);
+		properties.setProperty(Acme.Serve.Serve.ARG_NOHUP, "nohup");
+		srv.arguments = properties;
+		//srv.addDefaultServlets(null); // optional file servlet
+		//srv.addServlet("/myservlet", new MyServlet()); // optional
+		ServerApp manager = new ServerApp(l);
+		srv.addServlet("/", new GetUiServlet(manager)); // optional
+		srv.addServlet("/control", new ControlServlet(manager)); // optional
+		
+		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
+			public void run() {
+				try {
+					srv.notifyStop();
+				}catch(java.io.IOException ioe) {
+					
+				}
+				srv.destroyAllServlets();
 			}
-		}catch(Exception e){
-
-		}
-	}
-	private void setTCPSocket(int port) throws IOException{
-		if(tcpSock != null){
-			if(dos != null){
-				dos.flush();
-				dos.close();
-				dos=null;
-			}if(dis != null){
-				dis.close();
-				dis=null;
-			}	
-		}
-		if(port != this.port){
-			this.port = port;
-			if(tcpSock != null){
-				tcpSock.close();
-				tcpSock = null;
-			}
-		}
-		if(tcpSock == null){
-			ServerSocket serverSocket = new ServerSocket(this.port);
-			while(!serverSocket.isBound());
-			tcpSock = serverSocket;
-		}
-
+		}));
+		srv.serve();
 	}
 	
-	public static  URL getURL(){
-		URL url=null;
-		try{
-	        @SuppressWarnings("rawtypes")
-			Enumeration e = NetworkInterface.getNetworkInterfaces();
-	        while(e.hasMoreElements()){
-	        	NetworkInterface ni =(NetworkInterface)  e.nextElement();
-		        @SuppressWarnings("rawtypes")
-				Enumeration e2 = ni.getInetAddresses();
-		        while(e2.hasMoreElements()){
-		        	InetAddress ip = (InetAddress) e2.nextElement();
-		        	if(!(ip.isAnyLocalAddress() || ip.isLinkLocalAddress()||ip.isLoopbackAddress()||ip.isMulticastAddress()))
-		        		address="http://"+ip.getHostAddress()+"/"; 
-		        }
-	        }
-	       url = new URL(address);
-		}catch(Exception e){}
-		return url;
-	}
-	public static String getURLString(){
-		getURL();
-		return address;
-	}
+
 	public static void main(String args []){
 		System.out.println("Starting Launcher Server");
 		try {
@@ -118,19 +70,5 @@ public class NRLauncherServer {
 			System.exit(1);
 		}
 	}
-	public Socket accept() throws IOException {
-		if(tcpSock != null)
-			return tcpSock.accept();
-		return null;
-	}
-	public void setDataIns(DataInputStream dataInputStream) {
-		if(serve!= null)
-			serve.setDataIns(dataInputStream);
-		dis=dataInputStream;	
-	}
-	public void setDataOuts(DataOutputStream dataOutputStream) {
-		if(serve!= null)
-			serve.setDataOuts(dataOutputStream);
-		dos = dataOutputStream;
-	}
+
 }
