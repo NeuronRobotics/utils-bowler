@@ -49,7 +49,7 @@ public class ServerApp{
 "		<h1>Select a file to run:</h1>\n"+
 		
 "		<form action=\"upload\"enctype=\"multipart/form-data\" method=\"post\">\n"+
-"			<p>Upload a ner .JAR file:<br>\n"+
+"			<p>Upload a new .JAR file:<br>\n"+
 "				<input type=\"file\" name=\"datafile\" size=\"40\">\n"+
 "				<input type=\"submit\" value=\"Send\">\n"+
 "			</p>\n"+
@@ -74,7 +74,7 @@ public class ServerApp{
 			s+=getJarRadio(j);
 		}
 		s+="</p>\n";
-		s+=getRunStop(launcher.getWindow().isRunning());
+		s+=getRunStop();
 		s+="\n</div>\n</form>\n";
 		return s;
 	}
@@ -82,8 +82,8 @@ public class ServerApp{
 	private String getJarRadio(String name){
 		return "<p><input type=\"radio\" name=\"JarSel\" value=\""+name+"\" >"+name+"</input></p>";
 	}
-	private String getRunStop(boolean running){
-		if(running){
+	private String getRunStop(){
+		if(isRunning()){
 			return "<p><input type=\"submit\" name=\"Stop\" value=\"Stop\" /></p>";
 		}else
 			return "<p><input type=\"submit\" name=\"Run\" value=\"Run\" /></p>";
@@ -91,7 +91,7 @@ public class ServerApp{
 	private String getOutputBox(String content){
 		return "<p>\n"+
 "					<textarea name=\"output\" rows=\"10\" cols=\"50\">"+content+"</textarea>\n"+
-"					<form class=\"link\" action=\"\" method=\"post\">\n"+
+"					<form class=\"link\" action=\"/\" method=\"post\">\n"+
 "						<div>\n"+
 "							<input type=\"submit\" name=\"Refresh\" value=\"Refresh\" />\n"+
 "						</div>\n"+
@@ -100,5 +100,14 @@ public class ServerApp{
 	}
 	public void refresh() {
 		launcher.getWindow().refreshJars();
+	}
+	public boolean isRunning(){
+		return launcher.getWindow().isRunning();
+	}
+	public void stop() {
+		launcher.getWindow().stop();
+	}
+	public void runFile(String fileName){
+		launcher.getWindow().runFile(fileName);
 	}
 }

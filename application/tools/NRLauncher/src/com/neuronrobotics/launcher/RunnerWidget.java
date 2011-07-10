@@ -76,7 +76,7 @@ public class RunnerWidget extends JPanel {
 	        }
 	    }
 	};
-	private boolean isRunning;
+	private boolean isRun;
 	private String oldtxt;
 	private JPanel jarPanel = new JPanel(new MigLayout());
 	private JButton refresh = new JButton("Refresh Jars");
@@ -133,40 +133,51 @@ public class RunnerWidget extends JPanel {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				setRunning(true);
-				runner = new JarRunner();
-				runner.start();
-				new Thread(){
-					public void run(){
-						while(isRunning ){
-							try {
-								Thread.sleep(200);
-							} catch (InterruptedException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-							String tmp= getText();
-							output.setText(tmp);
-							try{
-								output.setCaretPosition(tmp.length()-1);
-								output.moveCaretPosition(tmp.length()-1);
-							}catch(IllegalArgumentException ex){
-								ex.printStackTrace();
-							}
-						}
-					}
-				}.start();
+				runJar();
 			}
 		});
 		stop.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				setRunning(false);
-				runner.kill();
+				stop();
 			}
 		});
 		refreshJars();
+	}
+	
+	public void stop(){
+		setRunning(false);
+		runner.kill();
+	}
+	
+	public void runJar(){
+		System.out.println("Running Jar");
+		
+		runner = new JarRunner();
+		runner.start();
+		new Thread(){
+			public void run(){
+				setRunning(true);
+				while(isRunning() ){
+					try {
+						Thread.sleep(200);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					String tmp= getText();
+					output.setText(tmp);
+					try{
+						output.setCaretPosition(tmp.length()-1);
+						output.moveCaretPosition(tmp.length()-1);
+					}catch(IllegalArgumentException ex){
+						ex.printStackTrace();
+					}
+				}
+				System.out.println("Done running, exiting");
+			}
+		}.start();
 	}
 	
 	public ArrayList<String> getJarNames(){
@@ -259,12 +270,15 @@ public class RunnerWidget extends JPanel {
 	}
 	
 	public void setFile(String fileName){
-		
-	}
-	
-	public void setFile(File file2) {
+		String fn = "";
+		for(String s:getJarNames()){
+			if(s.contains(fileName))
+				fn=s;
+		}
+		if(fn.equals(""))
+			throw new RuntimeException("Bad filename:"+fn);
 		run.setEnabled(true);
-		file =file2;
+		file = new File(fn);
 		fileLabel.setText("Using File: "+file.getName());
 		fileLabel.setVisible(true);
 		String date = new SimpleDateFormat("yyyy-MM-dd-HH_mm").format(new Date());
@@ -285,6 +299,10 @@ public class RunnerWidget extends JPanel {
 			ex.printStackTrace();
 		}
 	}
+	
+	public void setFile(File file2) {
+		setFile(file2.getName());
+	}
 	@Override 
 	public void setSize(int width,int height){
 		super.setSize(width,height);
@@ -294,8 +312,8 @@ public class RunnerWidget extends JPanel {
 		scrollPanel.setPreferredSize(new Dimension(d.width,400));
 		scrollPanel.setSize(new Dimension(d.width,300));
 	}
-	private void setRunning(boolean b){
-		isRunning = b;
+	void setRunning(boolean b){
+		System.out.println("Setting run state to: "+b);
 		if(b){
 			run.setEnabled(false);
 			stop.setEnabled(true);
@@ -303,15 +321,17 @@ public class RunnerWidget extends JPanel {
 			run.setEnabled(true);
 			stop.setEnabled(false);
 		}
+		isRun = b;
 	}
 	public boolean isRunning(){
-		return isRunning;
+		System.out.println("IsRunning = "+isRun);
+		return isRun;
 	}
 	private synchronized void addText(String s){
 		//System.out.print(s);
 		setText(getText() + s);
 	}
-	private String getText(){
+	String getText(){
 		return text;
 	}
 

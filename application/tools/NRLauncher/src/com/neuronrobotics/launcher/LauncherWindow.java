@@ -70,10 +70,14 @@ public class LauncherWindow extends JFrame {
 		runner.refreshJars();
 	}
 	public String getJarOutput(){
-		if(!isRunning()){
-			return "No jar running...";
-		}else
-			return "Running";
+		return runner.getText();
+	}
+	public void stop() {
+		runner.stop();
+	}
+	public void runFile(String fileName){
+		runner.setFile(fileName);
+		runner.runJar();
 	}
 	
 }
