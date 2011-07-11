@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -124,5 +126,28 @@ public class ServerApp{
 	}
 	public void runFile(String fileName){
 		launcher.getWindow().runFile(fileName);
+	}
+	public void writeConfigFile(String string) {
+		String content="<?xml version=\"1.0\"?>\n"+
+"<config>\n"+
+"	<connections>\n"+
+"		<connection>\n"+
+"			<type>serial</type>\n"+
+"			<name>Default Serial Connection</name>\n"+
+"			<baud>115200</baud>\n"+
+"			<port>"+string+"</port>\n"+
+"		</connection>\n"+
+"	</connections>\n"+
+"</config>";
+		File config = new File(launcher.getWindow().getLaunchDirectory()+"/config.xml");
+		System.err.println("New config file:\n"+content);
+		try {
+			FileOutputStream fos = new FileOutputStream(config);
+			fos.write(content.getBytes());
+			fos.close();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

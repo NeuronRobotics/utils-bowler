@@ -54,6 +54,11 @@ public class ControlServlet extends HttpServlet {
 	    	  hasJar=true;
 	    	  jar = paramValues[0];
 	      }
+	      if(paramName.contains("portSel")){
+	    	  if(!paramValues[0].contains("none")){
+	    		  writeConfigFile(paramValues[0]);
+	    	  }
+	      }
 	      
 	    }
 	    
@@ -69,6 +74,9 @@ public class ControlServlet extends HttpServlet {
 		ThreadUtil.wait(100);
 		PrintWriter out = resp.getWriter();
 		out.print(manager.getBody());
+	}
+	private void writeConfigFile(String string) {
+		manager.writeConfigFile(string);
 	}
 	@Override
 	protected void doGet(HttpServletRequest req,HttpServletResponse resp)throws ServletException, IOException{
