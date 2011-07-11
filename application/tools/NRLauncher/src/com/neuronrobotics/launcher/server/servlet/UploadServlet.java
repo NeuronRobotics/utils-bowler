@@ -58,7 +58,7 @@ public class UploadServlet extends HttpServlet {
 			        boolean isInMemory = item.isInMemory();
 			        long sizeInBytes = item.getSize();
 			        System.out.println("File name="+fileName+" size="+sizeInBytes);
-			        File uploadedFile = new File(manager.getLaunchDirectory()+"/UPLOADED_"+fileName);
+			        File uploadedFile = new File(manager.getLaunchDirectory()+"/"+fileName);
 			        item.write(uploadedFile);
 			    }
 			}
