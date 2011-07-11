@@ -18,6 +18,7 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 import com.neuronrobotics.launcher.server.ServerApp;
+import com.neuronrobotics.sdk.util.ThreadUtil;
 
 public class ControlServlet extends HttpServlet {
 	
@@ -41,10 +42,10 @@ public class ControlServlet extends HttpServlet {
 	    String jar = "";
 	    while(paramNames.hasMoreElements()) {
 	      String paramName = (String)paramNames.nextElement();
-	      System.out.println("Param=" + paramName );   
+	      System.out.print("\nParam=" + paramName );   
 	      String[] paramValues = request.getParameterValues(paramName);
 	      for(int i=0; i<paramValues.length; i++) {
-	    	  System.out.println("value=" + paramValues[i]);
+	    	  System.out.print(" value=" + paramValues[i]+"\n");
 	      }
 	      if(paramName.contains("Run") ||paramName.contains("Stop")){
 	    	  hasRun=true;  
@@ -65,6 +66,7 @@ public class ControlServlet extends HttpServlet {
 	    }
 		
 		manager.refresh();
+		ThreadUtil.wait(100);
 		PrintWriter out = resp.getWriter();
 		out.print(manager.getBody());
 	}

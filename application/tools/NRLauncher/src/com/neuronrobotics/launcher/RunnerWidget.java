@@ -247,7 +247,7 @@ public class RunnerWidget extends JPanel {
 		for (JarWidget jw:jars){
 			jw.selsect(false);
 		}
-		setRunning(false);
+		//setRunning(false);
 		run.setEnabled(false);
 		stop.setEnabled(false);
 		if(runner != null)
@@ -353,7 +353,7 @@ public class RunnerWidget extends JPanel {
 			    // Execute command
 				String command = "java -jar \'"+getFile().getAbsolutePath()+"\'";
 
-				ProcessBuilder pb = new ProcessBuilder( "java","-jar",getFile().getAbsolutePath() );
+				ProcessBuilder pb = new ProcessBuilder( "java", "-Dnrdk.config.file="+getFile().getParent()+"/config.xml","-jar",getFile().getAbsolutePath() );
 
 				pb.directory( new File(".") );
 
@@ -361,7 +361,7 @@ public class RunnerWidget extends JPanel {
 
 				child = pb.start();
 				
-			    System.out.println("Starting: "+command);
+			    System.out.println("Starting: "+pb.toString());
 			    
 			    InputStream in = child.getInputStream();
 			    DataInputStream input = new DataInputStream(in);

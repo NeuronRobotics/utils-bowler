@@ -3,6 +3,9 @@ package com.neuronrobotics.launcher;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -25,7 +28,29 @@ public class NRLauncher {
 		getWindow().repaint();
 		getWindow().refresh();
 		getWindow().setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+		
+		File config = new File(f.getAbsolutePath()+"/config.xml");
+		InputStream in = NRLauncher.class.getResourceAsStream("config.xml");
+		try {
+			copyResource(in, config);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	private void copyResource(InputStream io, File file) throws IOException {
+		FileOutputStream fos = new FileOutputStream(file);
+		
+		
+		byte[] buf = new byte[256];
+		int read = 0;
+		while ((read = io.read(buf)) > 0) {
+			fos.write(buf, 0, read);
+		}
+		fos.close();
+		io.close();
 	}
 	private void reSize(JFrame f){
 		//f.setExtendedState(Frame.MAXIMIZED_BOTH);

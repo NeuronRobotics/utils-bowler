@@ -13,6 +13,7 @@ import java.util.StringTokenizer;
 
 import com.neuronrobotics.launcher.NRLauncher;
 import com.neuronrobotics.sdk.common.ByteList;
+import com.neuronrobotics.sdk.serial.SerialConnection;
 import com.neuronrobotics.sdk.util.ThreadUtil;
 
 
@@ -75,19 +76,32 @@ public class ServerApp{
 			s+=getJarRadio(j);
 		}
 		s+="</p>\n";
-		s+=getRunStop();
+		s+="<p>"+getSerialSelect()+getRunStop()+"</p>";
 		s+="\n</div>\n</form>\n";
 		return s;
 	}
 	
+	private String getSerialSelect() {
+		String s="Select a serial port:<select name=\"portSel\">";
+		String ports="";
+		for(String ser: SerialConnection.getAvailableSerialPorts()){
+			String []p = ser.split("/");
+			String port = p[p.length-1];
+			port=ser;
+			ports="\n<option value=\""+port+"\">"+port+"</option>"+ports;
+		}
+		s+=ports;
+		s+="</select>";
+		return s;
+	}
 	private String getJarRadio(String name){
 		return "\n<p><input type=\"radio\" name=\"JarSel\" value=\""+name+"\" >"+name+"</input></p>";
 	}
 	private String getRunStop(){
 		if(isRunning()){
-			return "<p><input type=\"submit\" name=\"Stop\" value=\"Stop\" /></p>";
+			return "<input type=\"submit\" name=\"Stop\" value=\"Stop\" />";
 		}else
-			return "<p><input type=\"submit\" name=\"Run\" value=\"Run\" /></p>";
+			return "<input type=\"submit\" name=\"Run\" value=\"Run\" />";
 	}
 	private String getOutputBox(String content){
 		return "<p>\n"+
