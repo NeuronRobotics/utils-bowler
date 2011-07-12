@@ -21,6 +21,7 @@ import com.neuronrobotics.sdk.util.ThreadUtil;
 
 public class ServerApp{
 	boolean run = true;
+	private double volts = 0.0;
 	private NRLauncher launcher;
 
 	
@@ -58,6 +59,9 @@ public class ServerApp{
 "				<input type=\"submit\" value=\"Send\">\n"+
 "			</p>\n"+
 "		</form>\n";
+			html+="		<form class=\"link\" action=\"batt\" method=\"post\">\n"+
+			"			<p><input type=\"submit\" name=\"Get Battery\" value=\"Get Battery\" /> Current Voltage = "+volts+" volts</p>\n"+
+			"		</form>\n";
 			html+=getJarForm();
 			html+=getOutputBox(launcher.getWindow().getJarOutput());
 			html+="\n</body></html>";
@@ -149,5 +153,8 @@ public class ServerApp{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	public void setVoltage(double batteryVoltage) {
+		volts=batteryVoltage;
 	}
 }

@@ -324,7 +324,7 @@ public class RunnerWidget extends JPanel {
 		isRun = b;
 	}
 	public boolean isRunning(){
-		System.out.println("IsRunning = "+isRun);
+		//System.out.println("IsRunning = "+isRun);
 		return isRun;
 	}
 	private synchronized void addText(String s){

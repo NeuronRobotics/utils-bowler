@@ -15,6 +15,6 @@
 	<classpathentry kind="lib" path="lib/war.jar"/>
 	<classpathentry kind="lib" path="lib/webserver.jar"/>
 	<classpathentry kind="lib" path="lib/commons-fileupload-1.2.2.jar"/>
-	<classpathentry kind="lib" path="lib/nrsdk-3.7.7-jar-with-dependencies.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/NRSDK"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

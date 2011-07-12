@@ -2,6 +2,7 @@ package com.neuronrobotics.launcher.server;
 
 import java.io.IOException;
 import com.neuronrobotics.launcher.NRLauncher;
+import com.neuronrobotics.launcher.server.servlet.BatteryVoltageServlet;
 import com.neuronrobotics.launcher.server.servlet.ControlServlet;
 import com.neuronrobotics.launcher.server.servlet.GetUiServlet;
 import com.neuronrobotics.launcher.server.servlet.UploadServlet;
@@ -46,6 +47,7 @@ public class NRLauncherServer {
 		srv.addServlet("/", new GetUiServlet(manager)); // 
 		srv.addServlet("/control", new ControlServlet(manager)); // 
 		srv.addServlet("/upload", new UploadServlet(manager)); // 
+		srv.addServlet("/batt", new BatteryVoltageServlet(manager)); //
 		
 		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
 			public void run() {
