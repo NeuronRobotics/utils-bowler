@@ -36,11 +36,16 @@ public class BatteryVoltageServlet extends HttpServlet {
 	    	  System.out.print(" value=" + paramValues[i]+"\n");
 	      }
 	      if(paramName.toLowerCase().contains("get battery") ){
-	    	  DyIO d = new DyIO(ConnectionDialog.getHeadlessConnection(manager.getLaunchDirectory()+"/config.xml"));
-	    	  d.enableDebug();
-	    	  d.connect();
-	    	  manager.setVoltage(d.getBatteryVoltage(true));
-	    	  d.disconnect();
+	    	  try {
+		    	  DyIO d = new DyIO(ConnectionDialog.getHeadlessConnection(manager.getLaunchDirectory()+"/config.xml"));
+		    	  d.enableDebug();
+		    	  d.connect();
+		    	  manager.setVoltage(d.getBatteryVoltage(true));
+		    	  d.disconnect();
+	    	  }catch(Exception ex){
+	    		  ex.printStackTrace();
+	    		  System.err.println("DyIO not connected, ignore");
+	    	  }
 	      }
 
 	    }
