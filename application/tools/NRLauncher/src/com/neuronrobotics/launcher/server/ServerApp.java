@@ -90,11 +90,15 @@ public class ServerApp{
 	private String getSerialSelect() {
 		String s="Select a serial port:<select name=\"portSel\">";
 		String ports="";
-		for(String ser: SerialConnection.getAvailableSerialPorts()){
-			String []p = ser.split("/");
-			String port = p[p.length-1];
-			port=ser;
-			ports="\n<option value=\""+port+"\">"+port+"</option>"+ports;
+		try{
+			for(String ser: SerialConnection.getAvailableSerialPorts()){
+				String []p = ser.split("/");
+				String port = p[p.length-1];
+				port=ser;
+				ports="\n<option value=\""+port+"\">"+port+"</option>"+ports;
+			}
+		}catch (Exception ex){
+			ex.printStackTrace();
 		}
 		s+=ports;
 		s+="</select>";
