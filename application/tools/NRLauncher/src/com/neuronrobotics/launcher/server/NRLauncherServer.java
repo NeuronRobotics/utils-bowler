@@ -10,7 +10,7 @@ import com.neuronrobotics.launcher.server.servlet.UploadServlet;
 
 public class NRLauncherServer {
 
-	private  int port=8081;
+	private  int port=80;
 
 	
 	public NRLauncherServer(NRLauncher l) throws IOException{
