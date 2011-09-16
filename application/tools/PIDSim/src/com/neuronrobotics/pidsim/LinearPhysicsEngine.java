@@ -37,7 +37,7 @@ class LinearPhysicsEngine extends Thread {
 			setTime(getTime() + localStep);
 			pid.setTime(getTime());
 			double I = getMass() * getLinkLen() * getLinkLen() ;
-			double tGravity = (getLinkLen()*Math.sin(angle)) * (getMass() * (Math.cos(angle) * -9.8)); // the torque due to gravity
+			double tGravity = (getLinkLen()*Math.cos(angle)) * ((getMass()  * -9.8)); // the torque due to gravity
 			double tTotal = torque + tGravity;
 			
 			if( w==0 && (getMuStatic()>Math.abs(tTotal))){
@@ -46,20 +46,21 @@ class LinearPhysicsEngine extends Thread {
 			}
 			if(w!=0){
 				double t = tTotal;
+				//System.out.println("Moving, no friction acceletration="+acceleration);
 				if(tTotal>0){
 					tTotal =t-getMuDynamic();
+					if(tTotal<0)
+						tTotal = 0;
 				}else{
 					tTotal =t+getMuDynamic();
+					if(tTotal>0)
+						tTotal = 0;
 				}
 				if(tTotal!=0)
 					System.out.println("Torque: \n\tgravity="+ tGravity+" \n\tgravity plus set="+t+" \n\tafter friction="+tTotal);
 			}
-			
-			acceleration=0;
 
 			acceleration = tTotal/I;
-			
-			
 			
 			w+=acceleration*step*step;
 			
@@ -77,7 +78,7 @@ class LinearPhysicsEngine extends Thread {
 				w=0;
 			}
 			
-			//System.out.println("Control torque: "+torque+" Tg: "+tGravity+" Aceleration: "+acceleration+" Angular velocity: "+w+" Angle: "+Math.toDegrees(angle));
+			System.out.println("Controls: \n\ttorque: "+torque+" \n\tTorque Total: "+tTotal+" \n\tTg: "+tGravity+" \n\tAceleration: "+acceleration+" \n\tAngular velocity: "+w+" \n\tAngle: "+Math.toDegrees(angle));
 			pid.setPosition(Math.toDegrees(angle));
 			
 			try {Thread.sleep(localStep);} catch (InterruptedException e) {}
