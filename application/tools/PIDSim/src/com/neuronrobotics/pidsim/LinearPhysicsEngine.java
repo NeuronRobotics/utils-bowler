@@ -46,15 +46,14 @@ class LinearPhysicsEngine extends Thread {
 			}
 			if(w!=0){
 				double t = tTotal;
-				//System.out.println("Moving, no friction acceletration="+acceleration);
 				if(tTotal>0){
-					tTotal =t-getMuDynamic();
-					if(tTotal<0)
-						tTotal = 0;
+					tTotal =t-getMuDynamic()*w;
+//					if(tTotal<0)
+//						tTotal = 0;
 				}else{
-					tTotal =t+getMuDynamic();
-					if(tTotal>0)
-						tTotal = 0;
+					tTotal =t+getMuDynamic()*w;
+//					if(tTotal>0)
+//						tTotal = 0;
 				}
 				if(tTotal!=0)
 					System.out.println("Torque: \n\tgravity="+ tGravity+" \n\tgravity plus set="+t+" \n\tafter friction="+tTotal);
