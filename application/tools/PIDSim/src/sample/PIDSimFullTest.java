@@ -8,7 +8,8 @@ public class PIDSimFullTest {
 		PIDSim pid = new PIDSim( .01, // mass
 								 .5,  //link length
 								 5,  //torque from static friction
-								 4.5); //torque from dynamic friction
+								 4.5,//torque from dynamic friction
+								 20);//maximum torque that can be exerted by motor
     	pid.initialize();
     	pid.setSetPoint(45);
     	PIDConstantsDialog d = new PIDConstantsDialog(	2,//kp

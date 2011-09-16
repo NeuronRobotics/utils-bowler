@@ -18,13 +18,14 @@ class LinearPhysicsEngine extends Thread {
 	double acceleration;
 	private boolean run = true;
 	
-	public LinearPhysicsEngine(PIDSim pidSim) {
+	public LinearPhysicsEngine(PIDSim pidSim,double maxTorque) {
 		pid = pidSim;
 		setMass(pid.getMass());
 		setLinkLen(pid.getLength());
 		setMuStatic(pid.getStaticFriction());
 		setMuDynamic(pid.getDynamicFriction());
 		setTime(System.currentTimeMillis());
+		this.maxTorque=maxTorque;
 	}
 	
 	public void run() {

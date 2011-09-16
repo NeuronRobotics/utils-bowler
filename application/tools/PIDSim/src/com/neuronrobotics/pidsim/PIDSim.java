@@ -15,14 +15,16 @@ public class PIDSim {
     private double stFriction = .5;
     private double dyFriction = .3;
     private long time = 0;
+	private double maxTorque = 20;// Newton meters
     
     public PIDSim() { }
     
-    public PIDSim(double mass, double linkLegnth,double muStatic, double muDynamic) {
+    public PIDSim(double mass, double linkLegnth,double muStatic, double muDynamic, double maxTorque) {
     	this.mass=mass;
     	this.length=linkLegnth;
     	stFriction=muStatic;
     	dyFriction=muDynamic;
+    	this.maxTorque=maxTorque;
     }
     
     public void initialize() {
@@ -35,7 +37,7 @@ public class PIDSim {
     	frame.setVisible(true);
     	
     	
-    	phy = new LinearPhysicsEngine(this);
+    	phy = new LinearPhysicsEngine(this,maxTorque);
     	phy.start();
     }
     
