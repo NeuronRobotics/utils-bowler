@@ -41,7 +41,7 @@ class LinearPhysicsEngine extends Thread {
 			double tTotal = torque + tGravity;
 			
 			if( w==0 && (getMuStatic()>Math.abs(tTotal))){
-				System.out.println("Static friction not overcome");
+				//System.out.println("Static friction not overcome");
 				tTotal=0;
 			}
 			if(w!=0){
@@ -51,8 +51,8 @@ class LinearPhysicsEngine extends Thread {
 				}else{
 					tTotal =t+getMuDynamic()*w;
 				}
-				if(tTotal!=0)
-					System.out.println("Torque: \n\tgravity="+ tGravity+" \n\tgravity plus set="+t+" \n\tafter friction="+tTotal);
+//				if(tTotal!=0)
+//					System.out.println("Torque: \n\tgravity="+ tGravity+" \n\tgravity plus set="+t+" \n\tafter friction="+tTotal);
 			}
 
 			acceleration = tTotal/I;
@@ -73,7 +73,7 @@ class LinearPhysicsEngine extends Thread {
 				w=0;
 			}
 			
-			System.out.println("Controls: \n\ttorque: "+torque+" \n\tTorque Total: "+tTotal+" \n\tTg: "+tGravity+" \n\tAceleration: "+acceleration+" \n\tAngular velocity: "+w+" \n\tAngle: "+Math.toDegrees(angle));
+			//System.out.println("Controls: \n\ttorque: "+torque+" \n\tTorque Total: "+tTotal+" \n\tTg: "+tGravity+" \n\tAceleration: "+acceleration+" \n\tAngular velocity: "+w+" \n\tAngle: "+Math.toDegrees(angle));
 			pid.setPosition(Math.toDegrees(angle));
 			
 			try {Thread.sleep(localStep);} catch (InterruptedException e) {}
