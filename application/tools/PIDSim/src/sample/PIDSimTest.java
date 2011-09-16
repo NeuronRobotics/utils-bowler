@@ -5,13 +5,13 @@ import com.neuronrobotics.pidsim.PIDSim;
 
 public class PIDSimTest {
 	public static void main(String[] args) throws InterruptedException {
-		PIDSim pid = new PIDSim( .01, // mass
+		PIDSim pid = new PIDSim( .1, // mass
 								 .5,  //link length
 								 5,  //torque from static friction
-								 4.5,//torque from dynamic friction
-								 20);//maximum torque that can be exerted by motor
+								 10,//torque from dynamic friction
+								 80);//maximum torque that can be exerted by motor
     	pid.initialize();
-    	pid.setSetPoint(45);
+    	pid.setSetPoint(90);
     	PIDConstantsDialog constants = new PIDConstantsDialog(	.1,//kp
 												    			0,//ki
 												    			0);//kd

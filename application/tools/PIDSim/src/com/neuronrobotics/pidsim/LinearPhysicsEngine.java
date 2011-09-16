@@ -33,31 +33,36 @@ class LinearPhysicsEngine extends Thread {
 		while (run) {
 			
 			long localStep = (long) (step*1000);
-			try {Thread.sleep(localStep);} catch (InterruptedException e) {}
+			
 			setTime(getTime() + localStep);
 			pid.setTime(getTime());
-			
-			double tGravity = getLinkLen() * (getMass() * (Math.cos(angle) * -9.8)); // the torque due to gravity
+			double I = getMass() * getLinkLen() * getLinkLen() ;
+			double tGravity = (getLinkLen()*Math.sin(angle)) * (getMass() * (Math.cos(angle) * -9.8)); // the torque due to gravity
 			double tTotal = torque + tGravity;
-			acceleration=0;
-			if(tTotal != 0) {
-				// update angular velocity
-				double mu = Math.abs((w ==0)?getMuStatic():getMuDynamic()*w);
-				double muTorque = (tTotal>0)? (mu*-1):mu;
-				
-				//if(Math.abs(tTotal)>Math.abs(muTorque)) {
-					tTotal+=muTorque;
-//				} else {
-//					tTotal=0;
-//				}
-				//System.out.println("Set Torque is: "+torque+" gravity: "+tGravity+" friction: "+ muTorque+" Total: "+tTotal);
-				double I = getMass() * getLinkLen() * getLinkLen() ;
-
-				// T/I= alpha
-				acceleration = tTotal/I;
-				
-				w+=acceleration*step*step;
+			
+			if( w==0 && (getMuStatic()>Math.abs(tTotal))){
+				System.out.println("Static friction not overcome");
+				tTotal=0;
 			}
+			if(w!=0){
+				double t = tTotal;
+				if(tTotal>0){
+					tTotal =t-getMuDynamic();
+				}else{
+					tTotal =t+getMuDynamic();
+				}
+				if(tTotal!=0)
+					System.out.println("Torque: \n\tgravity="+ tGravity+" \n\tgravity plus set="+t+" \n\tafter friction="+tTotal);
+			}
+			
+			acceleration=0;
+
+			acceleration = tTotal/I;
+			
+			
+			
+			w+=acceleration*step*step;
+			
 			if(w != 0) {
 				angle+=w*step;
 			}
@@ -74,6 +79,8 @@ class LinearPhysicsEngine extends Thread {
 			
 			//System.out.println("Control torque: "+torque+" Tg: "+tGravity+" Aceleration: "+acceleration+" Angular velocity: "+w+" Angle: "+Math.toDegrees(angle));
 			pid.setPosition(Math.toDegrees(angle));
+			
+			try {Thread.sleep(localStep);} catch (InterruptedException e) {}
 		}
 	}
 	
