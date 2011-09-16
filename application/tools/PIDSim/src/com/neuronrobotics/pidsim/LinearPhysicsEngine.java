@@ -12,7 +12,7 @@ class LinearPhysicsEngine extends Thread {
 	private double muStatic;// Newton meters
 	private double muDynamic;// Newton meters
 	private PIDSim pid;
-	private double step = .002;//in seconds
+	private double step = .005;//in seconds
 	private double maxTorque = 20;// Newton meters
 	private long time = 0l;// Seconds
 	double acceleration;
