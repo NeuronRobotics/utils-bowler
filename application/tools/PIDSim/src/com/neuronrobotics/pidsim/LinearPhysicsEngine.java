@@ -49,7 +49,7 @@ class LinearPhysicsEngine extends Thread {
 				if(tTotal>0){
 					tTotal =t-getMuDynamic()*w;
 				}else{
-					tTotal =t+getMuDynamic()*w;
+					tTotal =t+getMuDynamic()*w*-1;
 				}
 //				if(tTotal!=0)
 //					System.out.println("Torque: \n\tgravity="+ tGravity+" \n\tgravity plus set="+t+" \n\tafter friction="+tTotal);
