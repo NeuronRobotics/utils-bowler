@@ -53,8 +53,9 @@ public class PIDSim {
     /**
      * setting a torque in kg/m
      * @param value
+     * @throws Exception if max torque is exceded
      */
-    public void setTorque(double value) {
+    public void setTorque(double value) throws Exception {
     	phy.setTorque(value);
     }
     

@@ -81,7 +81,7 @@ class LinearPhysicsEngine extends Thread {
 		run = isEnabled;
 	}
 	
-	public void setTorque(double torque) {
+	public void setTorque(double torque) throws Exception{
 		if(Math.abs(torque)<=Math.abs(getMaxTorque())){
 			this.torque = torque;
 			return;
@@ -90,7 +90,7 @@ class LinearPhysicsEngine extends Thread {
 			this.torque = getMaxTorque();
 		else
 			this.torque = getMaxTorque()*-1;
-		throw new RuntimeException("Max Torque exceded, actuator saturates at: "+maxTorque+" N*M, tried to set to value: "+ torque);
+		throw new Exception("Max Torque exceded, actuator saturates at: "+maxTorque+" N*M, tried to set to value: "+ torque);
 	}
 	
 	public void setMass(double mass) {
