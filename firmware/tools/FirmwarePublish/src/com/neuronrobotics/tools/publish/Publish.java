@@ -55,7 +55,7 @@ public class Publish {
 				output+="\t</core>\n";
 			}
 		}
-		output +="\n<root>\n";
+		output +="\n</root>\n";
 		if(xml == null){
 			xml = new File("output_"+getDate()+".xml");
 			System.err.println("No file defined with -output=\nUsing:"+xml);
