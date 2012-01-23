@@ -13,6 +13,7 @@ import java.sql.Timestamp;
 public class Publish {
 	private Publish(String[] args){
 		String output = "<root>\n";
+		output+="<buildDate>"+getDate()+"</buildDate>";
 		File xml = null;
 		for(int i=0;i<args.length;i++){
 			String str = args[i];
