@@ -1,0 +1,53 @@
+#!/bin/bash
+INSTALL=/usr/local/NeuronRobotics/RDK/
+echo "Neuron Robotics Post Install Script..."
+cd $INSTALL
+rm -rf rdk-java
+
+if (test -d archive); then 
+	echo [Archve exists]
+else
+	mkdir archive
+fi
+
+if (test -d bin); then 
+	cp -r bin archive
+	rm -rf bin
+fi
+
+if (test -d firmware); then 
+	cp -r firmware archive
+	rm -rf firmware 
+fi
+
+if (test -d java); then 
+	cp -r java archive
+	rm -rf java 
+fi
+
+tar -xf  rdk.tar
+cp -r rdk/* .
+rm -rf rdk
+rm rdk.tar
+
+NRDIR=/usr/local/NeuronRobotics/RDK/bin/
+
+LIB_DIRS=( '/lib/'  '/usr/lib/' '/usr/lib/x86_64-linux-gnu/' '/usr/lib/x86-linux-gnu/' '/usr/lib/i386-linux-gnu/' '/usr/lib/i586-linux-gnu/' '/usr/lib/i686-linux-gnu/')
+ELEMENTS=${#LIB_DIRS[@]}
+
+if (test -e /usr/lib/libbluetooth.so) then
+	echo "Bluetooth Library OK"
+	exit 0
+else
+	echo "OS bluetooth library is missing: /usr/lib/libbluetooth.so, Attempting to symlink..."
+	for (( i=0;i<$ELEMENTS;i++)); do
+		FILE=${LIB_DIRS[${i}]}libbluetooth.so.3
+		if(test -e $FILE) then
+			echo $FILE OK
+			sudo ln -s $FILE /usr/lib/libbluetooth.so
+			exit 0
+		fi
+	done 
+	echo Bluetooth not installed!
+	exit 1
+fi
