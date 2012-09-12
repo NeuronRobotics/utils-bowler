@@ -1,4 +1,0 @@
-SUBSYSTEM=="tty", ATTRS{product}=="DyIO*", SYMLINK+="DyIO%n", MODE="0777"
-SUBSYSTEM=="tty", ATTRS{product}=="*Bootloader*", SYMLINK+="Bootloader%n", MODE="0777"
-SUBSYSTEM=="tty", ATTRS{product}=="*AIM Lab*", SYMLINK+="BowlerDevice%n", MODE="0777"
-SUBSYSTEM=="tty", ATTRS{product}=="*DeltaDoodle*", SYMLINK+="DeltaDoodle%n", MODE="0777"
