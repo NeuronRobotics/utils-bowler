@@ -24,7 +24,7 @@ if (! test -z "$VERSION" ) then
 	
 
 	#Docs
-	#s3cmd put --recursive 	--acl-public --guess-mime-type $VERSION/java/ 							s3://downloads.bowler.io/nrdk/$VERSION/java/
+	s3cmd put --recursive 	--acl-public --guess-mime-type $VERSION/java/ 							s3://downloads.bowler.io/nrdk/$VERSION/java/
 else
 	echo #####ERROR no version specified, I.E. 3.7.0
 	exit 1
