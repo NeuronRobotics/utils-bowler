@@ -6,7 +6,9 @@ if (! test -z "$VERSION" ) then
 	sudo apt-get install s3cmd
 	#cp ../installer-scripts/windows/nrdk-$VERSION.exe $VERSION/
 	svn commit -m="$VERSION committing"
-	
+
+	sh makeRedirect.sh $VERSION
+
 	s3cmd put 				--acl-public --guess-mime-type current.html 	s3://downloads.bowler.io/nrdk/current.html
 	
 	

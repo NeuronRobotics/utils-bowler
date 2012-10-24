@@ -112,7 +112,7 @@ if (! test -z "$VERSION" ) then
 	cp -r $START/../../DyIO/FirmwarePublish/Release/*						$BUILD/firmware/
 	rsync -avtP --exclude=.svn* $START/../../NRSDK/target/docs 				$BUILD/java/
 	cp $START/index.html 													$BUILD/java/docs/api/
-	sh makeRedirect.sh $VERSION
+
 	cd $START/../../NRDK_Test;svn update;
 	rm -rf $START/../../NRDK_Test/bin/
 	rsync -avtP --exclude=.svn* $START/../../NRDK_Test		 				$BUILD/java/

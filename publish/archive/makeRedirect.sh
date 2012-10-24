@@ -11,4 +11,5 @@ if (! test -z "$VERSION" ) then
 	<meta http-equiv="REFRESH" content="0;url=http://downloads.bowler.io/nrdk/'$VERSION'/java/docs/api/index.html">
 	</HEAD>
 	</HTML>' > current.html
+	cat current.html
 fi
