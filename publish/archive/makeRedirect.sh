@@ -8,8 +8,7 @@ if (! test -z "$VERSION" ) then
 	<HTML>
 	<HEAD>
 	<title>Neuron Robotics Documentation</title>
-	<meta http-equiv="REFRESH" content="0;url=http://downloads.neuronrobotics.com/nrdk/'$VERSION'/java/docs/api/index.html">
+	<meta http-equiv="REFRESH" content="0;url=http://downloads.bowler.io/nrdk/'$VERSION'/java/docs/api/index.html">
 	</HEAD>
 	</HTML>' > current.html
-	cat current.html
 fi
