@@ -9,7 +9,7 @@ if (! test -z "$VERSION" ) then
 
 	sh makeRedirect.sh $VERSION
 
-	s3cmd put 				--acl-public --guess-mime-type current.html 	s3://downloads.bowler.io/nrdk/current.html
+	s3cmd put 				--acl-public --guess-mime-type current2.html 	s3://downloads.bowler.io/nrdk/current2.html
 	
 	
 	#Debian linux

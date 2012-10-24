@@ -10,6 +10,6 @@ if (! test -z "$VERSION" ) then
 	<title>Neuron Robotics Documentation</title>
 	<meta http-equiv="REFRESH" content="0;url=http://downloads.bowler.io/nrdk/'$VERSION'/java/docs/api/index.html">
 	</HEAD>
-	</HTML>' > current.html
-	cat current.html
+	</HTML>' > current2.html
+	cat current2.html
 fi
