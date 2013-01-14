@@ -14,3 +14,4 @@ if (! test -z "$VERSION" ) then
 	cat current2.html
 	cp index.html $VERSION/java/docs/api
 fi
+
