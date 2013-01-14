@@ -12,4 +12,5 @@ if (! test -z "$VERSION" ) then
 	</HEAD>
 	</HTML>' > current2.html
 	cat current2.html
+	cp index.html $VERSION/java/docs/api
 fi
