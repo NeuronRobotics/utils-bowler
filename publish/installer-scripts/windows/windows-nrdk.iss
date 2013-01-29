@@ -1,3 +1,5 @@
+//This is an example file for InnoIDE
+
 #define MyAppName "Neuron Robotics Development Kit"
 #define MyAppSlug "nrdk"
 #define JDKREG "SOFTWARE\JavaSoft\Java Development Kit"
