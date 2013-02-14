@@ -25,8 +25,8 @@ if (! test -z "$VERSION" ) then
 
 	#Docs
 	s3cmd put --recursive 	--acl-public --guess-mime-type $VERSION/java/docs/api/ 							s3://downloads.bowler.io/nrdk/$VERSION/java/docs/api/ 
-	s3cmd put --recursive 	--acl-public --guess-mime-type $VERSION/java/docs/addonApi 							s3://downloads.bowler.io/nrdk/$VERSION/java/docs/addonApi/
-	s3cmd put --recursive 	--acl-public --guess-mime-type $VERSION/java/docs/coreApi 							s3://downloads.bowler.io/nrdk/$VERSION/java/docs/coreApi/
+	s3cmd put --recursive 	--acl-public --guess-mime-type $VERSION/java/docs/addonApi 							s3://downloads.bowler.io/nrdk/$VERSION/java/docs/
+	s3cmd put --recursive 	--acl-public --guess-mime-type $VERSION/java/docs/coreApi 							s3://downloads.bowler.io/nrdk/$VERSION/java/docs/
 
 else
 	echo #####ERROR no version specified, I.E. 3.7.0
