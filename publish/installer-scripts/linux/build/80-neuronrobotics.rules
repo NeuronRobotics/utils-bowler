@@ -1,7 +1,3 @@
-SUBSYSTEM=="tty", ATTRS{product}=="DyIO*", 			SYMLINK+="DyIO%n",			SYMLINK+="DyIO.%E{ID_SERIAL_SHORT}", 		MODE="0777", ENV{ID_MM_DEVICE_IGNORE}="1"
-SUBSYSTEM=="tty", ATTRS{product}=="*Bootloader*", 	SYMLINK+="Bootloader%n", 	SYMLINK+="Bootloader.%E{ID_SERIAL_SHORT}", 	MODE="0777", ENV{ID_MM_DEVICE_IGNORE}="1"
-SUBSYSTEM=="tty", ATTRS{product}=="*AIM Lab*", 		SYMLINK+="BowlerDevice%n", 	SYMLINK+="BowlerDevice.%E{ID_SERIAL_SHORT}", 	MODE="0777", ENV{ID_MM_DEVICE_IGNORE}="1"
-SUBSYSTEM=="tty", ATTRS{product}=="*DeltaDoodle*", 	SYMLINK+="DeltaForge%n", 	SYMLINK+="DeltaForge.%E{ID_SERIAL_SHORT}", 	MODE="0777", ENV{ID_MM_DEVICE_IGNORE}="1"
-
-ATTRS{idVendor}=="04d8", ATTRS{idProduct}=="3742", ENV{ID_MM_DEVICE_IGNORE}="1"
-ATTRS{idVendor}=="04d8", ATTRS{idProduct}=="0001", ENV{ID_MM_DEVICE_IGNORE}="1"
+SUBSYSTEM=="tty", ATTRS{product}=="*Bootloader*",			SYMLINK+="Bootloader%n",   SYMLINK+="Bootloader.%E{ID_SERIAL_SHORT}", 	MODE="0777", ENV{ID_MM_DEVICE_IGNORE}="1"
+SUBSYSTEM=="tty",ATTRS{idVendor}=="04d8", ATTRS{idProduct}=="3742", 	SYMLINK+="DyIO%n",	   SYMLINK+="DyIO.%E{ID_SERIAL_SHORT}", 	MODE="0777", ENV{ID_MM_DEVICE_IGNORE}="1"
+SUBSYSTEM=="tty",ATTRS{idVendor}=="04d8", ATTRS{idProduct}=="0001", 	SYMLINK+="BowlerDevice%n", SYMLINK+="BowlerDevice.%E{ID_SERIAL_SHORT}", MODE="0777", ENV{ID_MM_DEVICE_IGNORE}="1"
