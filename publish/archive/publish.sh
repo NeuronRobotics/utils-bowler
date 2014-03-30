@@ -5,7 +5,7 @@ START=$PWD
 VERSION=$1
 
 if (! test -z "$VERSION" ) then
-	sudo apt-get install ant wine eclipse
+	sudo apt-get install ant wine
 	
 	echo ok $VERSION
 	ZIP=nrdk-$VERSION.zip

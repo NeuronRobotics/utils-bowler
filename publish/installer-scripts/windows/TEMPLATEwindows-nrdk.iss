@@ -151,10 +151,14 @@ begin
 	begin
 		Result :=True;
 	end
+	else if (CompareText('1.8', jv)=0) then
+	begin
+		Result :=True;
+	end
 	else
 	begin
 		MsgBox('The version of Java installed is incompatable or missing with {#MyAppName}, Java 7 32 is required, Reported:'+jv, mbInformation, MB_OK);
-		Result :=False;
+		Result :=True;
 	end;
 end;
 
