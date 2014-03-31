@@ -11,52 +11,61 @@ if (! test -z "$VERSION" ) then
 	ZIP=nrdk-$VERSION.zip
 	BUILDLOCAL=nrdk-$VERSION
 	DIST=$PWD/$VERSION
-	TL=$START/../../
-	if (test -d $TL/NRSDK/); then 
-		cd $TL/NRSDK/;
-		svn update;
-	else 
-		cd $TL/;
-		svn checkout http://nr-sdk.googlecode.com/svn/trunk/NRDK NRSDK;
-	fi
-	if (test -d $TL/NRConsole/); then 
-		cd $TL/NRConsole/;
-		svn update;
-	else 
-		cd $TL/;
-		svn checkout http://nr-sdk.googlecode.com/svn/trunk/application/nrconsole NRConsole;
-	fi
+	TL=$START/../../../
+	NRSDK=java-bowler/javasdk/NRSDK/
+	NRConsole=NrConsole/application/nrconsole/
+	DyIO=microcontroller-bowler/DyIO/development/
+	LIB=$TL/$NRSDK/target/nrsdk-$VERSION-jar-with-dependencies.jar
+	XML=$TL/$DyIO/FirmwarePublish/Release/dyio-$VERSION.xml
+	NRCONSOLE=$TL/$NRConsole/target/nr-console.jar
+	OLDDYIO=false;
 
-	if (test -d $TL/DyIO/); then 
-		cd $TL/DyIO/;
-		svn update;
-	else 
+	if !(test -d $TL/$NRSDK/); then  
 		cd $TL/;
-		svn checkout https://nr-sdk.googlecode.com/svn/trunk/firmware/device/DyIO/development  DyIO;
+		git clone https://github.com/NeuronRobotics/java-bowler.git
 	fi
-
-	if (test -d $TL/NR-Clib/); then 
-		cd $TL/NR-Clib/;
-		svn update;
-	else 
-		cd $TL/;
-		svn checkout https://nr-sdk.googlecode.com/svn/trunk/firmware/library/NR-Clib/development NR-Clib;
+	cd $TL/$NRSDK/
+	if (! git checkout tags/$VERSION); then
+		echo "$VERSION Is not taged yet"
+		exit 1;
 	fi
 
 
+	if !(test -d $TL/$NRConsole/); then  
+		cd $TL/;
+		git clone https://github.com/NeuronRobotics/NrConsole.git
+	fi
+	cd $TL/$NRConsole/
+	if (! git checkout tags/$VERSION); then
+		echo "$VERSION Is not taged yet"
+		exit 1;
+	fi
+
+	if !(test -d $TL/microcontroller-bowler); then  
+		cd $TL/;
+		git clone https://github.com/NeuronRobotics/microcontroller-bowler.git
+	fi
+	cd $TL/$DyIO/
+	if (! git checkout tags/$VERSION); then
+		if (! git checkout tags/v$VERSION); then
+			echo "$VERSION Is not taged yet"
+			exit 1;
+		fi
+		#Change the DyIO directory to the old location before the GIT transition
+		DyIO=microcontroller-bowler/firmware/device/DyIO/development/
+		XML=$TL/$DyIO/FirmwarePublish/Release/dyio-$VERSION.xml
+	fi
+	
 	cd $START
-	LIB=$START/../../NRSDK/target/nrsdk-$VERSION-jar-with-dependencies.jar
-	XML=$START/../../DyIO/FirmwarePublish/Release/dyio-$VERSION.xml
-	NRCONSOLE=$START/../../NRConsole/target/nr-console.jar
-	
-	
+
 	#Build all depandancies
-	cd $TL/NRSDK/;ant
+	cd $TL/$NRSDK/;ant
 	if (! test -e $LIB) then
 		echo ERROR!! expected lib file: $LIB 
 		echo but none was found
 		exit 1
 	fi
+exit 0;
 	rm $TL/NRConsole/lib/nrsdk-*.jar
 	cp $LIB/ $TL/NRConsole/lib/
 	cd $TL/NRConsole/;ant
@@ -65,8 +74,6 @@ if (! test -z "$VERSION" ) then
 		exit 1
 	fi
 	
-	cd $TL/NR-Clib/;make all
-	cd $TL/DyIO/;make update
 	cd $TL/DyIO/;make all
 	
 	#Copy over data
