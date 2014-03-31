@@ -1,13 +1,12 @@
 #!/bin/bash
 
 export VERSION=$1
-export GH_TOKEN=$2
 export GH_PROJECT=java-bowler
 
 # sudo apt-get install ruby1.9.3
 # sudo gem install octokit
 
-if ( test -z "$2" ) then
+if ( test -z "$GH_TOKEN" ) then
 	echo #####ERROR no Token
 	exit 1
 fi
