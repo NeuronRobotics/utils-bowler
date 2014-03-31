@@ -10,7 +10,7 @@ fi
 if (! test -z "$VERSION" ) then
 	#cp ../installer-scripts/windows/nrdk-$VERSION.exe $VERSION/
 
-	curl -H "Authorization: token fb69cf95a0a7cd48206b6bef33d997e36730104b" \
+	curl -H "Authorization: token $TOKEN" \
 	     -H "Content-Type: application/zip" \
 	     --data-binary @$VERSION/nrdk-$VERSION.exe \
 	     "https://uploads.github.com/repos/NeuronRobotics/java-bowler/releases/$VERSION/assets?name=Windows-nrdk-$VERSION.exe"
