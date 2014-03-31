@@ -14,10 +14,8 @@ if (! test -z "$VERSION" ) then
 	TL=$START/../../../
 	NRSDK=java-bowler/javasdk/NRSDK/
 	NRConsole=NrConsole/application/nrconsole/
-	DyIO=microcontroller-bowler/DyIO/development/
 	LIB=$TL/$NRSDK/target/nrsdk-$VERSION-jar-with-dependencies.jar
-	XML=$TL/$DyIO/FirmwarePublish/Release/dyio-$VERSION.xml
-	NRCONSOLE=$TL/$NRConsole/target/nr-console.jar
+	NRCONSOLE_JAR=$TL/$NRConsole/target/nr-console.jar
 	OLDDYIO=false;
 
 	if !(test -d $TL/$NRSDK/); then  
@@ -25,8 +23,10 @@ if (! test -z "$VERSION" ) then
 		git clone https://github.com/NeuronRobotics/java-bowler.git
 	fi
 	cd $TL/$NRSDK/
+	git pull
 	if (! git checkout tags/$VERSION); then
-		echo "$VERSION Is not taged yet"
+		git tag -l
+		echo "NRSDK $VERSION Is not taged yet"
 		exit 1;
 	fi
 
@@ -36,8 +36,10 @@ if (! test -z "$VERSION" ) then
 		git clone https://github.com/NeuronRobotics/NrConsole.git
 	fi
 	cd $TL/$NRConsole/
+	git pull
 	if (! git checkout tags/$VERSION); then
-		echo "$VERSION Is not taged yet"
+		git tag -l
+		echo "NRConsole $VERSION Is not taged yet"
 		exit 1;
 	fi
 
@@ -45,18 +47,36 @@ if (! test -z "$VERSION" ) then
 		cd $TL/;
 		git clone https://github.com/NeuronRobotics/microcontroller-bowler.git
 	fi
-	cd $TL/$DyIO/
+	cd $TL/microcontroller-bowler/
+	git pull
 	if (! git checkout tags/$VERSION); then
 		if (! git checkout tags/v$VERSION); then
-			echo "$VERSION Is not taged yet"
+			git tag -l
+			echo "DyIO $VERSION Is not taged yet"
 			exit 1;
 		fi
 		#Change the DyIO directory to the old location before the GIT transition
 		DyIO=microcontroller-bowler/firmware/device/DyIO/development/
-		XML=$TL/$DyIO/FirmwarePublish/Release/dyio-$VERSION.xml
+	else
+		DyIO=microcontroller-bowler/DyIO/development/
 	fi
-	
-	cd $START
+	# make the output dirs for building the DyIO
+
+	mkdir -p $TL/$DyIO/pic/output/release/
+	mkdir -p $TL/$DyIO/pic/output/debug/
+	mkdir -p $TL/$DyIO/pic/output/bluetooth/
+
+	mkdir -p $TL/$DyIO/avr/output/atmega644p/
+	mkdir -p $TL/$DyIO/avr/output/atmega324p/
+
+	mkdir -p $TL/$DyIO/FirmwarePublish/Release/legacy/
+	mkdir -p $TL/$DyIO/FirmwarePublish/Dev/
+
+	XML=$TL/$DyIO/FirmwarePublish/Release/dyio-$VERSION.xml
+	cd $TL/$DyIO/
+	make all
+
+
 
 	#Build all depandancies
 	cd $TL/$NRSDK/;ant
@@ -65,23 +85,23 @@ if (! test -z "$VERSION" ) then
 		echo but none was found
 		exit 1
 	fi
-exit 0;
-	rm $TL/NRConsole/lib/nrsdk-*.jar
-	cp $LIB/ $TL/NRConsole/lib/
-	cd $TL/NRConsole/;ant
-	if(!test -e $NRCONSOLE) then
-		echo ERROR!! expected lib file: $NRCONSOLE 
+
+	rm -rf $TL/$NRConsole/lib/nrsdk-*.jar
+	cp $LIB $TL/$NRConsole/lib/
+	cd $TL/$NRConsole/;
+	ant
+	if(!test -e $NRCONSOLE_JAR) then
+		echo ERROR!! expected lib file: $NRCONSOLE_JAR 
 		exit 1
 	fi
-	
-	cd $TL/DyIO/;make all
-	
+
+
 	#Copy over data
 	
 	if (! test -e $XML) then
 		echo ERROR!! expected firmware file: $XML 
 		echo but none was found
-		exit 1
+		#exit 1
 	fi
 	if(test -e $DIST) then
 		echo previous build exists
@@ -111,24 +131,19 @@ exit 0;
 		cp $START/*.txt $BUILD
 	fi
 	
-
-
-	cp $LIB 																$BUILD/java/
-	cp $START/../../NRConsole/target/nr-console.jar 						$BUILD/bin/
-	cp $START/NeuronRobotics.* 												$BUILD/bin/
-	cp -r $START/../../DyIO/FirmwarePublish/Release/*						$BUILD/firmware/
-	rsync -avtP --exclude=.svn* $START/../../NRSDK/target/docs 				$BUILD/java/
-	cp $START/index.html 													$BUILD/java/docs/api/
-
-	cd $START/../../NRDK_Test;svn update;
-	rm -rf $START/../../NRDK_Test/bin/
-	rsync -avtP --exclude=.svn* $START/../../NRDK_Test		 				$BUILD/java/
-	rsync -avtP --exclude=.svn* $START/../../NRSDK/target/docs				$DIST/java
+	cp $LIB 								$BUILD/java/
+	cp $TL/$NRConsole/target/nr-console.jar 			        $BUILD/bin/
+	cp $START/NeuronRobotics.* 						$BUILD/bin/
+	cp -r $TL/$DyIO/FirmwarePublish/Release/*			$BUILD/firmware/
+	rsync -avtP --exclude=.svn* $TL/$NRSDK/target/docs 		$BUILD/java/
+	cp $START/index.html 							$BUILD/java/docs/api/
+	rsync -avtP --exclude=.svn* $TL/$NRSDK/target/docs				$DIST/java
 	echo Copy OK
-	
+
 	cd $DIST
 	zip -r $ZIP $BUILDLOCAL
-	
+
+exit 0;
 	#Prepare the windows exe
 	echo preparing the windows compile directory
 	WINBUILD=$START/../installer-scripts/windows/
