@@ -5,7 +5,13 @@ VERSION=$1
 if (! test -z "$VERSION" ) then
 	#cp ../installer-scripts/windows/nrdk-$VERSION.exe $VERSION/
 
-	curl -X POST https://uploads.github.com/repos/NeuronRobotics/java-bowler/releases/$VERSION/assets?name=$VERSION/nrdk-$VERSION.exe
+	curl -H "Authorization: token TOKEN" \
+	     -H "Accept: application/vnd.github.manifold-preview" \
+	     -H "Content-Type: application/zip" \
+	     --data-binary @$VERSION/nrdk-$VERSION.exe \
+	     "https://uploads.github.com/repos/NeuronRobotics/java-bowler/releases/$VERSION/assets?name=nrdk-$VERSION.exe"
+
+	#curl --form "fileupload=@$VERSION/nrdk-$VERSION.exe" https://uploads.github.com/repos/NeuronRobotics/java-bowler/releases/$VERSION/
 	
 	#Debian linux
 	#s3cmd put 				--acl-public --guess-mime-type $VERSION/nr-rdk-java_$VERSION-1_all.deb 	s3://downloads.bowler.io/nrdk/$VERSION/nr-rdk-java_$VERSION-1_all.deb
