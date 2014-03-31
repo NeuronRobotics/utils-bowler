@@ -1,15 +1,19 @@
 #!/bin/bash
 
 VERSION=$1
+TOKEN=$2
 
+if ( test -z "$TOKEN" ) then
+	echo #####ERROR no Token
+	exit 1
+fi
 if (! test -z "$VERSION" ) then
 	#cp ../installer-scripts/windows/nrdk-$VERSION.exe $VERSION/
 
-	curl -H "Authorization: token TOKEN" \
-	     -H "Accept: application/vnd.github.manifold-preview" \
+	curl -H "Authorization: token fb69cf95a0a7cd48206b6bef33d997e36730104b" \
 	     -H "Content-Type: application/zip" \
 	     --data-binary @$VERSION/nrdk-$VERSION.exe \
-	     "https://uploads.github.com/repos/NeuronRobotics/java-bowler/releases/$VERSION/assets?name=nrdk-$VERSION.exe"
+	     "https://uploads.github.com/repos/NeuronRobotics/java-bowler/releases/$VERSION/assets?name=Windows-nrdk-$VERSION.exe"
 
 	#curl --form "fileupload=@$VERSION/nrdk-$VERSION.exe" https://uploads.github.com/repos/NeuronRobotics/java-bowler/releases/$VERSION/
 	
