@@ -5,7 +5,7 @@ START=$PWD
 VERSION=$1
 
 if (! test -z "$VERSION" ) then
-	sudo apt-get install ant wine
+	#sudo apt-get install ant wine
 	
 	echo ok $VERSION
 	ZIP=nrdk-$VERSION.zip
@@ -143,7 +143,7 @@ if (! test -z "$VERSION" ) then
 	cd $DIST
 	zip -r $ZIP $BUILDLOCAL
 
-exit 0;
+
 	#Prepare the windows exe
 	echo preparing the windows compile directory
 	WINBUILD=$START/../installer-scripts/windows/
@@ -179,7 +179,6 @@ exit 0;
 			exit 1
 		fi
 	fi
-	
 	echo setting up build dirs for debian builder
 	#Build the Debian package
 	rm $START/../installer-scripts/linux/*.zip

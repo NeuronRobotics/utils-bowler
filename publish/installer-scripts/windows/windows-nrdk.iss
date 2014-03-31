@@ -1,15 +1,13 @@
-//This is an example file for InnoIDE
-
 #define MyAppName "Neuron Robotics Development Kit"
 #define MyAppSlug "nrdk"
 #define JDKREG "SOFTWARE\JavaSoft\Java Development Kit"
 #define MyAppPublisher "Neuron Robotics, LLC"
 #define MyAppURL "http://www.neuronrobotics.com"
-#define MyAppOutput "C:\archive\3.8.6"
+#define MyAppOutput "C:\archive\3.8.9"
 
-#define MyAppVersion "3.8.6"
-#define MyAppVerName "Neuron Robotics Development Kit 3.8.6"
-#define MyAppPath "C:\installer-scripts\windows\nrdk-3.8.6"
+#define MyAppVersion "3.8.9"
+#define MyAppVerName "Neuron Robotics Development Kit 3.8.9"
+#define MyAppPath "C:\installer-scripts\windows\nrdk-3.8.9"
 
 
 [Setup]
@@ -153,10 +151,14 @@ begin
 	begin
 		Result :=True;
 	end
+	else if (CompareText('1.8', jv)=0) then
+	begin
+		Result :=True;
+	end
 	else
 	begin
 		MsgBox('The version of Java installed is incompatable or missing with {#MyAppName}, Java 7 32 is required, Reported:'+jv, mbInformation, MB_OK);
-		Result :=False;
+		Result :=True;
 	end;
 end;
 

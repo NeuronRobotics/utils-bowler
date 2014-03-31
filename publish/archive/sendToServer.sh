@@ -1,19 +1,19 @@
 #!/bin/bash
 
-VERSION=$1
-TOKEN=$2
+export VERSION=$1
+export GH_TOKEN=$2
+export GH_PROJECT=java-bowler
 
-if ( test -z "$TOKEN" ) then
+# sudo apt-get install ruby1.9.3
+# sudo gem install octokit
+
+if ( test -z "$2" ) then
 	echo #####ERROR no Token
 	exit 1
 fi
-if (! test -z "$VERSION" ) then
+if (! test -z "$1" ) then
 	#cp ../installer-scripts/windows/nrdk-$VERSION.exe $VERSION/
-
-	curl -H "Authorization: token $TOKEN" \
-	     -H "Content-Type: application/zip" \
-	     --data-binary @$VERSION/nrdk-$VERSION.exe \
-	     "https://uploads.github.com/repos/NeuronRobotics/java-bowler/releases/$VERSION/assets?name=Windows-nrdk-$VERSION.exe"
+	ruby ghupload.rb
 
 	#curl --form "fileupload=@$VERSION/nrdk-$VERSION.exe" https://uploads.github.com/repos/NeuronRobotics/java-bowler/releases/$VERSION/
 	
