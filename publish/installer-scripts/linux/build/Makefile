@@ -10,5 +10,5 @@ install:
 	cp NeuronRobotics.png /usr/share/themes/base/neuronrobotics/icons/
 	cp NR-Console.desktop /usr/share/applications/
 	cp 80-neuronrobotics.rules /etc/udev/rules.d/
-	restart udev
-	
+	service udev restart
+	udevadm control --reload-rules
