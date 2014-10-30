@@ -17,6 +17,8 @@ if (! test -z "$VERSION" ) then
 	LIB=$TL/$NRSDK/target/nrsdk-$VERSION-jar-with-dependencies.jar
 	NRCONSOLE_JAR=$TL/$NRConsole/target/nr-console.jar
 	OLDDYIO=false;
+	
+	USE_PROVIDED_FIRMWARE=true;
 
 	if !(test -d $TL/$NRSDK/); then  
 		cd $TL/;
