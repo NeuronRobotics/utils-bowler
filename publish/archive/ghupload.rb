@@ -15,7 +15,7 @@ client.upload_asset(target_release.url, "#{VERSION}/nrdk-#{VERSION}.exe",
 
 client.upload_asset(target_release.url, "#{VERSION}/nrdk-#{VERSION}.zip",
                     :content_type => "application/octet-stream",
-                    :name => "OSX-nrdk-#{VERSION}.zip")
+                    :name => "MacOSX-nrdk-#{VERSION}.zip")
 
 client.upload_asset(target_release.url, "#{VERSION}/nr-rdk-java_#{VERSION}-1_all.deb",
                     :content_type => "application/octet-stream",
