@@ -17,6 +17,8 @@ if (! test -z "$VERSION" ) then
 	LIB=$TL/$NRSDK/target/nrsdk-$VERSION-jar-with-dependencies.jar
 	NRCONSOLE_JAR=$TL/$NRConsole/target/nr-console.jar
 	OLDDYIO=false;
+	ZIP=$DIST/$ZIP
+	BUILD=$DIST/$BUILDLOCAL
 	
 	USE_PROVIDED_FIRMWARE=true;
 
@@ -45,11 +47,11 @@ if (! test -z "$VERSION" ) then
 		exit 1;
 	fi
 
-	if !(test -d $TL/microcontroller-bowler); then  
+	if !(test -d $TL/dyio); then  
 		cd $TL/;
-		git clone https://github.com/NeuronRobotics/microcontroller-bowler.git
+		git clone https://github.com/NeuronRobotics/dyio.git
 	fi
-	cd $TL/microcontroller-bowler/
+	cd $TL/dyio/
 	git pull
 	if (! git checkout tags/$VERSION); then
 		if (! git checkout tags/v$VERSION); then
@@ -60,7 +62,7 @@ if (! test -z "$VERSION" ) then
 		#Change the DyIO directory to the old location before the GIT transition
 		DyIO=microcontroller-bowler/firmware/device/DyIO/development/
 	else
-		DyIO=microcontroller-bowler/DyIO/development/
+		DyIO=dyio/
 	fi
 	# make the output dirs for building the DyIO
 
@@ -75,76 +77,78 @@ if (! test -z "$VERSION" ) then
 	mkdir -p $TL/$DyIO/FirmwarePublish/Dev/
 
 	XML=$TL/$DyIO/FirmwarePublish/Release/dyio-$VERSION.xml
-	cd $TL/$DyIO/
-	make all
-
-
-
-	#Build all depandancies
-	cd $TL/$NRSDK/;ant
-	if (! test -e $LIB) then
-		echo ERROR!! expected lib file: $LIB 
-		echo but none was found
-		exit 1
-	fi
-
-	rm -rf $TL/$NRConsole/lib/nrsdk-*.jar
-	cp $LIB $TL/$NRConsole/lib/
-	cd $TL/$NRConsole/;
-	ant
-	if(!test -e $NRCONSOLE_JAR) then
-		echo ERROR!! expected lib file: $NRCONSOLE_JAR 
-		exit 1
-	fi
-
-
-	#Copy over data
 	
-	if (! test -e $XML) then
-		echo ERROR!! expected firmware file: $XML 
-		echo but none was found
-		#exit 1
-	fi
+
+	
 	if(test -e $DIST) then
-		echo previous build exists
-		rm -rf $DIST/java
-	else
-		mkdir $DIST
-	fi
-	mkdir $DIST/java
-	cd $DIST
-	ZIP=$DIST/$ZIP
-	
-	BUILD=$DIST/$BUILDLOCAL
-	echo entering:  $DIST 
-	echo zip file:  $ZIP
-	echo build dir: $BUILD
-	if(test -e $ZIP) then
-		echo zip exists
-		rm $ZIP
-	fi
-	if(test -e $BUILD) then
 		echo build dir exists
 	else
+		cd $TL/$DyIO/
+		make pub
+	
+	
+	
+		#Build all depandancies
+		cd $TL/$NRSDK/;ant
+		if (! test -e $LIB) then
+			echo ERROR!! expected lib file: $LIB 
+			echo but none was found
+			exit 1
+		fi
+	
+		rm -rf $TL/$NRConsole/lib/nrsdk-*.jar
+		cp $LIB $TL/$NRConsole/lib/
+		cd $TL/$NRConsole/;
+		ant
+		if(!test -e $NRCONSOLE_JAR) then
+			echo ERROR!! expected lib file: $NRCONSOLE_JAR 
+			exit 1
+		fi
+	
+	
+		#Copy over data
+		
+		if (! test -e $XML) then
+			echo ERROR!! expected firmware file: $XML 
+			echo but none was found
+			#exit 1
+		fi
+		if(test -e $DIST) then
+			echo previous build exists
+			rm -rf $DIST/java
+		else
+			mkdir $DIST
+		fi
+		mkdir $DIST/java
+		cd $DIST
+
+		echo entering:  $DIST 
+		echo zip file:  $ZIP
+		echo build dir: $BUILD
+		if(test -e $ZIP) then
+			echo zip exists
+			rm $ZIP
+		fi
+
 		mkdir $BUILD
 		mkdir $BUILD/bin
 		mkdir $BUILD/java
 		mkdir $BUILD/firmware
 		cp $START/*.txt $BUILD
-	fi
 	
-	cp $LIB 								$BUILD/java/
-	cp $TL/$NRConsole/target/nr-console.jar 			        $BUILD/bin/
-	cp $START/NeuronRobotics.* 						$BUILD/bin/
-	cp -r $TL/$DyIO/FirmwarePublish/Release/*			$BUILD/firmware/
-	rsync -avtP --exclude=.svn* $TL/$NRSDK/target/docs 		$BUILD/java/
-	cp $START/index.html 							$BUILD/java/docs/api/
-	rsync -avtP --exclude=.svn* $TL/$NRSDK/target/docs				$DIST/java
-	echo Copy OK
-
-	cd $DIST
-	zip -r $ZIP $BUILDLOCAL
-
+	
+		cp $LIB 								$BUILD/java/
+		cp $TL/$NRConsole/target/nr-console.jar 			        $BUILD/bin/
+		cp $START/NeuronRobotics.* 						$BUILD/bin/
+		cp -r $TL/$DyIO/FirmwarePublish/Release/*			$BUILD/firmware/
+		rsync -avtP --exclude=.svn* $TL/$NRSDK/target/docs 		$BUILD/java/
+		cp $START/index.html 							$BUILD/java/docs/api/
+		rsync -avtP --exclude=.svn* $TL/$NRSDK/target/docs				$DIST/java
+		echo Copy OK
+	
+		cd $DIST
+		zip -r $ZIP $BUILDLOCAL
+	fi
 
 	#Prepare the windows exe
 	echo preparing the windows compile directory
@@ -173,7 +177,6 @@ if (! test -z "$VERSION" ) then
 	if ( wine "C:\Program Files\Inno Setup 5\Compil32.exe" /cc "C:\installer-scripts\windows\windows-nrdk.iss") then 
 		echo windows installer compiled
 	else
-
 		if ( wine "C:\Program Files (x86)\Inno Setup 5\Compil32.exe" /cc "C:\installer-scripts\windows\windows-nrdk.iss") then
 			echo wine ok
 		else
@@ -196,7 +199,7 @@ if (! test -z "$VERSION" ) then
 	rm -rf 	$BUILD
 	
 	#sh $START/sendToServer.sh $VERSION
-else
-	echo #####ERROR no version specified, I.E. 3.7.0
-	exit 1
+	exit 0
 fi
+echo #####ERROR no version specified, I.E. 3.7.0
+exit 1

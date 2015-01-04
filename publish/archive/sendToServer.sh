@@ -11,7 +11,7 @@ if ( test -z "$GH_TOKEN" ) then
 	exit 1
 fi
 if (! test -z "$1" ) then
-
+	echo Sending to Github
 	ruby ghupload.rb
 
 else
