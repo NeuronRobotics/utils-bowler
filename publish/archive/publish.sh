@@ -180,7 +180,7 @@ if (! test -z "$VERSION" ) then
 		if ( wine "C:\Program Files (x86)\Inno Setup 5\Compil32.exe" /cc "C:\installer-scripts\windows\windows-nrdk.iss") then
 			echo wine ok
 		else
-			wine tools/isetup-5.4.3.exe
+			wine $START/tools/isetup-5.4.3.exe
 			exit 1
 		fi
 	fi
