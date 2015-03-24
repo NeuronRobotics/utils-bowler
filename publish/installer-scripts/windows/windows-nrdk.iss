@@ -3,11 +3,11 @@
 #define JDKREG "SOFTWARE\JavaSoft\Java Development Kit"
 #define MyAppPublisher "Neuron Robotics, LLC"
 #define MyAppURL "http://www.neuronrobotics.com"
-#define MyAppOutput "C:\archive\3.8.9"
+#define MyAppOutput "C:\archive\3.11.0"
 
-#define MyAppVersion "3.8.9"
-#define MyAppVerName "Neuron Robotics Development Kit 3.8.9"
-#define MyAppPath "C:\installer-scripts\windows\nrdk-3.8.9"
+#define MyAppVersion "3.11.0"
+#define MyAppVerName "Neuron Robotics Development Kit 3.11.0"
+#define MyAppPath "C:\installer-scripts\windows\nrdk-3.11.0"
 
 
 [Setup]
