@@ -142,22 +142,13 @@ var jv :String;
 begin
 	jv := getJavaVersion();
 	setupEnvVars();
-	if (CompareText('1.6', jv)=0) then
-	begin
-		MsgBox('The {#MyAppName} recommends Java 7 32 bit. Detected:'+jv, mbInformation, MB_OK);
-		Result :=True;
-	end
-	else if (CompareText('1.7', jv)=0) then
-	begin
-		Result :=True;
-	end
-	else if (CompareText('1.8', jv)=0) then
+	if (CompareText('1.8', jv)=0) then
 	begin
 		Result :=True;
 	end
 	else
 	begin
-		MsgBox('The version of Java installed is incompatable or missing with {#MyAppName}, Java 7 32 is required, Reported:'+jv, mbInformation, MB_OK);
+		MsgBox('The version of Java installed is incompatable or missing with {#MyAppName}, Java 8 is required, Reported:'+jv, mbInformation, MB_OK);
 		Result :=True;
 	end;
 end;
