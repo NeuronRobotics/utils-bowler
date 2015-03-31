@@ -28,10 +28,10 @@ DriverVer=10/06/2014,5.1.2600.9
 ; the device lists.
 ;------------------------------------------------------------------------------
 [DeviceList]
-%DESCRIPTION%=DriverInstall,USB\VID_04D8&PID_3742
+%DESCRIPTION%=DriverInstall,USB\VID_04D8&PID_0001
 
 [DeviceList.NTamd64] 
-%DESCRIPTION%=DriverInstall,USB\VID_04D8&PID_3742
+%DESCRIPTION%=DriverInstall,USB\VID_04D8&PID_0001
 
 
 ;------------------------------------------------------------------------------
@@ -99,7 +99,7 @@ ServiceBinary = %12%\usbser.sys
 MFGFILENAME="mchpcdc"
 DRIVERFILENAME ="usbser"
 MFGNAME="Neuron Robotics Cooperative"   ;This name shows up in the device manager properties for the device
-DESCRIPTION="DyIO Module"          ;This is the "friendly name" that shows up in the device manager
+DESCRIPTION="Bowler Device"          ;This is the "friendly name" that shows up in the device manager
 SERVICE="USB to Serial Driver"
 
 
