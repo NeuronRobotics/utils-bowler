@@ -193,12 +193,14 @@ if (! test -z "$VERSION" ) then
 	if ( test -e $DIST/*.deb) then
 		rm $DIST/*.deb
 	fi
-	cp $START/../installer-scripts/linux/*$VERSION*.deb $DIST
+	cp $START/../installer-scripts/linux/*$VERSION*.deb $DIST/Ubuntu-nrdk-$VERSION.deb
+	
+	mv $DIST/nrdk-$VERSION.exe $DIST/Windows-nrdk-$VERSION.exe 
+	mv $DIST/nrdk-$VERSION.zip $DIST/MacOSX-nrdk-$VERSION.zip 
 	
 	echo cleanup
 	rm -rf 	$BUILD
 	
-	#sh $START/sendToServer.sh $VERSION
 	exit 0
 fi
 echo #####ERROR no version specified, I.E. 3.7.0
