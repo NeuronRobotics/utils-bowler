@@ -33,6 +33,7 @@ Name: english; MessagesFile: compiler:Default.isl
 [Files]
 Source: {#MyAppPath}\*; DestDir: {app}\{#MyAppSlug}-{#MyAppVersion}; Flags: recursesubdirs createallsubdirs; Languages: ; Excludes: .*
 Source: .\driver\*; DestDir: {win}\inf; Excludes: .*
+Source: .\driver\*; DestDir: {app}\{#MyAppSlug}-{#MyAppVersion}\driver; Excludes: .*
 
 [Icons]
 Name: {group}\NR Console; Filename: {app}\{#MyAppSlug}-{#MyAppVersion}\bin\nr-console.jar
