@@ -3,11 +3,11 @@
 #define JDKREG "SOFTWARE\JavaSoft\Java Development Kit"
 #define MyAppPublisher "Neuron Robotics, LLC"
 #define MyAppURL "http://www.neuronrobotics.com"
-#define MyAppOutput "C:\Users\hephaestus\Desktop"
+#define MyAppOutput "C:\archive\3.11.3"
 
-#define MyAppVersion "3.11.2"
-#define MyAppVerName "Neuron Robotics Development Kit 3.11.2"
-#define MyAppPath "C:\Users\hephaestus\Desktop\nrdk-3.11.2"
+#define MyAppVersion "3.11.3"
+#define MyAppVerName "Neuron Robotics Development Kit 3.11.3"
+#define MyAppPath "C:\installer-scripts\windows\nrdk-3.11.3"
 
 
 [Setup]
@@ -33,9 +33,11 @@ Name: english; MessagesFile: compiler:Default.isl
 [Files]
 Source: {#MyAppPath}\*; DestDir: {app}\{#MyAppSlug}-{#MyAppVersion}; Flags: recursesubdirs createallsubdirs; Languages: ; Excludes: .*
 Source: .\driver\*; DestDir: {app}\{#MyAppSlug}-{#MyAppVersion}\driver; Excludes: .*
+Source: .\driver\*; DestDir: {win}\inf; Excludes: .*
 
 [Run]
 Filename: {sys}\rundll32.exe; Parameters: "setupapi,InstallHinfSection DefaultInstall 128 {app}\{#MyAppSlug}-{#MyAppVersion}\driver\NRDyIO.inf"; WorkingDir: {app}\{#MyAppSlug}-{#MyAppVersion}\driver\; Flags: 32bit;
+
 
 [Icons]
 Name: {group}\NR Console; Filename: {app}\{#MyAppSlug}-{#MyAppVersion}\bin\nr-console.jar
