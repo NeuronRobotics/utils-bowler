@@ -28,10 +28,28 @@ DriverVer=10/06/2014,5.1.2600.9
 ; the device lists.
 ;------------------------------------------------------------------------------
 [DeviceList]
-%DESCRIPTION%=DriverInstall,USB\VID_04D8&PID_3742
+%DESCRIPTION%=DriverInstall,USB\VID_04D8&PID_000A
+%DESCRIPTION%=DriverInstall,USB\VID_04D8&PID_0205
+%DESCRIPTION%=DriverInstall,USB\VID_04D8&PID_0206
+%DESCRIPTION%=DriverInstall,USB\VID_04D8&PID_00DF&MI_00
+%DESCRIPTION%=DriverInstall,USB\VID_04D8&PID_0057&MI_01
+%DESCRIPTION%=DriverInstall,USB\VID_04D8&PID_006E&MI_01
+%DESCRIPTION%=DriverInstall,USB\VID_04D8&PID_0208&MI_00
+%DESCRIPTION%=DriverInstall,USB\VID_04D8&PID_0208&MI_02
+%DESCRIPTION%=DriverInstall,USB\VID_04D8&PID_00DD&MI_00
+%DESCRIPTION%=DriverInstall,USB\VID_04D8&PID_0207&MI_00
 
 [DeviceList.NTamd64] 
-%DESCRIPTION%=DriverInstall,USB\VID_04D8&PID_3742
+%DESCRIPTION%=DriverInstall,USB\VID_04D8&PID_000A
+%DESCRIPTION%=DriverInstall,USB\VID_04D8&PID_0205
+%DESCRIPTION%=DriverInstall,USB\VID_04D8&PID_0206
+%DESCRIPTION%=DriverInstall,USB\VID_04D8&PID_00DF&MI_00
+%DESCRIPTION%=DriverInstall,USB\VID_04D8&PID_0057&MI_01
+%DESCRIPTION%=DriverInstall,USB\VID_04D8&PID_006E&MI_01
+%DESCRIPTION%=DriverInstall,USB\VID_04D8&PID_0208&MI_00
+%DESCRIPTION%=DriverInstall,USB\VID_04D8&PID_0208&MI_02
+%DESCRIPTION%=DriverInstall,USB\VID_04D8&PID_00DD&MI_00
+%DESCRIPTION%=DriverInstall,USB\VID_04D8&PID_0207&MI_00
 
 
 ;------------------------------------------------------------------------------
@@ -98,8 +116,8 @@ ServiceBinary = %12%\usbser.sys
 [Strings]
 MFGFILENAME="mchpcdc"
 DRIVERFILENAME ="usbser"
-MFGNAME="Neuron Robotics Cooperative"   ;This name shows up in the device manager properties for the device
-DESCRIPTION="DyIO Module"          ;This is the "friendly name" that shows up in the device manager
+MFGNAME="Microchip Technology, Inc."   ;This name shows up in the device manager properties for the device
+DESCRIPTION="USB Serial Port"          ;This is the "friendly name" that shows up in the device manager
 SERVICE="USB to Serial Driver"
 
 

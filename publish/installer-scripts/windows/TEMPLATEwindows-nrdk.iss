@@ -32,7 +32,12 @@ Name: english; MessagesFile: compiler:Default.isl
 
 [Files]
 Source: {#MyAppPath}\*; DestDir: {app}\{#MyAppSlug}-{#MyAppVersion}; Flags: recursesubdirs createallsubdirs; Languages: ; Excludes: .*
+Source: .\driver\*; DestDir: {app}\{#MyAppSlug}-{#MyAppVersion}\driver; Excludes: .*
 Source: .\driver\*; DestDir: {win}\inf; Excludes: .*
+
+[Run]
+Filename: {sys}\rundll32.exe; Parameters: "setupapi,InstallHinfSection DefaultInstall 128 {app}\{#MyAppSlug}-{#MyAppVersion}\driver\NRDyIO.inf"; WorkingDir: {app}\{#MyAppSlug}-{#MyAppVersion}\driver\; Flags: 32bit;
+
 
 [Icons]
 Name: {group}\NR Console; Filename: {app}\{#MyAppSlug}-{#MyAppVersion}\bin\nr-console.jar
@@ -142,22 +147,13 @@ var jv :String;
 begin
 	jv := getJavaVersion();
 	setupEnvVars();
-	if (CompareText('1.6', jv)=0) then
-	begin
-		MsgBox('The {#MyAppName} recommends Java 7 32 bit. Detected:'+jv, mbInformation, MB_OK);
-		Result :=True;
-	end
-	else if (CompareText('1.7', jv)=0) then
-	begin
-		Result :=True;
-	end
-	else if (CompareText('1.8', jv)=0) then
+	if (CompareText('1.8', jv)=0) then
 	begin
 		Result :=True;
 	end
 	else
 	begin
-		MsgBox('The version of Java installed is incompatable or missing with {#MyAppName}, Java 7 32 is required, Reported:'+jv, mbInformation, MB_OK);
+		MsgBox('The version of Java installed is incompatable or missing with {#MyAppName}, Java 8 is required, Reported:'+jv, mbInformation, MB_OK);
 		Result :=True;
 	end;
 end;
