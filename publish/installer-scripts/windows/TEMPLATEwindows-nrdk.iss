@@ -26,20 +26,22 @@ OutputDir={#MyAppOutput}
 OutputBaseFilename={#MyAppSlug}-{#MyAppVersion}
 Compression=lzma
 SolidCompression=yes
+; Tell Windows Explorer to reload the environment
+ChangesEnvironment=yes
 
 [Languages]
 Name: english; MessagesFile: compiler:Default.isl
 
-[Files]
-Source: {#MyAppPath}\*; DestDir: {app}\{#MyAppSlug}-{#MyAppVersion}; Flags: recursesubdirs createallsubdirs; Languages: ; Excludes: .*
-Source: .\driver\*; DestDir: {app}\{#MyAppSlug}-{#MyAppVersion}\driver; Excludes: .*
 
 [Run]
 Filename: {sys}\rundll32.exe; Parameters: "setupapi,InstallHinfSection DefaultInstall 128 {app}\{#MyAppSlug}-{#MyAppVersion}\driver\NRDyIO.inf"; WorkingDir: {app}\{#MyAppSlug}-{#MyAppVersion}\driver\; Flags: 32bit;
 
+[Files]
+Source: {#MyAppPath}\*; DestDir: {app}\{#MyAppSlug}-{#MyAppVersion}; Flags: recursesubdirs createallsubdirs; Languages: ; Excludes: .*
+Source: .\driver\*; DestDir: {app}\{#MyAppSlug}-{#MyAppVersion}\driver; Excludes: .*;  AfterInstall: setupEnvOpenCV() ;
 
 [Icons]
-Name: {group}\NR Console; Filename: {app}\{#MyAppSlug}-{#MyAppVersion}\bin\nr-console.jar
+Name: {group}\NR Console; Filename: {app}\{#MyAppSlug}-{#MyAppVersion}\bin\nr-console.jar 
 Name: {group}\{#MyAppVerName}; Filename: {app}\{#MyAppSlug}-{#MyAppVersion}\
 Name: {commondesktop}\NR Console; Filename: {app}\{#MyAppSlug}-{#MyAppVersion}\bin\nr-console.jar; WorkingDir: {app}\{#MyAppSlug}-{#MyAppVersion}\bin\; Comment: "The Neuron Robotics NR-Console";IconFilename: {app}\{#MyAppSlug}-{#MyAppVersion}\bin\NeuronRobotics.ico;
 
@@ -51,6 +53,9 @@ var JavaHome: String;
 var JREBinPath: String;
 var JDKBinPath: String;
 var IsBoth: Boolean;
+var opencvHomeEnvVar :String;
+
+
 
 function hasAdminRights(): Boolean;
 begin
@@ -71,11 +76,13 @@ begin
 	end
 end;
 
+
 function setupEnvVars(): Boolean;
 var javaHomeEnvVar :String;
 var sysPath :String;
 var idx : Integer;
 begin
+  
 	javaHomeEnvVar:=JavaHome;
 	if RegQueryStringValue(HKEY_CURRENT_USER, 'Environment','JavaHome', javaHomeEnvVar) then
 	begin
@@ -99,6 +106,7 @@ begin
 
 	if hasAdminRights() then
 	begin
+    
 		if RegQueryStringValue(HKEY_LOCAL_MACHINE, 'SYSTEM\CurrentControlSet\Control\Session Manager\Environment','Path', sysPath) then
 		begin
 			idx:=Pos(JREBinPath,sysPath);
@@ -141,6 +149,8 @@ begin
 	end;
 end;
 
+
+
 function isJavaVersionOK(): Boolean;
 var jv :String;
 begin
@@ -159,6 +169,7 @@ end;
 
 function InitializeSetup(): Boolean;
 begin
+  
 	Result :=isJavaVersionOK();
 end;
 
@@ -182,5 +193,34 @@ begin
 	Result :=JREBinPath;
 end;
 
+function GetOpenCVBit: String;
+begin
+	if (IsBoth64) then
+	begin
+		Result :='x64';
+	end
+	else
+	begin
+		Result :='x32';
+	end;
+end;
+
+procedure setupEnvOpenCV();
+var homedir: String;
+begin
+   homedir := ExpandConstant('{app}');
+   if (IsBoth64()) then
+    begin
+      opencvHomeEnvVar :=homedir+'\build\x64\vc11';
+    end
+    else
+    begin
+      opencvHomeEnvVar :=homedir+'\build\x86\vc11' ;
+    end
+   RegWriteExpandStringValue(HKLM, '{#SystemEnvRegKey}', 'OPENCV_DIR', opencvHomeEnvVar);
+end;
+
+
 [Registry]
-Root: HKCU; SubKey: Environment; ValueName: NRDK_HOME; Flags: uninsdeletekey; ValueData: {app}\{#MyAppSlug}-{#MyAppVersion}; 
+Root: HKCR; SubKey: "SYSTEM\CuurrentControlSet\Control\Session Manager\Environment"; ValueName: "NRDK_HOME"; ValueData: {app}\{#MyAppSlug}-{#MyAppVersion};
+Root: HKCR; SubKey: "SYSTEM\CuurrentControlSet\Control\Session Manager\Environment"; ValueName: "OPENCV_DIR"; ValueData: {app}\build\{GetOpenCVBit()}\vc11; 
