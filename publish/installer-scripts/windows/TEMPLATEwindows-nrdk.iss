@@ -219,6 +219,7 @@ begin
       opencvHomeEnvVar :=homedir+'\build\x86\vc11' ;
     end
    RegWriteExpandStringValue(HKLM, '{#SystemEnvRegKey}', 'OPENCV_DIR', opencvHomeEnvVar);
+   RegWriteExpandStringValue(HKLM, '{#SystemEnvRegKey}', 'BOWLER_HOME', homedir+ExpandConstant('{#OutputBaseFilename}'));
 end;
 
 
