@@ -11,7 +11,10 @@ if (! test -z "$VERSION" ) then
 	mv rdk/nrdk-*/* rdk/
 	rm -rf rdk/nrdk-*
 	
-	tar cf build/rdk.tar rdk/* --exclude-vcs --exclude=.DS_Store --exclude=__MACOSX
+	tar cf build/rdk.tar rdk/ --exclude-vcs --exclude=.DS_Store --exclude=__MACOSX
+	unzip ~/git/ZipArchive/linux/Slic3r_x64.zip rdk/Slic3r_x64/
+	unzip ~/git/ZipArchive/linux/Slic3r_x86.zip rdk/Slic3r_x86/
+
 	
 	if (test -e rdk/java/nrsdk-$VERSION-jar-with-dependencies.jar) then
 		BUILD=nr_rdk_java-$VERSION
