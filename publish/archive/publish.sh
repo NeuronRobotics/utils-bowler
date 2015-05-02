@@ -46,6 +46,9 @@ if (! test -z "$VERSION" ) then
 		echo "NRConsole $VERSION Is not taged yet"
 		exit 1;
 	fi
+	cd $TL/$NRConsole/java-bowler/
+	git pull origin development
+	cd $TL
 
 	if !(test -d $TL/dyio); then  
 		cd $TL/;
@@ -164,9 +167,9 @@ if (! test -z "$VERSION" ) then
 	
 	
 	cp -r $BUILD $START/../installer-scripts/windows
-	unzip ~/git/ZipArchive/win/OpenCV-Win-2.4.9.zip $START/../installer-scripts/windows/$BUILDLOCAL/
-	unzip ~/git/ZipArchive/win/Slic3r_x64.zip $START/../installer-scripts/windows/$BUILDLOCAL/Slic3r_x64/
-	unzip ~/git/ZipArchive/win/Slic3r_x86.zip $START/../installer-scripts/windows/$BUILDLOCAL/Slic3r_x86/
+	unzip ~/git/ZipArchive/win/OpenCV-Win-2.4.9.zip -d $START/../installer-scripts/windows/$BUILDLOCAL/
+	unzip ~/git/ZipArchive/win/Slic3r_x64.zip -d $START/../installer-scripts/windows/$BUILDLOCAL/Slic3r_x64/
+	unzip ~/git/ZipArchive/win/Slic3r_x86.zip -d $START/../installer-scripts/windows/$BUILDLOCAL/Slic3r_x86/
 
 	if ( test -e $DIST/nrdk-$VERSION.exe) then
 		echo exe exists $DIST/nrdk-$VERSION.exe

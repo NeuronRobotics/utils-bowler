@@ -12,8 +12,8 @@ if (! test -z "$VERSION" ) then
 	rm -rf rdk/nrdk-*
 	
 	tar cf build/rdk.tar rdk/ --exclude-vcs --exclude=.DS_Store --exclude=__MACOSX
-	unzip ~/git/ZipArchive/linux/Slic3r_x64.zip rdk/Slic3r_x64/
-	unzip ~/git/ZipArchive/linux/Slic3r_x86.zip rdk/Slic3r_x86/
+	unzip ~/git/ZipArchive/linux/Slic3r_x64.zip -d rdk/Slic3r_x64/
+	unzip ~/git/ZipArchive/linux/Slic3r_x86.zip -d rdk/Slic3r_x86/
 
 	
 	if (test -e rdk/java/nrsdk-$VERSION-jar-with-dependencies.jar) then
