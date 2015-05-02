@@ -3,7 +3,8 @@ RDKINSTALL=/usr/local/NeuronRobotics/RDK/
 install:
 	if (test -d $(RDKINSTALL)); then echo "RDK exists, overwriting.."; else sudo mkdir -p $(RDKINSTALL); fi
 	cp rdk.tar $(RDKINSTALL)
-	chmod +x nr-*
+	chmod +x bowlerstudio
+	chmod +x BowlerStudio.desktop
 	cp bowlerstudio /usr/bin/
 	
 	if(! test -d /usr/share/themes/base/neuronrobotics/icons/)then  mkdir -p /usr/share/themes/base/neuronrobotics/icons/; fi

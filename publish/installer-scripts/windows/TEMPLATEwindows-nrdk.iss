@@ -9,6 +9,10 @@
 #define MyAppVerName "Neuron Robotics Development Kit VER"
 #define MyAppPath "C:\installer-scripts\windows\nrdk-VER"
 
+#define SystemEnvRegKey "SYSTEM\CurrentControlSet\Control\Session Manager\Environment"
+#define CurUserEnvRegKey "Environment"
+
+
 
 [Setup]
 AppId={{A6FF93DE-2451-4610-8C9B-64DC2546DBE7}
@@ -42,9 +46,9 @@ Source: .\driver\*; DestDir: {win}\inf; Excludes: .*
 Filename: {sys}\rundll32.exe; Parameters: "setupapi,InstallHinfSection DefaultInstall 128 {app}\{#MyAppSlug}-{#MyAppVersion}\driver\NRDyIO.inf"; WorkingDir: {app}\{#MyAppSlug}-{#MyAppVersion}\driver\; Flags: 32bit;
 
 [Icons]
-Name: {group}\NR Console; Filename: {app}\{#MyAppSlug}-{#MyAppVersion}\bin\nr-console.jar 
+Name: {group}\NR Console; Filename: {app}\{#MyAppSlug}-{#MyAppVersion}\bin\BowlerStudio.jar 
 Name: {group}\{#MyAppVerName}; Filename: {app}\{#MyAppSlug}-{#MyAppVersion}\
-Name: {commondesktop}\NR Console; Filename: {app}\{#MyAppSlug}-{#MyAppVersion}\bin\nr-console.jar; WorkingDir: {app}\{#MyAppSlug}-{#MyAppVersion}\bin\; Comment: "The Neuron Robotics NR-Console";IconFilename: {app}\{#MyAppSlug}-{#MyAppVersion}\bin\NeuronRobotics.ico;
+Name: {commondesktop}\NR Console; Filename: {app}\{#MyAppSlug}-{#MyAppVersion}\bin\BowlerStudio.jar; WorkingDir: {app}\{#MyAppSlug}-{#MyAppVersion}\bin\; Comment: "Neuron Robotics BowlerStudio";IconFilename: {app}\{#MyAppSlug}-{#MyAppVersion}\bin\NeuronRobotics.ico;
 
 
 [Code]

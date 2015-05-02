@@ -12,10 +12,10 @@ if (! test -z "$VERSION" ) then
 	BUILDLOCAL=nrdk-$VERSION
 	DIST=$PWD/$VERSION
 	TL=$START/../../../
-	NRSDK=java-bowler/javasdk/NRSDK/
-	NRConsole=NrConsole/application/nrconsole/
-	LIB=$TL/$NRSDK/target/nrsdk-$VERSION-jar-with-dependencies.jar
-	NRCONSOLE_JAR=$TL/$NRConsole/target/nr-console.jar
+	NRSDK=java-bowler/
+	NRConsole=BowlerStudio/
+	LIB=$TL/$NRSDK/build/libs/nrsdk-$VERSION-jar-with-dependencies.jar
+	NRCONSOLE_JAR=$TL/$NRConsole/build/libs/BowlerStudio.jar
 	OLDDYIO=false;
 	ZIP=$DIST/$ZIP
 	BUILD=$DIST/$BUILDLOCAL
@@ -37,11 +37,11 @@ if (! test -z "$VERSION" ) then
 
 	if !(test -d $TL/$NRConsole/); then  
 		cd $TL/;
-		git clone https://github.com/NeuronRobotics/NrConsole.git
+		git clone https://github.com/NeuronRobotics/BowlerStudio.git
 	fi
 	cd $TL/$NRConsole/
 	git pull
-	if (! git checkout tags/$VERSION); then
+	if (! git checkout master); then
 		git tag -l
 		echo "NRConsole $VERSION Is not taged yet"
 		exit 1;
@@ -89,17 +89,20 @@ if (! test -z "$VERSION" ) then
 	
 	
 		#Build all depandancies
-		cd $TL/$NRSDK/;ant
+		cd $TL/$NRSDK/;
+
+		gradle jar
 		if (! test -e $LIB) then
 			echo ERROR!! expected lib file: $LIB 
 			echo but none was found
 			exit 1
 		fi
-	
-		rm -rf $TL/$NRConsole/lib/nrsdk-*.jar
-		cp $LIB $TL/$NRConsole/lib/
+
 		cd $TL/$NRConsole/;
-		ant
+		cd java-bowler/
+		git pull origin $VERSION
+		cd ..
+		gradle jar
 		if(!test -e $NRCONSOLE_JAR) then
 			echo ERROR!! expected lib file: $NRCONSOLE_JAR 
 			exit 1
@@ -138,7 +141,7 @@ if (! test -z "$VERSION" ) then
 	
 	
 		cp $LIB 								$BUILD/java/
-		cp $TL/$NRConsole/target/nr-console.jar 			        $BUILD/bin/
+		cp $NRCONSOLE_JAR						        $BUILD/bin/
 		cp $START/NeuronRobotics.* 						$BUILD/bin/
 		cp -r $TL/$DyIO/FirmwarePublish/Release/*			$BUILD/firmware/
 		rsync -avtP --exclude=.svn* $TL/$NRSDK/target/docs 		$BUILD/java/
@@ -161,6 +164,8 @@ if (! test -z "$VERSION" ) then
 	
 	
 	cp -r $BUILD $START/../installer-scripts/windows
+	cp -r $START/../installer-scripts/windows/build $START/../installer-scripts/windows/$BUILDLOCAL/
+	
 	if ( test -e $DIST/nrdk-$VERSION.exe) then
 		echo exe exists $DIST/nrdk-$VERSION.exe
 		rm $DIST/nrdk-$VERSION.exe
