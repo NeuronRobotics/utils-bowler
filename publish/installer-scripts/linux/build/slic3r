@@ -1,0 +1,10 @@
+NRDIR=/usr/local/NeuronRobotics/RDK/
+if [ $(uname -m) == 'x86_64' ]; then
+  # 64-bit stuff here
+  cd $NRDIR/Slic3r_x64/Slic3r/bin/
+  ./slic3r "$@"
+else
+  # 32-bit stuff here
+  cd $NRDIR/Slic3r_x86/Slic3r/bin
+  ./slic3r  "$@"
+fi
