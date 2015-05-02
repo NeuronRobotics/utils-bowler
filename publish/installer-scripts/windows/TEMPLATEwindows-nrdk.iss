@@ -9,6 +9,7 @@
 #define MyAppVerName "Neuron Robotics Development Kit VER"
 #define MyAppPath "C:\installer-scripts\windows\nrdk-VER"
 
+
 #define SystemEnvRegKey "SYSTEM\CurrentControlSet\Control\Session Manager\Environment"
 #define CurUserEnvRegKey "Environment"
 
@@ -46,7 +47,7 @@ Filename: {sys}\rundll32.exe; Parameters: "setupapi,InstallHinfSection DefaultIn
 [Icons]
 Name: {group}\NR Console; Filename: {app}\{#MyAppSlug}-{#MyAppVersion}\bin\BowlerStudio.jar 
 Name: {group}\{#MyAppVerName}; Filename: {app}\{#MyAppSlug}-{#MyAppVersion}\
-Name: {commondesktop}\NR Console; Filename: {app}\{#MyAppSlug}-{#MyAppVersion}\bin\BowlerStudio.jar; WorkingDir: {app}\{#MyAppSlug}-{#MyAppVersion}\bin\; Comment: "The Neuron Robotics BowlerStudio";IconFilename: {app}\{#MyAppSlug}-{#MyAppVersion}\bin\NeuronRobotics.ico;
+Name: {commondesktop}\NR Console; Filename: {app}\{#MyAppSlug}-{#MyAppVersion}\bin\BowlerStudio.jar; WorkingDir: {app}\{#MyAppSlug}-{#MyAppVersion}\bin\; Comment: "Neuron Robotics BowlerStudio";IconFilename: {app}\{#MyAppSlug}-{#MyAppVersion}\bin\NeuronRobotics.ico;
 
 
 [Code]
@@ -155,20 +156,56 @@ end;
 
 
 function isJavaVersionOK(): Boolean;
-var jv :String;
+var
+ ErrorCode: Integer;
+ JavaInstalled : Boolean;
+ Result1 : Boolean;
+ Versions: TArrayOfString;
+ I: Integer;
 begin
-	jv := getJavaVersion();
-	setupEnvVars();
-	if (CompareText('1.8', jv)=0) then
-	begin
-		Result :=True;
-	end
-	else
-	begin
-		MsgBox('The version of Java installed is incompatable or missing with {#MyAppName}, Java 8 is required, Reported:'+jv, mbInformation, MB_OK);
-		Result :=True;
-	end;
-end;
+ if RegGetSubkeyNames(HKLM, 'SOFTWARE\JavaSoft\Java Runtime Environment', Versions) then
+ begin
+  for I := 0 to GetArrayLength(Versions)-1 do
+   if JavaInstalled = true then
+   begin
+    //do nothing
+   end else
+   begin
+    if ( Versions[I][2]='.' ) and ( ( StrToInt(Versions[I][1]) > 1 ) or ( ( StrToInt(Versions[I][1]) = 1 ) and ( StrToInt(Versions[I][3]) >= 6 ) ) ) then
+    begin
+     JavaInstalled := true;
+    end else
+    begin
+     JavaInstalled := false;
+    end;
+   end;
+ end else
+ begin
+  JavaInstalled := false;
+ end;
+
+
+ //JavaInstalled := RegKeyExists(HKLM,'SOFTWARE\JavaSoft\Java Runtime Environment\1.9');
+ if JavaInstalled then
+ begin
+  Result := true;
+ end else
+    begin
+  Result1 := MsgBox('This tool requires Java Runtime Environment version 1.8 or newer to run. Please download and install the JRE and run this setup again. Do you want to download it now?',
+   mbConfirmation, MB_YESNO) = idYes;
+  if Result1 = false then
+  begin
+   Result:=false;
+  end else
+  begin
+   Result:=false;
+   ShellExec('open',
+    'http://www.java.com/getjava/',
+    '','',SW_SHOWNORMAL,ewNoWait,ErrorCode);
+  end;
+    end;
+   end;
+end.
 
 function InitializeSetup(): Boolean;
 begin
@@ -207,7 +244,80 @@ begin
 		Result :='x32';
 	end;
 end;
+#ifdef UNICODE
+  #define AW "W"
+#else
+  #define AW "A"
+#endif
 
+#define SystemEnvRegKey "SYSTEM\CurrentControlSet\Control\Session Manager\Environment"
+#define CurUserEnvRegKey "Environment"
+
+const
+  SMTO_ABORTIFHUNG = 2;
+  WM_WININICHANGE = $001A;
+  WM_SETTINGCHANGE = WM_WININICHANGE;
+
+type
+  WPARAM = UINT_PTR;
+  LPARAM = INT_PTR;
+  LRESULT = INT_PTR;
+
+function SetEnvironmentVariable(lpName: string; lpValue: string): BOOL;
+  external 'SetEnvironmentVariable{#AW}@kernel32.dll stdcall';
+function SendTextMessageTimeout(hWnd: HWND; Msg: UINT; wParam: WPARAM;
+  lParam: string; fuFlags: UINT; uTimeout: UINT; out lpdwResult: DWORD): LRESULT;
+  external 'SendMessageTimeout{#AW}@user32.dll stdcall';
+
+procedure RefreshEnvironment;
+var
+  MsgResult: DWORD;
+begin
+  SendTextMessageTimeout(HWND_BROADCAST, WM_SETTINGCHANGE, 0, 'Environment',
+    SMTO_ABORTIFHUNG, 5000, MsgResult);
+end;
+
+// function which sets environment variables for the setup process; processes
+// executed from the setup after this function call will see the changes made
+// because every process created by the setup inherits its environment block;
+// changes made by this function are valid just for the setup process and are
+// not persistent nor system wide
+function SetEnvSetup(const Name, Value: string): Boolean;
+begin
+  Result := SetEnvironmentVariable(Name, Value);
+end;
+
+// function which persistently changes the system wide environment variables;
+// changes made by this function call won't be seen by the setup process, nor
+// the applications executed from it since Inno Setup does not modify its own
+// environment block even if you send an environment change notification; the
+// Refresh parameter in this function determines whether the running programs
+// should be notified about the environment changes; when you set it to True,
+// all running programs will be notified about this change and may reload the
+// current settings; if you set it to False, no running program will notice a
+// change (it's the immediate equivalent to the ChangesEnvironment directive)
+function SetEnvSystem(const Name, Value: string; Refresh: Boolean): Boolean;
+begin
+  Result := RegWriteExpandStringValue(HKLM, '{#SystemEnvRegKey}', Name, Value);
+  if Result and Refresh then
+    RefreshEnvironment;
+end;
+
+// function that persistently changes the current user environment variables;
+// changes made by this function call won't be seen by the setup process, nor
+// the applications executed from it since Inno Setup does not modify its own
+// environment block even if you send an environment change notification; the
+// Refresh parameter in this function determines whether the running programs
+// should be notified about the environment changes; when you set it to True,
+// all running programs will be notified about this change and may reload the
+// current settings; if you set it to False, no running program will notice a
+// change (it's the immediate equivalent to the ChangesEnvironment directive)
+function SetEnvCurUser(const Name, Value: string; Refresh: Boolean): Boolean;
+begin
+  Result := RegWriteExpandStringValue(HKCU, '{#CurUserEnvRegKey}', Name, Value);
+  if Result and Refresh then
+    RefreshEnvironment;
+end;
 procedure setupEnvOpenCV();
 var homedir: String;
 begin
@@ -220,7 +330,14 @@ begin
     begin
       opencvHomeEnvVar :=homedir+'\build\x86\vc11' ;
     end
-   RegWriteExpandStringValue(HKLM, '{#SystemEnvRegKey}', 'OPENCV_DIR', opencvHomeEnvVar);
-   RegWriteExpandStringValue(HKLM, '{#SystemEnvRegKey}', 'BOWLER_HOME', homedir);
+   SetEnvSystem( 'OPENCV_DIR', opencvHomeEnvVar,True);
+   SetEnvSystem( 'BOWLER_HOME', homedir,True);
+
+   SetEnvCurUser( 'OPENCV_DIR', opencvHomeEnvVar,True);
+   SetEnvCurUser( 'BOWLER_HOME', homedir,True);
 end;
 
+
+[Registry]
+Root: HKLM; SubKey: "SYSTEM\CurrentControlSet\Control\Session Manager\Environment";ValueType:string; ValueName: "BOWLER_HOME"; ValueData: {app}\{#MyAppSlug}-{#MyAppVersion};  Flags: preservestringtype ;
+Root: HKLM; SubKey: "SYSTEM\CurrentControlSet\Control\Session Manager\Environment";ValueType:string; ValueName: "OPENCV_DIR"; ValueData: {app}\{#MyAppSlug}-{#MyAppVersion}\build\x64\vc11;  Flags: preservestringtype ;
