@@ -156,6 +156,18 @@ if (! test -z "$VERSION" ) then
 		zip -r $ZIP $BUILDLOCAL
 	fi
 
+	echo setting up build dirs for debian builder
+	#Build the Debian package
+	rm $START/../installer-scripts/linux/*.zip
+	cp $ZIP $START/../installer-scripts/linux/
+	cd $START/../installer-scripts/linux/
+	sh prep.sh $VERSION
+	if ( test -e $DIST/*.deb) then
+		rm $DIST/*.deb
+	fi
+	cp $START/../installer-scripts/linux/*$VERSION*.deb $DIST/Ubuntu-nrdk-$VERSION.deb
+	
+
 	#Prepare the windows exe
 	echo preparing the windows compile directory
 	WINBUILD=$START/../installer-scripts/windows/
@@ -194,17 +206,7 @@ if (! test -z "$VERSION" ) then
 			exit 1
 		fi
 	fi
-	echo setting up build dirs for debian builder
-	#Build the Debian package
-	rm $START/../installer-scripts/linux/*.zip
-	cp $ZIP $START/../installer-scripts/linux/
-	cd $START/../installer-scripts/linux/
-	sh prep.sh $VERSION
-	if ( test -e $DIST/*.deb) then
-		rm $DIST/*.deb
-	fi
-	cp $START/../installer-scripts/linux/*$VERSION*.deb $DIST/Ubuntu-nrdk-$VERSION.deb
-	
+
 	mv $DIST/nrdk-$VERSION.exe $DIST/Windows-nrdk-$VERSION.exe 
 	mv $DIST/nrdk-$VERSION.zip $DIST/MacOSX-nrdk-$VERSION.zip 
 	
