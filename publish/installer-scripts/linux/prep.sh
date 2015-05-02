@@ -8,13 +8,13 @@ if (! test -z "$VERSION" ) then
 	
 	mkdir rdk
 	unzip -qq nrdk-*.zip -d rdk
+	unzip -qq ~/git/ZipArchive/linux/Slic3r_x64.zip -d rdk/Slic3r_x64/
+	unzip -qq ~/git/ZipArchive/linux/Slic3r_x86.zip -d rdk/Slic3r_x86/
+
 	mv rdk/nrdk-*/* rdk/
 	rm -rf rdk/nrdk-*
 	
 	tar cf build/rdk.tar rdk/ --exclude-vcs --exclude=.DS_Store --exclude=__MACOSX
-	unzip ~/git/ZipArchive/linux/Slic3r_x64.zip -d rdk/Slic3r_x64/
-	unzip ~/git/ZipArchive/linux/Slic3r_x86.zip -d rdk/Slic3r_x86/
-
 	
 	if (test -e rdk/java/nrsdk-$VERSION-jar-with-dependencies.jar) then
 		BUILD=nr_rdk_java-$VERSION
