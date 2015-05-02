@@ -12,8 +12,6 @@
 #define SystemEnvRegKey "SYSTEM\CurrentControlSet\Control\Session Manager\Environment"
 #define CurUserEnvRegKey "Environment"
 
-
-
 [Setup]
 AppId={{A6FF93DE-2451-4610-8C9B-64DC2546DBE7}
 AppName={#MyAppName}
@@ -226,7 +224,3 @@ begin
    RegWriteExpandStringValue(HKLM, '{#SystemEnvRegKey}', 'BOWLER_HOME', homedir);
 end;
 
-
-[Registry]
-Root: HKCR; SubKey: "SYSTEM\CuurrentControlSet\Control\Session Manager\Environment"; ValueName: "NRDK_HOME"; ValueData: {app}\{#MyAppSlug}-{#MyAppVersion};
-Root: HKCR; SubKey: "SYSTEM\CuurrentControlSet\Control\Session Manager\Environment"; ValueName: "OPENCV_DIR"; ValueData: {app}\build\{GetOpenCVBit()}\vc11; 
