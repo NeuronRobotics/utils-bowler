@@ -167,9 +167,9 @@ if (! test -z "$VERSION" ) then
 	
 	
 	cp -r $BUILD $START/../installer-scripts/windows
-	unzip ~/git/ZipArchive/win/OpenCV-Win-2.4.9.zip -d $START/../installer-scripts/windows/$BUILDLOCAL/
-	unzip ~/git/ZipArchive/win/Slic3r_x64.zip -d $START/../installer-scripts/windows/$BUILDLOCAL/Slic3r_x64/
-	unzip ~/git/ZipArchive/win/Slic3r_x86.zip -d $START/../installer-scripts/windows/$BUILDLOCAL/Slic3r_x86/
+	unzip -qq ~/git/ZipArchive/win/OpenCV-Win-2.4.9.zip -d $START/../installer-scripts/windows/$BUILDLOCAL/
+	unzip -qq ~/git/ZipArchive/win/Slic3r_x64.zip -d $START/../installer-scripts/windows/$BUILDLOCAL/Slic3r_x64/
+	unzip -qq ~/git/ZipArchive/win/Slic3r_x86.zip -d $START/../installer-scripts/windows/$BUILDLOCAL/Slic3r_x86/
 
 	if ( test -e $DIST/nrdk-$VERSION.exe) then
 		echo exe exists $DIST/nrdk-$VERSION.exe
