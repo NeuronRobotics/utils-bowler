@@ -1,7 +1,16 @@
 #! /bin/bash
-VERSION="3.7.2"
+VERSION=$1
 IMAGE=nrdk-$VERSION.dmg
 
+rm -rf data/
+mkdir data
+
+cp -r ../../archive/$VERSION/* data/
+cp -r $OPENCV_DIR/../../../build/ data/
+chmod +x BowlerStudio
+cp BowlerStudio data/
+ 
+ 
 test -f $IMAGE && rm $IMAGE
 ./scripts/create-dmg --window-size 553 300 \
                      --background background.png \
