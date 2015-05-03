@@ -1,5 +1,5 @@
 [Desktop Entry]
 Type=Application
-Name=NR-Console
+Name=Bowler Studio
 Exec=/usr/bin/bowlerstudio
 Icon=/usr/share/themes/base/neuronrobotics/icons/NeuronRobotics.png

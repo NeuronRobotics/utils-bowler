@@ -1,6 +1,6 @@
 #! /bin/bash
 VERSION=$1
-IMAGE=nrdk-$VERSION.dmg
+IMAGE=BowlerStudio-$VERSION.dmg
 
 rm -rf data/
 mkdir data
@@ -15,7 +15,7 @@ test -f $IMAGE && rm $IMAGE
 ./scripts/create-dmg --window-size 553 300 \
                      --background background.png \
                      --icon-size 140 \
-                     --volname "NRDK - $VERSION" \
+                     --volname "BowlerStudio - $VERSION" \
                      --icon "Applications" 420 180 \
                      --icon "server" 140 180 \
                      $IMAGE \
