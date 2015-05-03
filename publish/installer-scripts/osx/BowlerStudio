@@ -1,0 +1,6 @@
+#! /bin/bash
+
+DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+
+export OPENCV_DIR=$DIR/build/x64/vc11/
+java -jar $DIR/bin/BowlerStudio.jar
