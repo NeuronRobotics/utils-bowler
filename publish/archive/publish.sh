@@ -166,7 +166,12 @@ if (! test -z "$VERSION" ) then
 		rm $DIST/*.deb
 	fi
 	cp $START/../installer-scripts/linux/*$VERSION*.deb $DIST/Ubuntu-nrdk-$VERSION.deb
-	
+
+	rm $START/../installer-scripts/osx/*.zip
+	cp $ZIP $START/../installer-scripts/osx/
+	cd $START/../installer-scripts/osx/
+	sh prep.sh $VERSION	
+	cp $START/../installer-scripts/osx/*$VERSION*.zip $DIST/MacOSX-nrdk-$VERSION.zip
 
 	#Prepare the windows exe
 	echo preparing the windows compile directory
