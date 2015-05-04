@@ -157,6 +157,14 @@ if (! test -z "$VERSION" ) then
 	fi
 
 	echo setting up build dirs for debian builder
+
+	rm $START/../installer-scripts/osx/*.zip
+	cp $ZIP $START/../installer-scripts/osx/
+	cd $START/../installer-scripts/osx/
+	sh prep.sh $VERSION	
+	cp $START/../installer-scripts/osx/*$VERSION*.zip $DIST/MacOSX-nrdk-$VERSION.zip
+
+
 	#Build the Debian package
 	rm $START/../installer-scripts/linux/*.zip
 	cp $ZIP $START/../installer-scripts/linux/
@@ -167,11 +175,6 @@ if (! test -z "$VERSION" ) then
 	fi
 	cp $START/../installer-scripts/linux/*$VERSION*.deb $DIST/Ubuntu-nrdk-$VERSION.deb
 
-	rm $START/../installer-scripts/osx/*.zip
-	cp $ZIP $START/../installer-scripts/osx/
-	cd $START/../installer-scripts/osx/
-	sh prep.sh $VERSION	
-	cp $START/../installer-scripts/osx/*$VERSION*.zip $DIST/MacOSX-nrdk-$VERSION.zip
 
 	#Prepare the windows exe
 	echo preparing the windows compile directory
@@ -213,7 +216,7 @@ if (! test -z "$VERSION" ) then
 	fi
 
 	mv $DIST/nrdk-$VERSION.exe $DIST/Windows-nrdk-$VERSION.exe 
-	mv $DIST/nrdk-$VERSION.zip $DIST/MacOSX-nrdk-$VERSION.zip 
+	mv $START/../installer-scripts/osx/*.zip $DIST/MacOSX-nrdk-$VERSION.zip 
 	
 	echo cleanup
 	rm -rf 	$BUILD

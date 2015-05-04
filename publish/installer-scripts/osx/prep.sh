@@ -15,7 +15,7 @@ if (! test -z "$VERSION" ) then
 
 	mv rdk/nrdk-*/* rdk/
 	rm -rf rdk/nrdk-*
-	rm nrdk-*.zip
+	rm *.zip
 	
 	zip -r mac-$VERSION.zip rdk
 
