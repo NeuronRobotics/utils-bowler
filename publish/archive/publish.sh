@@ -147,6 +147,7 @@ if (! test -z "$VERSION" ) then
 		cp $NRCONSOLE_JAR						        $BUILD/bin/
 		cp $START/NeuronRobotics.* 						$BUILD/bin/
 		cp -r $TL/$DyIO/FirmwarePublish/Release/*			$BUILD/firmware/
+		cp -r $TL/$NRConsole/BowlerBoard*.xml					$BUILD/firmware/
 		rsync -avtP --exclude=.svn* $TL/$NRSDK/target/docs 		$BUILD/java/
 		cp $START/index.html 							$BUILD/java/docs/api/
 		rsync -avtP --exclude=.svn* $TL/$NRSDK/target/docs				$DIST/java
