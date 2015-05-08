@@ -15,3 +15,4 @@ install:
 	cp 80-neuronrobotics.rules /etc/udev/rules.d/
 	service udev restart
 	udevadm control --reload-rules
+	chmod 666 $(RDKINSTALL)/firmware/*.xml
