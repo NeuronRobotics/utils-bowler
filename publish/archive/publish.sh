@@ -26,8 +26,8 @@ if (! test -z "$VERSION" ) then
 		cd $TL/;
 		git clone https://github.com/NeuronRobotics/java-bowler.git
 	fi
-	cd $TL/$NRSDK/
-	git pull
+	cd $TL/$NRSDK/ 
+	git pull origin development
 	if (! git checkout tags/$VERSION); then
 		git tag -l
 		echo "NRSDK $VERSION Is not taged yet"
@@ -40,7 +40,7 @@ if (! test -z "$VERSION" ) then
 		git clone https://github.com/NeuronRobotics/BowlerStudio.git
 	fi
 	cd $TL/$NRConsole/
-	git pull
+	git pull origin master
 	if (! git checkout master); then
 		git tag -l
 		echo "NRConsole $VERSION Is not taged yet"
@@ -55,7 +55,7 @@ if (! test -z "$VERSION" ) then
 		git clone https://github.com/NeuronRobotics/dyio.git
 	fi
 	cd $TL/dyio/
-	git pull
+	git pull origin development
 	if (! git checkout tags/$VERSION); then
 		if (! git checkout tags/v$VERSION); then
 			git tag -l
