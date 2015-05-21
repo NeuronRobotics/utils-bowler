@@ -156,63 +156,102 @@ end;
 
 
 
-function isJavaVersionOK(): Boolean;
+
+
+
+
+
+
+; Both DecodeVersion and CompareVersion functions where taken from the  wiki
+procedure DecodeVersion (verstr: String; var verint: array of Integer);
 var
- ErrorCode: Integer;
- JavaInstalled : Boolean;
- Result1 : Boolean;
- Versions: TArrayOfString;
- I: Integer;
+  i,p: Integer; s: string;
 begin
- if RegGetSubkeyNames(HKLM, 'SOFTWARE\JavaSoft\Java Runtime Environment', Versions) then
- begin
-  for I := 0 to GetArrayLength(Versions)-1 do
-   if JavaInstalled = true then
-   begin
-    //do nothing
-   end else
-   begin
-    if ( Versions[I][2]='.' ) and ( ( StrToInt(Versions[I][1]) > 1 ) or ( ( StrToInt(Versions[I][1]) = 1 ) and ( StrToInt(Versions[I][3]) >= 6 ) ) ) then
+  // initialize array
+  verint := [0,0,0,0];
+  i := 0;
+  while ((Length(verstr) > 0) and (i < 4)) do
+  begin
+    p := pos ('.', verstr);
+    if p > 0 then
     begin
-     JavaInstalled := true;
-    end else
+      if p = 1 then s:= '0' else s:= Copy (verstr, 1, p - 1);
+      verint[i] := StrToInt(s);
+      i := i + 1;
+      verstr := Copy (verstr, p+1, Length(verstr));
+    end
+    else
     begin
-     JavaInstalled := false;
+      verint[i] := StrToInt (verstr);
+      verstr := '';
     end;
-   end;
- end else
- begin
-  JavaInstalled := false;
- end;
-
-
- //JavaInstalled := RegKeyExists(HKLM,'SOFTWARE\JavaSoft\Java Runtime Environment\1.9');
- if JavaInstalled then
- begin
-  Result := true;
- end else
-    begin
-  Result1 := MsgBox('This tool requires Java Runtime Environment version 1.8 or newer to run. Please download and install the JRE and run this setup again. Do you want to download it now?',
-   mbConfirmation, MB_YESNO) = idYes;
-  if Result1 = false then
-  begin
-   Result:=false;
-  end else
-  begin
-   Result:=false;
-   ShellExec('open',
-    'http://www.java.com/getjava/',
-    '','',SW_SHOWNORMAL,ewNoWait,ErrorCode);
   end;
-    end;
-   end;
-end.
+
+end;
+
+function CompareVersion (ver1, ver2: String) : Integer;
+var
+  verint1, verint2: array of Integer;
+  i: integer;
+begin
+
+  SetArrayLength (verint1, 4);
+  DecodeVersion (ver1, verint1);
+
+  SetArrayLength (verint2, 4);
+  DecodeVersion (ver2, verint2);
+
+  Result := 0; i := 0;
+  while ((Result = 0) and ( i < 4 )) do
+  begin
+    if verint1[i] > verint2[i] then
+      Result := 1
+    else
+      if verint1[i] < verint2[i] then
+        Result := -1
+      else
+        Result := 0;
+    i := i + 1;
+  end;
+
+end;
 
 function InitializeSetup(): Boolean;
+var
+  ErrorCode: Integer;
+  JavaVer : String;
+  Result1 : Boolean;
 begin
   
-	Result :=isJavaVersionOK();
+	RegQueryStringValue(HKLM, 'SOFTWARE\JavaSoft\Java Runtime Environment', 'CurrentVersion', JavaVer);
+    Result := false;
+    if Length( JavaVer ) > 0 then
+    begin
+    	if CompareVersion(JavaVer,'1.9') >= 0 then
+    	begin
+    		Result := true;
+    	end;
+    end;
+    if Result = false then
+    begin
+    	Result1 := MsgBox('This tool requires Java Runtime Environment v1.8_45 or older to run. Please download and install JRE and run this setup again.' + #13 + #10 + 'Do you want to download it now?',
+    	  mbConfirmation, MB_YESNO) = idYes;
+    	if Result1 = true then
+    	begin
+    		ShellExec('open',
+    		  'http://www.java.com/en/download/manual.jsp#win',
+    		  '','',SW_SHOWNORMAL,ewNoWait,ErrorCode);
+    	end;
+    end;
 end;
+
+
+
+
+
+
+
+
 
 function IsBoth64: Boolean;
 begin
@@ -319,26 +358,12 @@ begin
   if Result and Refresh then
     RefreshEnvironment;
 end;
-procedure setupEnvOpenCV();
-var homedir: String;
-begin
-   homedir := ExpandConstant('{app}');
-   if (IsBoth64()) then
-    begin
-      opencvHomeEnvVar :=homedir+'\build\x64\vc11';
-    end
-    else
-    begin
-      opencvHomeEnvVar :=homedir+'\build\x86\vc11' ;
-    end
-   SetEnvSystem( 'OPENCV_DIR', opencvHomeEnvVar,True);
-   SetEnvSystem( 'BOWLER_HOME', homedir,True);
 
-   SetEnvCurUser( 'OPENCV_DIR', opencvHomeEnvVar,True);
-   SetEnvCurUser( 'BOWLER_HOME', homedir,True);
-end;
 
 
 [Registry]
 Root: HKLM; SubKey: "SYSTEM\CurrentControlSet\Control\Session Manager\Environment";ValueType:string; ValueName: "BOWLER_HOME"; ValueData: {app}\{#MyAppSlug}-{#MyAppVersion};  Flags: preservestringtype ;
-Root: HKLM; SubKey: "SYSTEM\CurrentControlSet\Control\Session Manager\Environment";ValueType:string; ValueName: "OPENCV_DIR"; ValueData: {app}\{#MyAppSlug}-{#MyAppVersion}\build\x64\vc11;  Flags: preservestringtype ;
+if IsWin64 then
+	Root: HKLM; SubKey: "SYSTEM\CurrentControlSet\Control\Session Manager\Environment";ValueType:string; ValueName: "OPENCV_DIR"; ValueData: {app}\{#MyAppSlug}-{#MyAppVersion}\build\x64\vc11;  Flags: preservestringtype ;
+else
+	Root: HKLM; SubKey: "SYSTEM\CurrentControlSet\Control\Session Manager\Environment";ValueType:string; ValueName: "OPENCV_DIR"; ValueData: {app}\{#MyAppSlug}-{#MyAppVersion}\build\x86\vc11;  Flags: preservestringtype ;
