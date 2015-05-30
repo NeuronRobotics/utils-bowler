@@ -117,7 +117,7 @@ if ( test -n "$VERSION" ) then
 		git pull origin $VERSION
 		cd ..
 		gradle jar
-		if(!test -e $NRCONSOLE_JAR) then
+		if( ! test -e $NRCONSOLE_JAR) then
 			echo ERROR!! expected lib file: $NRCONSOLE_JAR 
 			exit 1
 		fi
