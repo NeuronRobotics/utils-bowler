@@ -11,6 +11,11 @@ if (! test -z "$VERSION" ) then
 	unzip -qq ~/git/ZipArchive/linux/Slic3r_x64.zip -d rdk/Slic3r_x64/
 	unzip -qq ~/git/ZipArchive/linux/Slic3r_x86.zip -d rdk/Slic3r_x86/
 
+	mv rdk/bowlerstudio-*/* rdk/
+	rm -rf rdk/bowlerstudio-*
+	
+	tar cf build/rdk.tar rdk/ --exclude-vcs --exclude=.DS_Store --exclude=__MACOSX
+	
 	if (test -e rdk/bin/BowlerStudio.jar) then
 		BUILD=bowlerstudio-$VERSION
 		echo Build = $BUILD

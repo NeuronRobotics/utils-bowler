@@ -160,7 +160,7 @@ if ( test -n "$VERSION" ) then
 		cp -r $TL/$DyIO/FirmwarePublish/Release/*			$BUILD/firmware/
 		cp -r $TL/$NRConsole/BowlerBoard*.xml					$BUILD/firmware/
 		#rsync -avtP --exclude=.svn* $TL/$NRSDK/target/docs 		$BUILD/java/
-		cp $START/index.html 							$BUILD/java/docs/api/
+		#cp $START/index.html 							$BUILD/java/docs/api/
 		#rsync -avtP --exclude=.svn* $TL/$NRSDK/target/docs				$DIST/java
 		echo Copy OK
 	
@@ -170,10 +170,11 @@ if ( test -n "$VERSION" ) then
 
 
 	#Build the OSX bundle
+	echo setting up build dirs for OSX builder
 	rm -rf $START/../installer-scripts/osx/*.zip
 	cp $ZIP $START/../installer-scripts/osx/
 	cd $START/../installer-scripts/osx/
-	sh prep.sh $STUDIOVER	
+	#sh prep.sh $STUDIOVER	
 	cp $START/../installer-scripts/osx/*$STUDIOVER*.zip $DIST/MacOSX-BowlerStudio-$STUDIOVER.zip
 
 
@@ -182,7 +183,7 @@ if ( test -n "$VERSION" ) then
 	rm -rf $START/../installer-scripts/linux/*.zip
 	cp $ZIP $START/../installer-scripts/linux/
 	cd $START/../installer-scripts/linux/
-	sh prep.sh $STUDIOVER
+	#sh prep.sh $STUDIOVER
 	if ( test -e $DIST/*.deb) then
 		rm $DIST/*.deb
 	fi
@@ -194,15 +195,17 @@ if ( test -n "$VERSION" ) then
 	WINBUILD=$START/../installer-scripts/windows/
 	WINDIR=$WINBUILD/$BUILDLOCAL
 	
-	rm -rf $WINBUILD/nrdk-*
+	rm -rf $WINDIR
 	cp $WINBUILD/TEMPLATEwindows-nrdk.iss $WINBUILD/windows-nrdk.iss
 	sed -i s/VER/"$STUDIOVER"/g $WINBUILD/windows-nrdk.iss
-	
-	
-	cp -r $BUILD $START/../installer-scripts/windows
-	unzip -qq ~/git/ZipArchive/win/OpenCV-Win-2.4.9.zip -d $START/../installer-scripts/windows/$BUILDLOCAL/
-	unzip -qq ~/git/ZipArchive/win/Slic3r_x64.zip -d $START/../installer-scripts/windows/$BUILDLOCAL/Slic3r_x64/
-	unzip -qq ~/git/ZipArchive/win/Slic3r_x86.zip -d $START/../installer-scripts/windows/$BUILDLOCAL/Slic3r_x86/
+	echo adding Bowler Studio
+	unzip -qq  $BUILD.zip -d $WINBUILD
+	echo adding Opencv
+	unzip -qq ~/git/ZipArchive/win/OpenCV-Win-2.4.9.zip -d $WINDIR
+	echo adding Slic3r 64
+	unzip -qq ~/git/ZipArchive/win/Slic3r_x64.zip -d $WINDIR/Slic3r_x64/
+	echo adding Slic3r 32
+	unzip -qq ~/git/ZipArchive/win/Slic3r_x86.zip -d $WINDIR/Slic3r_x86/
 
 	if ( test -e $EXEWIN) then
 		echo exe exists $EXEWIN
