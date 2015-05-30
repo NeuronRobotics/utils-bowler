@@ -12,7 +12,7 @@ install:
 	if(! test -d /usr/share/themes/base/neuronrobotics/icons/)then  mkdir -p /usr/share/themes/base/neuronrobotics/icons/; fi
 	cp NeuronRobotics.png /usr/share/themes/base/neuronrobotics/icons/
 	cp BowlerStudio.desktop /usr/share/applications/
-	cp 80-neuronrobotics.rules /etc/udev/rules.d/
+	cp 81-neuronrobotics.rules /etc/udev/rules.d/
 	
 	
 
