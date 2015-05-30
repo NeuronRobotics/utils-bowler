@@ -165,7 +165,7 @@ if ( test -n "$VERSION" ) then
 		echo Copy OK
 	
 		cd $DIST
-		zip -r $ZIP $BUILDLOCAL
+		zip -qq -r $ZIP $BUILDLOCAL
 	fi
 
 

@@ -16,7 +16,7 @@ if (! test -z "$VERSION" ) then
 	
 	tar cf build/rdk.tar rdk/ --exclude-vcs --exclude=.DS_Store --exclude=__MACOSX
 	
-	if (test -e rdk/java/nrsdk-$VERSION-jar-with-dependencies.jar) then
+	if (test -e rdk/bin/BowlerStudio.jar) then
 		BUILD=bowlerstudio-$VERSION
 		echo Build = $BUILD
 		BUILDDIR=$PWD/$BUILD/
