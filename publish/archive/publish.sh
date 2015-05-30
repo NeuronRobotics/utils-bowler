@@ -174,7 +174,10 @@ if ( test -n "$VERSION" ) then
 	fi
 
 
-	if ( ! test -a $MACFINAL ) then
+	if (test -s "$MACFINAL" ) then
+		echo "MAC OSX .zip exists $DEBINAL" 
+		ls $MACINAL
+	else
 		#Build the OSX bundle
 		echo setting up build dirs for OSX builder
 		rm -rf $START/../installer-scripts/osx/*.zip
@@ -184,7 +187,10 @@ if ( test -n "$VERSION" ) then
 		cp $START/../installer-scripts/osx/*$STUDIOVER*.zip $MACFINAL
     fi
 
-	if ( ! test -a $DEBINAL ) then
+	if (test -s "$DEBINAL" ) then
+			echo "Ubuntu .deb exists $DEBINAL" 
+			ls -al  $DEBINAL
+	else
 		#Build the Debian package
 		echo setting up build dirs for debian builder
 		rm -rf $START/../installer-scripts/linux/*.zip
@@ -197,7 +203,10 @@ if ( test -n "$VERSION" ) then
 		cp $START/../installer-scripts/linux/*$STUDIOVER*.deb $DEBFINAL
  	fi
 
-	if ( ! test -a $WININAL ) then	
+	if (test -s "$WININAL" ) then	
+		echo "Windows EXE exists $WININAL "
+		ls -al  $WININAL
+	else
 		#Prepare the windows exe
 		echo preparing the windows compile directory
 		WINBUILD=$START/../installer-scripts/windows/
@@ -235,12 +244,9 @@ if ( test -n "$VERSION" ) then
 			exit 1
 		fi
 	
-		mv $WINEXE $WINFINAL 
+		mv $EXEWIN $WINFINAL 
 	fi
-	
-	echo cleanup
-	rm -rf 	$BUILD
-	
+
 	exit 0
 fi
 echo #####ERROR no version specified, I.E. 3.7.0
