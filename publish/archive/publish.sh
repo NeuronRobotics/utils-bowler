@@ -31,6 +31,11 @@ if ( test -n "$VERSION" ) then
 	BUILD=$DIST/$BUILDLOCAL
 	EXEWIN=$DIST/bowlerstudio-$STUDIOVER.exe
 	
+	WINFINAL=$DIST/Windows-BowlerStudio-$STUDIOVER.exe
+	MACFINAL=$DIST/MacOSX-BowlerStudio-$STUDIOVER.zip
+	DEBFINAL=$DIST/Ubuntu-BowlerStudio-$STUDIOVER.deb
+	
+	
 	USE_PROVIDED_FIRMWARE=true;
 
 	if !(test -d $TL/$NRSDK/); then  
@@ -169,65 +174,69 @@ if ( test -n "$VERSION" ) then
 	fi
 
 
-	#Build the OSX bundle
-	echo setting up build dirs for OSX builder
-	rm -rf $START/../installer-scripts/osx/*.zip
-	cp $ZIP $START/../installer-scripts/osx/
-	cd $START/../installer-scripts/osx/
-	sh prep.sh $STUDIOVER	
-	cp $START/../installer-scripts/osx/*$STUDIOVER*.zip $DIST/MacOSX-BowlerStudio-$STUDIOVER.zip
+	if ( ! test -a $MACFINAL ) then
+		#Build the OSX bundle
+		echo setting up build dirs for OSX builder
+		rm -rf $START/../installer-scripts/osx/*.zip
+		cp $ZIP $START/../installer-scripts/osx/
+		cd $START/../installer-scripts/osx/
+		sh prep.sh $STUDIOVER	
+		cp $START/../installer-scripts/osx/*$STUDIOVER*.zip $MACFINAL
+    fi
 
+	if ( ! test -a $DEBINAL ) then
+		#Build the Debian package
+		echo setting up build dirs for debian builder
+		rm -rf $START/../installer-scripts/linux/*.zip
+		cp $ZIP $START/../installer-scripts/linux/
+		cd $START/../installer-scripts/linux/
+		sh prep.sh $STUDIOVER
+		if ( test -e $DIST/*.deb) then
+			rm $DIST/*.deb
+		fi
+		cp $START/../installer-scripts/linux/*$STUDIOVER*.deb $DEBFINAL
+ 	fi
 
-	#Build the Debian package
-	echo setting up build dirs for debian builder
-	rm -rf $START/../installer-scripts/linux/*.zip
-	cp $ZIP $START/../installer-scripts/linux/
-	cd $START/../installer-scripts/linux/
-	sh prep.sh $STUDIOVER
-	if ( test -e $DIST/*.deb) then
-		rm $DIST/*.deb
-	fi
-	cp $START/../installer-scripts/linux/*$STUDIOVER*.deb $DIST/Ubuntu-BowlerStudio-$STUDIOVER.deb
-
-
-	#Prepare the windows exe
-	echo preparing the windows compile directory
-	WINBUILD=$START/../installer-scripts/windows/
-	WINDIR=$WINBUILD/$BUILDLOCAL
+	if ( ! test -a $WININAL ) then	
+		#Prepare the windows exe
+		echo preparing the windows compile directory
+		WINBUILD=$START/../installer-scripts/windows/
+		WINDIR=$WINBUILD/$BUILDLOCAL
+		
+		rm -rf $WINDIR
+		cp $WINBUILD/TEMPLATEwindows-nrdk.iss $WINBUILD/windows-nrdk.iss
+		sed -i s/VER/"$STUDIOVER"/g $WINBUILD/windows-nrdk.iss
+		echo adding Bowler Studio
+		unzip -qq  $BUILD.zip -d $WINBUILD
+		echo adding Opencv
+		unzip -qq ~/git/ZipArchive/win/OpenCV-Win-2.4.9.zip -d $WINDIR
+		echo adding Slic3r 64
+		unzip -qq ~/git/ZipArchive/win/Slic3r_x64.zip -d $WINDIR/Slic3r_x64/
+		echo adding Slic3r 32
+		unzip -qq ~/git/ZipArchive/win/Slic3r_x86.zip -d $WINDIR/Slic3r_x86/
 	
-	rm -rf $WINDIR
-	cp $WINBUILD/TEMPLATEwindows-nrdk.iss $WINBUILD/windows-nrdk.iss
-	sed -i s/VER/"$STUDIOVER"/g $WINBUILD/windows-nrdk.iss
-	echo adding Bowler Studio
-	unzip -qq  $BUILD.zip -d $WINBUILD
-	echo adding Opencv
-	unzip -qq ~/git/ZipArchive/win/OpenCV-Win-2.4.9.zip -d $WINDIR
-	echo adding Slic3r 64
-	unzip -qq ~/git/ZipArchive/win/Slic3r_x64.zip -d $WINDIR/Slic3r_x64/
-	echo adding Slic3r 32
-	unzip -qq ~/git/ZipArchive/win/Slic3r_x86.zip -d $WINDIR/Slic3r_x86/
-
-	if ( test -e $EXEWIN) then
-		echo exe exists $EXEWIN
-		rm $EXEWIN
-	fi 
-	rm -rf $START/../installer-scripts/windows/nrdk-$VERSION/java/docs/
+		if ( test -e $EXEWIN) then
+			echo exe exists $EXEWIN
+			rm $EXEWIN
+		fi 
+		rm -rf $START/../installer-scripts/windows/nrdk-$VERSION/java/docs/
+		
+		echo 'Linking build dirs for wine'
+		if (! test -e /home/hephaestus/.wine/drive_c/installer-scripts) then
+			ln -s $START/../installer-scripts 	$HOME/.wine/drive_c/
+			ln -s $START/../archive 			$HOME/.wine/drive_c/
+		fi
+		
+		echo Running wine
+		if ( wine "C:\Program Files (x86)\Inno Setup 5\Compil32.exe" /cc "C:\installer-scripts\windows\windows-nrdk.iss") then
+			echo wine ok
+		else
+			wine $START/tools/isetup-5.4.3.exe
+			exit 1
+		fi
 	
-	echo 'Linking build dirs for wine'
-	if (! test -e /home/hephaestus/.wine/drive_c/installer-scripts) then
-		ln -s $START/../installer-scripts 	$HOME/.wine/drive_c/
-		ln -s $START/../archive 			$HOME/.wine/drive_c/
+		mv $WINEXE $WINFINAL 
 	fi
-	
-	echo Running wine
-	if ( wine "C:\Program Files (x86)\Inno Setup 5\Compil32.exe" /cc "C:\installer-scripts\windows\windows-nrdk.iss") then
-		echo wine ok
-	else
-		wine $START/tools/isetup-5.4.3.exe
-		exit 1
-	fi
-
-	mv $WINEXE $DIST/Windows-BowlerStudio-$STUDIOVER.exe 
 	
 	echo cleanup
 	rm -rf 	$BUILD
