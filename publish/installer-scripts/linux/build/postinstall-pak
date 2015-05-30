@@ -30,6 +30,8 @@ cp -r rdk/* .
 rm -rf rdk
 rm rdk.tar
 
+chmod 777 $(RDKINSTALL)/firmware/*.xml
+
 NRDIR=/usr/local/NeuronRobotics/RDK/bin/
 
 LIB_DIRS=( '/lib/'  '/usr/lib/' '/usr/lib/x86_64-linux-gnu/' '/usr/lib/x86-linux-gnu/' '/usr/lib/i386-linux-gnu/' '/usr/lib/i586-linux-gnu/' '/usr/lib/i686-linux-gnu/')

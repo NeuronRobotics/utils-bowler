@@ -1,8 +1,7 @@
 RDKINSTALL=/usr/local/NeuronRobotics/RDK/
 
 install:
-	if (test -d $(RDKINSTALL)); then echo "RDK exists, overwriting.."; else sudo mkdir -p $(RDKINSTALL); fi
-	cp rdk.tar $(RDKINSTALL)
+	
 	chmod +x bowlerstudio
 	chmod +x BowlerStudio.desktop
 	chmod +x slic3r
@@ -15,4 +14,4 @@ install:
 	cp 80-neuronrobotics.rules /etc/udev/rules.d/
 	service udev restart
 	udevadm control --reload-rules
-	chmod 666 $(RDKINSTALL)/firmware/*.xml
+
