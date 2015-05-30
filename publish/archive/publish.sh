@@ -174,7 +174,7 @@ if ( test -n "$VERSION" ) then
 	rm -rf $START/../installer-scripts/osx/*.zip
 	cp $ZIP $START/../installer-scripts/osx/
 	cd $START/../installer-scripts/osx/
-	#sh prep.sh $STUDIOVER	
+	sh prep.sh $STUDIOVER	
 	cp $START/../installer-scripts/osx/*$STUDIOVER*.zip $DIST/MacOSX-BowlerStudio-$STUDIOVER.zip
 
 
@@ -183,7 +183,7 @@ if ( test -n "$VERSION" ) then
 	rm -rf $START/../installer-scripts/linux/*.zip
 	cp $ZIP $START/../installer-scripts/linux/
 	cd $START/../installer-scripts/linux/
-	#sh prep.sh $STUDIOVER
+	sh prep.sh $STUDIOVER
 	if ( test -e $DIST/*.deb) then
 		rm $DIST/*.deb
 	fi
