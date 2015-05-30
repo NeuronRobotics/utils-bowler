@@ -1,13 +1,13 @@
-#define MyAppName "Neuron Robotics Development Kit"
-#define MyAppSlug "nrdk"
+#define MyAppName "Neuron Robotics Bowler Studio"
+#define MyAppSlug "bowlerstudio"
 #define JDKREG "SOFTWARE\JavaSoft\Java Development Kit"
 #define MyAppPublisher "Neuron Robotics, LLC"
 #define MyAppURL "http://www.neuronrobotics.com"
 #define MyAppOutput "C:\archive\VER"
 
 #define MyAppVersion "VER"
-#define MyAppVerName "Neuron Robotics Development Kit VER"
-#define MyAppPath "C:\installer-scripts\windows\nrdk-VER"
+#define MyAppVerName "Neuron Robotics Bowler Studio VER"
+#define MyAppPath "C:\installer-scripts\windows\bowlerstudio-VER"
 
 
 #define SystemEnvRegKey "SYSTEM\CurrentControlSet\Control\Session Manager\Environment"
@@ -155,14 +155,6 @@ begin
 end;
 
 
-
-
-
-
-
-
-
-; Both DecodeVersion and CompareVersion functions where taken from the  wiki
 procedure DecodeVersion (verstr: String; var verint: array of Integer);
 var
   i,p: Integer; s: string;
@@ -219,30 +211,45 @@ end;
 function InitializeSetup(): Boolean;
 var
   ErrorCode: Integer;
-  JavaVer : String;
+  javaVersion : String;
+  javaPath: String;
   Result1 : Boolean;
 begin
-  
-	RegQueryStringValue(HKLM, 'SOFTWARE\JavaSoft\Java Runtime Environment', 'CurrentVersion', JavaVer);
-    Result := false;
-    if Length( JavaVer ) > 0 then
+  if RegValueExists(HKLM64, 'SOFTWARE\JavaSoft\Java Runtime Environment', 'CurrentVersion') then
     begin
-    	if CompareVersion(JavaVer,'1.9') >= 0 then
-    	begin
-    		Result := true;
-    	end;
-    end;
+      RegQueryStringValue(HKLM64, 'SOFTWARE\JavaSoft\Java Runtime Environment', 'CurrentVersion', javaVersion);
+      if Length( javaVersion ) > 0 then
+      begin
+        if CompareVersion(javaVersion,'1.8') <= 0 then
+        begin
+          Result := true;
+        end
+      end
+    end
+  else if RegValueExists(HKLM, 'SOFTWARE\JavaSoft\Java Runtime Environment', 'CurrentVersion') then
+    begin
+      RegQueryStringValue(HKLM, 'SOFTWARE\JavaSoft\Java Runtime Environment', 'CurrentVersion', javaVersion);
+      if Length( javaVersion ) > 0 then
+      begin
+        if CompareVersion(javaVersion,'1.8') <= 0 then
+        begin
+          Result := true;
+        end
+      end
+   end
+
+    
     if Result = false then
-    begin
-    	Result1 := MsgBox('This tool requires Java Runtime Environment v1.8_45 or older to run. Please download and install JRE and run this setup again.' + #13 + #10 + 'Do you want to download it now?',
-    	  mbConfirmation, MB_YESNO) = idYes;
-    	if Result1 = true then
-    	begin
-    		ShellExec('open',
-    		  'http://www.java.com/en/download/manual.jsp#win',
-    		  '','',SW_SHOWNORMAL,ewNoWait,ErrorCode);
-    	end;
-    end;
+      begin
+        Result1 := MsgBox('This tool requires Java Runtime Environment v1.8_45 or newer to run.' + #13 + #10 + 'Your system reported = '+javaVersion + #13 + #10 + 'Please download and install JRE and run this setup again.' + #13 + #10 + 'Do you want to download it now?',
+          mbConfirmation, MB_YESNO) = idYes;
+        if Result1 = true then
+        begin
+          ShellExec('open',
+            'http://www.java.com/en/download/manual.jsp#win',
+            '','',SW_SHOWNORMAL,ewNoWait,ErrorCode);
+        end
+    end
 end;
 
 
@@ -361,9 +368,9 @@ end;
 
 
 
+
 [Registry]
 Root: HKLM; SubKey: "SYSTEM\CurrentControlSet\Control\Session Manager\Environment";ValueType:string; ValueName: "BOWLER_HOME"; ValueData: {app}\{#MyAppSlug}-{#MyAppVersion};  Flags: preservestringtype ;
-if IsWin64 then
-	Root: HKLM; SubKey: "SYSTEM\CurrentControlSet\Control\Session Manager\Environment";ValueType:string; ValueName: "OPENCV_DIR"; ValueData: {app}\{#MyAppSlug}-{#MyAppVersion}\build\x64\vc11;  Flags: preservestringtype ;
-else
-	Root: HKLM; SubKey: "SYSTEM\CurrentControlSet\Control\Session Manager\Environment";ValueType:string; ValueName: "OPENCV_DIR"; ValueData: {app}\{#MyAppSlug}-{#MyAppVersion}\build\x86\vc11;  Flags: preservestringtype ;
+//Root: HKLM; SubKey: "SYSTEM\CurrentControlSet\Control\Session Manager\Environment";ValueType:string; ValueName: "OPENCV_DIR"; ValueData: {app}\{#MyAppSlug}-{#MyAppVersion}\build\x64\vc11;  Flags: preservestringtype ; Check: IsWin64
+//Root: HKLM; SubKey: "SYSTEM\CurrentControlSet\Control\Session Manager\Environment";ValueType:string; ValueName: "OPENCV_DIR"; ValueData: {app}\{#MyAppSlug}-{#MyAppVersion}\build\x86\vc11;  Flags: preservestringtype ; Check: "not IsWin64"
+Root: HKLM; SubKey: "SYSTEM\CurrentControlSet\Control\Session Manager\Environment";ValueType:string; ValueName: "OPENCV_DIR"; ValueData: {app}\{#MyAppSlug}-{#MyAppVersion}\build\x86\vc11;  Flags: preservestringtype 

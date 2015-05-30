@@ -4,20 +4,20 @@ START=$PWD
 VERSION=$1
 if (! test -z "$VERSION" ) then
 	rm -rf rdk
-	rm -rf nr_rdk_java-$VERSION
+	rm -rf bowlerstudio-$VERSION
 	
 	mkdir rdk
-	unzip -qq nrdk-*.zip -d rdk
+	unzip -qq bowlerstudio-*.zip -d rdk
 	unzip -qq ~/git/ZipArchive/linux/Slic3r_x64.zip -d rdk/Slic3r_x64/
 	unzip -qq ~/git/ZipArchive/linux/Slic3r_x86.zip -d rdk/Slic3r_x86/
 
-	mv rdk/nrdk-*/* rdk/
-	rm -rf rdk/nrdk-*
+	mv rdk/bowlerstudio-*/* rdk/
+	rm -rf rdk/bowlerstudio-*
 	
 	tar cf build/rdk.tar rdk/ --exclude-vcs --exclude=.DS_Store --exclude=__MACOSX
 	
 	if (test -e rdk/java/nrsdk-$VERSION-jar-with-dependencies.jar) then
-		BUILD=nr_rdk_java-$VERSION
+		BUILD=bowlerstudio-$VERSION
 		echo Build = $BUILD
 		BUILDDIR=$PWD/$BUILD/
 		if (test -d $BUILDDIR) then 

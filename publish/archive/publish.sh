@@ -3,14 +3,24 @@
 START=$PWD
 
 VERSION=$1
+STUDIOVER=$2
 
-if (! test -z "$VERSION" ) then
+if ( test -z "$STUDIOVER" ) then
+	echo #####ERROR no BowlerStudio version specified, I.E. 3.7.0
+	exit 1
+fi
+if ( test -z "$VERSION" ) then
+	echo #####ERROR no java-bowler version specified, I.E. 3.7.0
+	exit 1
+fi
+
+if ( test -n "$VERSION" ) then
 	#sudo apt-get install ant wine
 	
 	echo ok $VERSION
-	ZIP=nrdk-$VERSION.zip
-	BUILDLOCAL=nrdk-$VERSION
-	DIST=$PWD/$VERSION
+	ZIP=bowlerstudio-$STUDIOVER.zip
+	BUILDLOCAL=bowlerstudio-$STUDIOVER
+	DIST=$PWD/$STUDIOVER
 	TL=$START/../../../
 	NRSDK=java-bowler/
 	NRConsole=BowlerStudio/
@@ -19,6 +29,7 @@ if (! test -z "$VERSION" ) then
 	OLDDYIO=false;
 	ZIP=$DIST/$ZIP
 	BUILD=$DIST/$BUILDLOCAL
+	EXEWIN=$DIST/bowlerstudio-$STUDIOVER.exe
 	
 	USE_PROVIDED_FIRMWARE=true;
 
@@ -40,10 +51,10 @@ if (! test -z "$VERSION" ) then
 		git clone https://github.com/NeuronRobotics/BowlerStudio.git
 	fi
 	cd $TL/$NRConsole/
-	git pull origin master
-	if (! git checkout master); then
+	git pull origin development
+	if (! git checkout $STUDIOVER); then
 		git tag -l
-		echo "NRConsole $VERSION Is not taged yet"
+		echo "NRConsole $STUDIOVER Is not taged yet"
 		exit 1;
 	fi
 	cd $TL/$NRConsole/java-bowler/
@@ -148,33 +159,34 @@ if (! test -z "$VERSION" ) then
 		cp $START/NeuronRobotics.* 						$BUILD/bin/
 		cp -r $TL/$DyIO/FirmwarePublish/Release/*			$BUILD/firmware/
 		cp -r $TL/$NRConsole/BowlerBoard*.xml					$BUILD/firmware/
-		rsync -avtP --exclude=.svn* $TL/$NRSDK/target/docs 		$BUILD/java/
+		#rsync -avtP --exclude=.svn* $TL/$NRSDK/target/docs 		$BUILD/java/
 		cp $START/index.html 							$BUILD/java/docs/api/
-		rsync -avtP --exclude=.svn* $TL/$NRSDK/target/docs				$DIST/java
+		#rsync -avtP --exclude=.svn* $TL/$NRSDK/target/docs				$DIST/java
 		echo Copy OK
 	
 		cd $DIST
 		zip -r $ZIP $BUILDLOCAL
 	fi
 
-	echo setting up build dirs for debian builder
 
-	rm $START/../installer-scripts/osx/*.zip
+	#Build the OSX bundle
+	rm -rf $START/../installer-scripts/osx/*.zip
 	cp $ZIP $START/../installer-scripts/osx/
 	cd $START/../installer-scripts/osx/
-	sh prep.sh $VERSION	
-	cp $START/../installer-scripts/osx/*$VERSION*.zip $DIST/MacOSX-nrdk-$VERSION.zip
+	sh prep.sh $STUDIOVER	
+	cp $START/../installer-scripts/osx/*$STUDIOVER*.zip $DIST/MacOSX-BowlerStudio-$STUDIOVER.zip
 
 
 	#Build the Debian package
-	rm $START/../installer-scripts/linux/*.zip
+	echo setting up build dirs for debian builder
+	rm -rf $START/../installer-scripts/linux/*.zip
 	cp $ZIP $START/../installer-scripts/linux/
 	cd $START/../installer-scripts/linux/
-	sh prep.sh $VERSION
+	sh prep.sh $STUDIOVER
 	if ( test -e $DIST/*.deb) then
 		rm $DIST/*.deb
 	fi
-	cp $START/../installer-scripts/linux/*$VERSION*.deb $DIST/Ubuntu-nrdk-$VERSION.deb
+	cp $START/../installer-scripts/linux/*$STUDIOVER*.deb $DIST/Ubuntu-BowlerStudio-$STUDIOVER.deb
 
 
 	#Prepare the windows exe
@@ -184,7 +196,7 @@ if (! test -z "$VERSION" ) then
 	
 	rm -rf $WINBUILD/nrdk-*
 	cp $WINBUILD/TEMPLATEwindows-nrdk.iss $WINBUILD/windows-nrdk.iss
-	sed -i s/VER/"$VERSION"/g $WINBUILD/windows-nrdk.iss
+	sed -i s/VER/"$STUDIOVER"/g $WINBUILD/windows-nrdk.iss
 	
 	
 	cp -r $BUILD $START/../installer-scripts/windows
@@ -192,9 +204,9 @@ if (! test -z "$VERSION" ) then
 	unzip -qq ~/git/ZipArchive/win/Slic3r_x64.zip -d $START/../installer-scripts/windows/$BUILDLOCAL/Slic3r_x64/
 	unzip -qq ~/git/ZipArchive/win/Slic3r_x86.zip -d $START/../installer-scripts/windows/$BUILDLOCAL/Slic3r_x86/
 
-	if ( test -e $DIST/nrdk-$VERSION.exe) then
-		echo exe exists $DIST/nrdk-$VERSION.exe
-		rm $DIST/nrdk-$VERSION.exe
+	if ( test -e $EXEWIN) then
+		echo exe exists $EXEWIN
+		rm $EXEWIN
 	fi 
 	rm -rf $START/../installer-scripts/windows/nrdk-$VERSION/java/docs/
 	
@@ -215,9 +227,11 @@ if (! test -z "$VERSION" ) then
 			exit 1
 		fi
 	fi
+	
 
-	mv $DIST/nrdk-$VERSION.exe $DIST/Windows-nrdk-$VERSION.exe 
-	mv $START/../installer-scripts/osx/*.zip $DIST/MacOSX-nrdk-$VERSION.zip 
+	
+
+	mv $WINEXE $DIST/Windows-BowlerStudio-$STUDIOVER.exe 
 	
 	echo cleanup
 	rm -rf 	$BUILD
