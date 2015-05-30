@@ -39,11 +39,11 @@ if (! test -z "$VERSION" ) then
 		cp $BUILDDIR/*.deb $BUILDDIR/../
 		
 		echo "Cleaning up the directory.."
-		rm -rf rdk
+		#rm -rf rdk
 		
-		rm build/rdk.tar
+		#rm build/rdk.tar
 		
-		rm -rf $BUILDDIR
+		#rm -rf $BUILDDIR
 		
 		echo Done!
 	
