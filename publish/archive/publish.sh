@@ -246,6 +246,44 @@ if ( test -n "$VERSION" ) then
 	
 		mv $EXEWIN $WINFINAL 
 	fi
+	
+		if !(test -d $TL/$NRSDK/); then  
+		cd $TL/;
+		git clone https://github.com/NeuronRobotics/java-bowler.git
+	fi
+	echo Cleanuo
+	cd $TL/$NRSDK/ 
+	git pull origin development
+	if (! git checkout development); then
+		git tag -l
+		echo "NRSDK $VERSION Is not taged yet"
+		exit 1;
+	fi
+
+	cd $TL/$NRConsole/
+	git pull origin development
+	if (! git checkout development); then
+		git tag -l
+		echo "NRConsole $STUDIOVER Is not taged yet"
+		exit 1;
+	fi
+	cd $TL/$NRConsole/java-bowler/
+	git pull origin development
+	cd $TL
+
+	cd $TL/dyio/
+	git pull origin development
+	if (! git checkout development); then
+		if (! git checkout tags/v$VERSION); then
+			git tag -l
+			echo "DyIO $VERSION Is not taged yet"
+			exit 1;
+		fi
+		#Change the DyIO directory to the old location before the GIT transition
+		DyIO=microcontroller-bowler/firmware/device/DyIO/development/
+	else
+		DyIO=dyio/
+	fi
 
 	exit 0
 fi
