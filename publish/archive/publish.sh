@@ -84,6 +84,8 @@ if ( test -n "$VERSION" ) then
 		DyIO=dyio/
 	fi
 	# make the output dirs for building the DyIO
+	
+	
 
 	mkdir -p $TL/$DyIO/pic/output/release/
 	mkdir -p $TL/$DyIO/pic/output/debug/
@@ -98,6 +100,8 @@ if ( test -n "$VERSION" ) then
 	XML=$TL/$DyIO/FirmwarePublish/Release/dyio-$VERSION.xml
 	
 
+	
+	cd $START
 	
 	if(test -e $DIST) then
 		echo build dir exists
@@ -175,8 +179,8 @@ if ( test -n "$VERSION" ) then
 
 
 	if (test -s "$MACFINAL" ) then
-		echo "MAC OSX .zip exists $DEBINAL" 
-		ls $MACINAL
+		echo "MAC OSX .zip exists $MACFINAL" 
+		ls $MACFINAL
 	else
 		#Build the OSX bundle
 		echo setting up build dirs for OSX builder
@@ -187,9 +191,9 @@ if ( test -n "$VERSION" ) then
 		cp $START/../installer-scripts/osx/*$STUDIOVER*.zip $MACFINAL
     fi
 
-	if (test -s "$DEBINAL" ) then
-			echo "Ubuntu .deb exists $DEBINAL" 
-			ls -al  $DEBINAL
+	if (test -s "$DEBFINAL" ) then
+			echo "Ubuntu .deb exists $DEBFINAL" 
+			ls -al  $DEBFINAL
 	else
 		#Build the Debian package
 		echo setting up build dirs for debian builder
@@ -203,9 +207,9 @@ if ( test -n "$VERSION" ) then
 		cp $START/../installer-scripts/linux/*$STUDIOVER*.deb $DEBFINAL
  	fi
 
-	if (test -s "$WININAL" ) then	
-		echo "Windows EXE exists $WININAL "
-		ls -al  $WININAL
+	if (test -s "$WINFINAL" ) then	
+		echo "Windows EXE exists $WINFINAL "
+		ls -al  $WINFINAL
 	else
 		#Prepare the windows exe
 		echo preparing the windows compile directory
@@ -251,6 +255,22 @@ if ( test -n "$VERSION" ) then
 		cd $TL/;
 		git clone https://github.com/NeuronRobotics/java-bowler.git
 	fi
+	
+	cd $START/
+	java -jar GithubPublish.jar BowlerStudio NeuronRobotics $STUDIOVER $DEBFINAL 
+	java -jar GithubPublish.jar BowlerStudio NeuronRobotics $STUDIOVER $MACFINAL 
+	java -jar GithubPublish.jar BowlerStudio NeuronRobotics $STUDIOVER $WINFINAL 
+	
+	sed -i s/VER/"$STUDIOVER"/g $START/index.md
+	cd $TL/NeuronRobotics.github.io/
+	git pull
+	cp $START/index.md $TL/NeuronRobotics.github.io/content/index.md
+	git commit -m"rev bump to $STUDIOVER" $TL/NeuronRobotics.github.io/content/index.md
+	git push
+	sed -i s/"$STUDIOVER"/VER/g $START/index.md
+	
+	
+	
 	echo Cleanup $TL/$NRSDK/ 
 	cd $TL/$NRSDK/ 
 	git checkout development
@@ -263,6 +283,8 @@ if ( test -n "$VERSION" ) then
 	echo Cleanup $TL/dyio/
 	cd $TL/dyio/
 	git checkout development
+	
+	
 
 	exit 0
 fi
