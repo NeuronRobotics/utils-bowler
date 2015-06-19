@@ -215,9 +215,9 @@ var
   javaPath: String;
   Result1 : Boolean;
 begin
-  if RegValueExists(HKLM64, 'SOFTWARE\JavaSoft\Java Runtime Environment', 'CurrentVersion') then
+  if RegValueExists(HKLM, 'SOFTWARE\JavaSoft\Java Runtime Environment', 'CurrentVersion') then
     begin
-      RegQueryStringValue(HKLM64, 'SOFTWARE\JavaSoft\Java Runtime Environment', 'CurrentVersion', javaVersion);
+      RegQueryStringValue(HKLM, 'SOFTWARE\JavaSoft\Java Runtime Environment', 'CurrentVersion', javaVersion);
       if Length( javaVersion ) > 0 then
       begin
         if CompareVersion(javaVersion,'1.8') <= 0 then
@@ -226,9 +226,9 @@ begin
         end
       end
     end
-  else if RegValueExists(HKLM, 'SOFTWARE\JavaSoft\Java Runtime Environment', 'CurrentVersion') then
+  else if RegValueExists(HKLM64, 'SOFTWARE\JavaSoft\Java Runtime Environment', 'CurrentVersion') then
     begin
-      RegQueryStringValue(HKLM, 'SOFTWARE\JavaSoft\Java Runtime Environment', 'CurrentVersion', javaVersion);
+      RegQueryStringValue(HKLM64, 'SOFTWARE\JavaSoft\Java Runtime Environment', 'CurrentVersion', javaVersion);
       if Length( javaVersion ) > 0 then
       begin
         if CompareVersion(javaVersion,'1.8') <= 0 then
@@ -371,6 +371,5 @@ end;
 
 [Registry]
 Root: HKLM; SubKey: "SYSTEM\CurrentControlSet\Control\Session Manager\Environment";ValueType:string; ValueName: "BOWLER_HOME"; ValueData: {app}\{#MyAppSlug}-{#MyAppVersion};  Flags: preservestringtype ;
-//Root: HKLM; SubKey: "SYSTEM\CurrentControlSet\Control\Session Manager\Environment";ValueType:string; ValueName: "OPENCV_DIR"; ValueData: {app}\{#MyAppSlug}-{#MyAppVersion}\build\x64\vc11;  Flags: preservestringtype ; Check: IsWin64
-//Root: HKLM; SubKey: "SYSTEM\CurrentControlSet\Control\Session Manager\Environment";ValueType:string; ValueName: "OPENCV_DIR"; ValueData: {app}\{#MyAppSlug}-{#MyAppVersion}\build\x86\vc11;  Flags: preservestringtype ; Check: "not IsWin64"
-Root: HKLM; SubKey: "SYSTEM\CurrentControlSet\Control\Session Manager\Environment";ValueType:string; ValueName: "OPENCV_DIR"; ValueData: {app}\{#MyAppSlug}-{#MyAppVersion}\build\x86\vc11;  Flags: preservestringtype 
+Root: HKLM; SubKey: "SYSTEM\CurrentControlSet\Control\Session Manager\Environment";ValueType:string; ValueName: "OPENCV_DIR"; ValueData: {app}\{#MyAppSlug}-{#MyAppVersion}\build\x64\vc11;  Flags: preservestringtype ; Check: IsWin64
+Root: HKLM; SubKey: "SYSTEM\CurrentControlSet\Control\Session Manager\Environment";ValueType:string; ValueName: "OPENCV_DIR"; ValueData: {app}\{#MyAppSlug}-{#MyAppVersion}\build\x86\vc11;  Flags: preservestringtype ; Check: "not IsWin64"
