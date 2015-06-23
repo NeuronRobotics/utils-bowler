@@ -189,7 +189,7 @@ if ( test -n "$VERSION" ) then
 		cp $ZIP $START/../installer-scripts/osx/
 		cd $START/../installer-scripts/osx/
 		sh prep.sh $STUDIOVER	
-		cp $START/../installer-scripts/osx/*$STUDIOVER*.zip $MACFINAL
+		mv $START/../installer-scripts/osx/*$STUDIOVER*.zip $MACFINAL
     fi
 
 	if (test -s "$DEBFINAL" ) then
@@ -205,7 +205,7 @@ if ( test -n "$VERSION" ) then
 		if ( test -e $DIST/*.deb) then
 			rm $DIST/*.deb
 		fi
-		cp $START/../installer-scripts/linux/*$STUDIOVER*.deb $DEBFINAL
+		mv $START/../installer-scripts/linux/*$STUDIOVER*.deb $DEBFINAL
  	fi
 
 	if (test -s "$WINFINAL" ) then	
@@ -248,6 +248,8 @@ if ( test -n "$VERSION" ) then
 			wine $START/tools/isetup-5.4.3.exe
 			exit 1
 		fi
+		
+		rm -rf $WINDIR
 	
 		mv $EXEWIN $WINFINAL 
 	fi
