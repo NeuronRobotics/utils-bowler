@@ -24,21 +24,17 @@ public class PIDSim {
     	this.length=linkLegnth;
     	stFriction=muStatic;
     	dyFriction=muDynamic;
-    	this.maxTorque=maxTorque;
+    	this.setMaxTorque(maxTorque);
     }
     
     public void initialize() {
-    	graphingPanel = new GraphingPanel(this, "Neuron Robotics PIDSim");
-    	graphingPanel.setVisible(true);
-    	frame.add(graphingPanel);
+    	setGraphingPanel(new GraphingPanel(this, "Neuron Robotics PIDSim"));
+    	getGraphingPanel().setVisible(true);
+    	frame.add(getGraphingPanel());
     	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     	frame.pack();
     	frame.setLocationRelativeTo(null);
     	frame.setVisible(true);
-    	
-    	
-    	phy = new LinearPhysicsEngine(this,maxTorque);
-    	phy.start();
     }
     
     public double getSetPoint() {
@@ -48,7 +44,7 @@ public class PIDSim {
     
     public void setSetPoint(double value) {
     	sp = value;
-    	graphingPanel.setSetPoint(sp);
+    	getGraphingPanel().setSetPoint(sp);
     }
     /**
      * setting a torque in kg/m
@@ -69,7 +65,7 @@ public class PIDSim {
     
     protected void setPosition(double value) {
     	position = value;
-    	graphingPanel.setPosition(position);
+    	getGraphingPanel().setPosition(position);
     }
     
     public double getPosition() {
@@ -110,5 +106,21 @@ public class PIDSim {
 	public void setDynamicFriction(double value) {
 		phy.setMuDynamic(value);
 		dyFriction = value;
+	}
+
+	public double getMaxTorque() {
+		return maxTorque;
+	}
+
+	public void setMaxTorque(double maxTorque) {
+		this.maxTorque = maxTorque;
+	}
+
+	public GraphingPanel getGraphingPanel() {
+		return graphingPanel;
+	}
+
+	public void setGraphingPanel(GraphingPanel graphingPanel) {
+		this.graphingPanel = graphingPanel;
 	}
 }
