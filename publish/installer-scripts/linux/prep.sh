@@ -42,6 +42,7 @@ if (! test -z "$VERSION" ) then
 		rm -rf rdk
 		
 		rm build/rdk.tar
+		rm *.zip
 		
 		rm -rf $BUILDDIR
 		
