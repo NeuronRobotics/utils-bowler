@@ -7,16 +7,17 @@ if (! test -z "$VERSION" ) then
 	rm -rf bowlerstudio-$VERSION
 	
 	mkdir rdk
-	unzip -qq bowlerstudio-*.zip -d rdk
-	unzip -qq ~/git/ZipArchive/mac/opencv249build.zip -d rdk/
+	cp -r BowlerStudio.app rdk/
+	unzip -qq bowlerstudio-*.zip -d rdk/BowlerStudio.app/Contents/MacOS/
+	unzip -qq ~/git/ZipArchive/mac/opencv249build.zip -d rdk/BowlerStudio.app/Contents/MacOS/
 	unzip -qq ~/git/ZipArchive/mac/Slic3r.app.zip -d rdk/
 	chmod +x BowlerStudio
-	cp BowlerStudio rdk/
+	cp BowlerStudio rdk/BowlerStudio.app/Contents/MacOS/
 
-	mv rdk/bowlerstudio-*/* rdk/
 	rm -rf rdk/bowlerstudio-*
 	rm *.zip
 	
 	zip  -qq -r mac-$VERSION.zip rdk
+	rm -rf rdk/
 
 fi
