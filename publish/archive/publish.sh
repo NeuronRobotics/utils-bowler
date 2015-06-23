@@ -64,6 +64,7 @@ if ( test -n "$VERSION" ) then
 	fi
 	cd $TL/$NRConsole/java-bowler/
 	git pull origin development
+	git checkout tags/$VERSION
 	cd $TL
 
 	if !(test -d $TL/dyio); then  
