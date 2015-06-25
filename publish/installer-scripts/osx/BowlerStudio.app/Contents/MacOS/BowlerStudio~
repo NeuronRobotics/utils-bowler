@@ -4,4 +4,4 @@ DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 export OPENCV_DIR=$DIR/opencv249build/
 echo Setting OPENCV_DIR = ${OPENCV_DIR}
-java -jar "$DIR/bin/BowlerStudio.jar"
+java -jar $DIR/bin/BowlerStudio.jar
