@@ -4,6 +4,7 @@ START=$PWD
 
 VERSION=$1
 STUDIOVER=$2
+DYIOVER=$3
 
 if ( test -z "$STUDIOVER" ) then
 	echo #####ERROR no BowlerStudio version specified, I.E. 3.7.0
@@ -12,6 +13,11 @@ fi
 if ( test -z "$VERSION" ) then
 	echo #####ERROR no java-bowler version specified, I.E. 3.7.0
 	exit 1
+fi
+
+if ( test -z "$DYIOVER" ) then
+	echo #####DyIO version not specified
+	DYIOVER=$VERSION
 fi
 
 if ( test -n "$VERSION" ) then
@@ -73,10 +79,10 @@ if ( test -n "$VERSION" ) then
 	fi
 	cd $TL/dyio/
 	git pull origin development
-	if (! git checkout tags/$VERSION); then
-		if (! git checkout tags/v$VERSION); then
+	if (! git checkout tags/$DYIOVER); then
+		if (! git checkout tags/v$DYIOVER); then
 			git tag -l
-			echo "DyIO $VERSION Is not taged yet"
+			echo "DyIO $DYIOVER Is not taged yet"
 			exit 1;
 		fi
 		#Change the DyIO directory to the old location before the GIT transition
@@ -98,7 +104,7 @@ if ( test -n "$VERSION" ) then
 	mkdir -p $TL/$DyIO/FirmwarePublish/Release/legacy/
 	mkdir -p $TL/$DyIO/FirmwarePublish/Dev/
 
-	XML=$TL/$DyIO/FirmwarePublish/Release/dyio-$VERSION.xml
+	XML=$TL/$DyIO/FirmwarePublish/Release/dyio-$DYIOVER.xml
 	
 
 	
@@ -124,7 +130,7 @@ if ( test -n "$VERSION" ) then
 
 		cd $TL/$NRConsole/;
 		cd java-bowler/
-		git pull origin $VERSION
+		git pull --tags origin $VERSION
 		cd ..
 		gradle jar
 		if( ! test -e $NRCONSOLE_JAR) then
@@ -233,7 +239,7 @@ if ( test -n "$VERSION" ) then
 			echo exe exists $EXEWIN
 			rm $EXEWIN
 		fi 
-		rm -rf $START/../installer-scripts/windows/nrdk-$VERSION/java/docs/
+		rm -rf $WINDIR/java/docs/
 		
 		echo 'Linking build dirs for wine'
 		if (! test -e /home/hephaestus/.wine/drive_c/installer-scripts) then
