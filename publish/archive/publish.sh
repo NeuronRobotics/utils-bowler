@@ -37,7 +37,8 @@ if ( test -n "$VERSION" ) then
 	BUILD=$DIST/$BUILDLOCAL
 	EXEWIN=$DIST/bowlerstudio-$STUDIOVER.exe
 	
-	WINFINAL=$DIST/Windows-BowlerStudio-$STUDIOVER.exe
+	WINFINAL_64=$DIST/Windows-BowlerStudio-$STUDIOVER_64.exe
+	WINFINAL_32=$DIST/Windows-BowlerStudio-$STUDIOVER_32.exe
 	MACFINAL=$DIST/MacOSX-BowlerStudio-$STUDIOVER.zip
 	DEBFINAL=$DIST/Ubuntu-BowlerStudio-$STUDIOVER.deb
 	
@@ -214,24 +215,74 @@ if ( test -n "$VERSION" ) then
 		mv $START/../installer-scripts/linux/*$STUDIOVER*.deb $DEBFINAL
  	fi
 
-	if (test -s "$WINFINAL" ) then	
-		echo "Windows EXE exists $WINFINAL "
-		ls -al  $WINFINAL
+	if (test -s "$WINFINAL_64" ) then	
+		echo "Windows EXE exists $WINFINAL_64 "
+		ls -al  $WINFINAL_64
 	else
 		#Prepare the windows exe
 		echo preparing the windows compile directory
 		WINBUILD=$START/../installer-scripts/windows/
 		WINDIR=$WINBUILD/$BUILDLOCAL
 		
+		#64 bit version
 		rm -rf $WINDIR
 		cp $WINBUILD/TEMPLATEwindows-nrdk.iss $WINBUILD/windows-nrdk.iss
 		sed -i s/VER/"$STUDIOVER"/g $WINBUILD/windows-nrdk.iss
+		sed -i s/CVARCH/x64/g $WINBUILD/windows-nrdk.iss
+		sed -i s/JAVAARCH/HKLM64/g $WINBUILD/windows-nrdk.iss
 		echo adding Bowler Studio
 		unzip -qq  $BUILD.zip -d $WINBUILD
 		echo adding Opencv
 		unzip -qq ~/git/ZipArchive/win/OpenCV-Win-2.4.9.zip -d $WINDIR
 		echo adding Slic3r 64
 		unzip -qq ~/git/ZipArchive/win/Slic3r_x64.zip -d $WINDIR/Slic3r_x64/
+		#echo adding Slic3r 32
+		#unzip -qq ~/git/ZipArchive/win/Slic3r_x86.zip -d $WINDIR/Slic3r_x86/
+	
+		if ( test -e $EXEWIN) then
+			echo exe exists $EXEWIN
+			rm $EXEWIN
+		fi 
+		rm -rf $WINDIR/java/docs/
+		
+		echo 'Linking build dirs for wine'
+		if (! test -e /home/hephaestus/.wine/drive_c/installer-scripts) then
+			ln -s $START/../installer-scripts 	$HOME/.wine/drive_c/
+			ln -s $START/../archive 			$HOME/.wine/drive_c/
+		fi
+		
+		echo Running wine
+		if ( wine "C:\Program Files (x86)\Inno Setup 5\Compil32.exe" /cc "C:\installer-scripts\windows\windows-nrdk.iss") then
+			echo wine ok
+		else
+			wine $START/tools/isetup-5.4.3.exe
+			exit 1
+		fi
+		
+		rm -rf $WINDIR
+	
+		mv $EXEWIN $WINFINAL_64 
+	fi
+	
+	if (test -s "$WINFINAL_32" ) then	
+		echo "Windows EXE exists $WINFINAL_32 "
+		ls -al  $WINFINAL_32
+	else
+		#Prepare the windows exe
+		echo preparing the windows compile directory
+		WINBUILD=$START/../installer-scripts/windows/
+		WINDIR=$WINBUILD/$BUILDLOCAL
+		
+		#32 bit version
+		rm -rf $WINDIR
+		cp $WINBUILD/TEMPLATEwindows-nrdk.iss $WINBUILD/windows-nrdk.iss
+		sed -i s/VER/"$STUDIOVER"/g $WINBUILD/windows-nrdk.iss
+		sed -i s/CVARCH/x32/g $WINBUILD/windows-nrdk.iss
+		sed -i s/JAVAARCH/HKLM/g $WINBUILD/windows-nrdk.iss
+		echo adding Bowler Studio
+		unzip -qq  $BUILD.zip -d $WINBUILD
+		echo adding Opencv
+		unzip -qq ~/git/ZipArchive/win/OpenCV-Win-2.4.9.zip -d $WINDIR
 		echo adding Slic3r 32
 		unzip -qq ~/git/ZipArchive/win/Slic3r_x86.zip -d $WINDIR/Slic3r_x86/
 	
@@ -257,19 +308,20 @@ if ( test -n "$VERSION" ) then
 		
 		rm -rf $WINDIR
 	
-		mv $EXEWIN $WINFINAL 
+		mv $EXEWIN $WINFINAL_32 
 	fi
 	
-		if !(test -d $TL/$NRSDK/); then  
+	if !(test -d $TL/$NRSDK/); then  
 		cd $TL/;
 		git clone https://github.com/NeuronRobotics/java-bowler.git
 	fi
 	
 	cd $START/
-	java -jar GithubPublish.jar BowlerStudio NeuronRobotics $STUDIOVER $DEBFINAL 
-	java -jar GithubPublish.jar BowlerStudio NeuronRobotics $STUDIOVER $MACFINAL 
-	java -jar GithubPublish.jar BowlerStudio NeuronRobotics $STUDIOVER $WINFINAL 
-	
+	#java -jar GithubPublish.jar BowlerStudio NeuronRobotics $STUDIOVER $DEBFINAL 
+	#java -jar GithubPublish.jar BowlerStudio NeuronRobotics $STUDIOVER $MACFINAL 
+	#java -jar GithubPublish.jar BowlerStudio NeuronRobotics $STUDIOVER $WINFINAL_64 
+	#java -jar GithubPublish.jar BowlerStudio NeuronRobotics $STUDIOVER $WINFINAL_32
+	 
 	sed -i s/VER/"$STUDIOVER"/g $START/index.md
 	cd $TL/NeuronRobotics.github.io/
 	git pull
