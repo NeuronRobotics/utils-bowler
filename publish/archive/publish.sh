@@ -37,8 +37,8 @@ if ( test -n "$VERSION" ) then
 	BUILD=$DIST/$BUILDLOCAL
 	EXEWIN=$DIST/bowlerstudio-$STUDIOVER.exe
 	
-	WINFINAL_64=$DIST/Windows-BowlerStudio-$STUDIOVER_64.exe
-	WINFINAL_32=$DIST/Windows-BowlerStudio-$STUDIOVER_32.exe
+	WINFINAL64=$DIST/Windows-64-BowlerStudio-$STUDIOVER.exe
+	WINFINAL32=$DIST/Windows-32-BowlerStudio-$STUDIOVER.exe
 	MACFINAL=$DIST/MacOSX-BowlerStudio-$STUDIOVER.zip
 	DEBFINAL=$DIST/Ubuntu-BowlerStudio-$STUDIOVER.deb
 	
@@ -215,12 +215,12 @@ if ( test -n "$VERSION" ) then
 		mv $START/../installer-scripts/linux/*$STUDIOVER*.deb $DEBFINAL
  	fi
 
-	if (test -s "$WINFINAL_64" ) then	
-		echo "Windows EXE exists $WINFINAL_64 "
-		ls -al  $WINFINAL_64
+	if (test -s "$WINFINAL64" ) then	
+		echo "Windows EXE exists $WINFINAL64 "
+		ls -al  $WINFINAL64
 	else
 		#Prepare the windows exe
-		echo preparing the windows compile directory
+		echo preparing the windows 64 compile directory
 		WINBUILD=$START/../installer-scripts/windows/
 		WINDIR=$WINBUILD/$BUILDLOCAL
 		
@@ -233,11 +233,9 @@ if ( test -n "$VERSION" ) then
 		echo adding Bowler Studio
 		unzip -qq  $BUILD.zip -d $WINBUILD
 		echo adding Opencv
-		unzip -qq ~/git/ZipArchive/win/OpenCV-Win-2.4.9.zip -d $WINDIR
+		unzip -qq ~/git/ZipArchive/win/OpenCV-Win-2.4.9_64/build.zip -d $WINDIR
 		echo adding Slic3r 64
 		unzip -qq ~/git/ZipArchive/win/Slic3r_x64.zip -d $WINDIR/Slic3r_x64/
-		#echo adding Slic3r 32
-		#unzip -qq ~/git/ZipArchive/win/Slic3r_x86.zip -d $WINDIR/Slic3r_x86/
 	
 		if ( test -e $EXEWIN) then
 			echo exe exists $EXEWIN
@@ -261,15 +259,15 @@ if ( test -n "$VERSION" ) then
 		
 		rm -rf $WINDIR
 	
-		mv $EXEWIN $WINFINAL_64 
+		mv $EXEWIN $WINFINAL64 
 	fi
 	
-	if (test -s "$WINFINAL_32" ) then	
-		echo "Windows EXE exists $WINFINAL_32 "
-		ls -al  $WINFINAL_32
+	if (test -s "$WINFINAL32" ) then	
+		echo "Windows EXE exists $WINFINAL32 "
+		ls -al  $WINFINAL32
 	else
 		#Prepare the windows exe
-		echo preparing the windows compile directory
+		echo preparing the windows 32 compile directory
 		WINBUILD=$START/../installer-scripts/windows/
 		WINDIR=$WINBUILD/$BUILDLOCAL
 		
@@ -282,7 +280,7 @@ if ( test -n "$VERSION" ) then
 		echo adding Bowler Studio
 		unzip -qq  $BUILD.zip -d $WINBUILD
 		echo adding Opencv
-		unzip -qq ~/git/ZipArchive/win/OpenCV-Win-2.4.9.zip -d $WINDIR
+		unzip -qq ~/git/ZipArchive/win/OpenCV-Win-2.4.9_32/build.zip -d $WINDIR
 		echo adding Slic3r 32
 		unzip -qq ~/git/ZipArchive/win/Slic3r_x86.zip -d $WINDIR/Slic3r_x86/
 	
@@ -308,7 +306,7 @@ if ( test -n "$VERSION" ) then
 		
 		rm -rf $WINDIR
 	
-		mv $EXEWIN $WINFINAL_32 
+		mv $EXEWIN $WINFINAL32 
 	fi
 	
 	if !(test -d $TL/$NRSDK/); then  
@@ -319,8 +317,8 @@ if ( test -n "$VERSION" ) then
 	cd $START/
 	#java -jar GithubPublish.jar BowlerStudio NeuronRobotics $STUDIOVER $DEBFINAL 
 	#java -jar GithubPublish.jar BowlerStudio NeuronRobotics $STUDIOVER $MACFINAL 
-	#java -jar GithubPublish.jar BowlerStudio NeuronRobotics $STUDIOVER $WINFINAL_64 
-	#java -jar GithubPublish.jar BowlerStudio NeuronRobotics $STUDIOVER $WINFINAL_32
+	#java -jar GithubPublish.jar BowlerStudio NeuronRobotics $STUDIOVER $WINFINAL64 
+	#java -jar GithubPublish.jar BowlerStudio NeuronRobotics $STUDIOVER $WINFINAL32
 	 
 	sed -i s/VER/"$STUDIOVER"/g $START/index.md
 	cd $TL/NeuronRobotics.github.io/
