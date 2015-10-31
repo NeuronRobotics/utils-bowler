@@ -11,7 +11,7 @@ if ( test -z "$STUDIOVER" ) then
 	exit 1
 fi
 if ( test -z "$VERSION" ) then
-	echo #####ERROR no java-bowler version specified, I.E. 3.7.0
+	echo #####ERROR no bowler-script-kernel version specified, I.E. 3.7.0
 	exit 1
 fi
 
@@ -28,9 +28,10 @@ if ( test -n "$VERSION" ) then
 	BUILDLOCAL=bowlerstudio-$STUDIOVER
 	DIST=$PWD/$STUDIOVER
 	TL=$START/../../../
-	NRSDK=java-bowler/
+	NRSDK=bowler-script-kernel/
 	NRConsole=BowlerStudio/
-	LIB=$TL/$NRSDK/build/libs/nrsdk-$VERSION-jar-with-dependencies.jar
+	#LIB=$TL/$NRSDK/build/libs/nrsdk-$VERSION-jar-with-dependencies.jar
+	LIB=$TL/$NRSDK/build/libs/BowlerScriptingKernel-$VERSION.jar
 	NRCONSOLE_JAR=$TL/$NRConsole/build/libs/BowlerStudio.jar
 	OLDDYIO=false;
 	ZIP=$DIST/$ZIP
@@ -47,13 +48,13 @@ if ( test -n "$VERSION" ) then
 
 	if !(test -d $TL/$NRSDK/); then  
 		cd $TL/;
-		git clone https://github.com/NeuronRobotics/java-bowler.git
+		git clone https://github.com/NeuronRobotics/bowler-script-kernel.git
 	fi
 	cd $TL/$NRSDK/ 
 	git pull origin development
 	if (! git checkout tags/$VERSION); then
 		git tag -l
-		echo "NRSDK $VERSION Is not taged yet"
+		echo "$NRSDK $VERSION Is not taged yet"
 		exit 1;
 	fi
 
@@ -69,10 +70,6 @@ if ( test -n "$VERSION" ) then
 		echo "NRConsole $STUDIOVER Is not taged yet"
 		exit 1;
 	fi
-	cd $TL/$NRConsole/java-bowler/
-	git pull origin development
-	git checkout tags/$VERSION
-	cd $TL
 
 	if !(test -d $TL/dyio); then  
 		cd $TL/;
@@ -130,9 +127,6 @@ if ( test -n "$VERSION" ) then
 		fi
 
 		cd $TL/$NRConsole/;
-		cd java-bowler/
-		git pull --tags origin $VERSION
-		cd ..
 		gradle jar
 		if( ! test -e $NRCONSOLE_JAR) then
 			echo ERROR!! expected lib file: $NRCONSOLE_JAR 
@@ -195,7 +189,7 @@ if ( test -n "$VERSION" ) then
 		rm -rf $START/../installer-scripts/osx/*.zip
 		cp $ZIP $START/../installer-scripts/osx/
 		cd $START/../installer-scripts/osx/
-		sh prep.sh $STUDIOVER	
+		sh prep.sh $STUDIOVER $XML
 		mv $START/../installer-scripts/osx/*$STUDIOVER*.zip $MACFINAL
     fi
 
@@ -315,10 +309,13 @@ if ( test -n "$VERSION" ) then
 	fi
 	
 	cd $START/
-	#java -jar GithubPublish.jar BowlerStudio NeuronRobotics $STUDIOVER $DEBFINAL 
-	#java -jar GithubPublish.jar BowlerStudio NeuronRobotics $STUDIOVER $MACFINAL 
-	#java -jar GithubPublish.jar BowlerStudio NeuronRobotics $STUDIOVER $WINFINAL64 
-	#java -jar GithubPublish.jar BowlerStudio NeuronRobotics $STUDIOVER $WINFINAL32
+	java -jar GithubPublish.jar BowlerStudio NeuronRobotics $STUDIOVER $XML
+	java -jar GithubPublish.jar BowlerStudio NeuronRobotics $STUDIOVER $LIB
+	java -jar GithubPublish.jar BowlerStudio NeuronRobotics $STUDIOVER $DEBFINAL 
+	java -jar GithubPublish.jar BowlerStudio NeuronRobotics $STUDIOVER $MACFINAL 
+	java -jar GithubPublish.jar BowlerStudio NeuronRobotics $STUDIOVER $WINFINAL64 
+	java -jar GithubPublish.jar BowlerStudio NeuronRobotics $STUDIOVER $WINFINAL32
+	
 	 
 	sed -i s/VER/"$STUDIOVER"/g $START/index.md
 	cd $TL/NeuronRobotics.github.io/
