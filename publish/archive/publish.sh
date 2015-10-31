@@ -165,7 +165,7 @@ if ( test -n "$VERSION" ) then
 		cp $START/*.txt $BUILD
 	
 	
-		cp $LIB 								$BUILD/java/
+		#cp $LIB 								$BUILD/java/
 		cp $NRCONSOLE_JAR						        $BUILD/bin/
 		cp $START/NeuronRobotics.* 						$BUILD/bin/
 		cp -r $TL/$DyIO/FirmwarePublish/Release/*			$BUILD/firmware/
