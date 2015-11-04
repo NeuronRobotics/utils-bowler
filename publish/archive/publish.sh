@@ -26,7 +26,7 @@ if ( test -n "$VERSION" ) then
 	echo ok $VERSION
 	ZIP=bowlerstudio-$STUDIOVER.zip
 	BUILDLOCAL=bowlerstudio-$STUDIOVER
-	DIST=$PWD/$STUDIOVER
+	DIST=$START/$STUDIOVER
 	TL=$START/../../../
 	NRSDK=bowler-script-kernel/
 	NRConsole=BowlerStudio/
@@ -160,12 +160,11 @@ if ( test -n "$VERSION" ) then
 
 		mkdir $BUILD
 		mkdir $BUILD/bin
-		mkdir $BUILD/java
 		mkdir $BUILD/firmware
 		cp $START/*.txt $BUILD
 	
 	
-		#cp $LIB 								$BUILD/java/
+		cp $LIB 								$BUILD/bin/
 		cp $NRCONSOLE_JAR						        $BUILD/bin/
 		cp $START/NeuronRobotics.* 						$BUILD/bin/
 		cp -r $TL/$DyIO/FirmwarePublish/Release/*			$BUILD/firmware/
