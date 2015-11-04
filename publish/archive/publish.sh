@@ -334,7 +334,7 @@ if ( test -n "$VERSION" ) then
 	
 	echo Cleanup $TL/$NRSDK/ 
 	cd $TL/$NRSDK/ 
-	git checkout development
+	git checkout master
 	echo Cleanup $TL/$NRConsole/
 	cd $TL/$NRConsole/
 	git checkout development
