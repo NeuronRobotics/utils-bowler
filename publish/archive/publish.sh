@@ -51,7 +51,7 @@ if ( test -n "$VERSION" ) then
 		git clone https://github.com/NeuronRobotics/bowler-script-kernel.git
 	fi
 	cd $TL/$NRSDK/ 
-	git pull origin development
+	git pull origin master
 	if (! git checkout tags/$VERSION); then
 		git tag -l
 		echo "$NRSDK $VERSION Is not taged yet"
@@ -244,6 +244,7 @@ if ( test -n "$VERSION" ) then
 		fi
 		
 		echo Running wine
+		
 		if ( wine "C:\Program Files (x86)\Inno Setup 5\Compil32.exe" /cc "C:\installer-scripts\windows\windows-nrdk.iss") then
 			echo wine ok
 		else
@@ -267,10 +268,10 @@ if ( test -n "$VERSION" ) then
 		
 		#32 bit version
 		rm -rf $WINDIR
-		cp $WINBUILD/TEMPLATEwindows-nrdk.iss $WINBUILD/windows-nrdk.iss
-		sed -i s/VER/"$STUDIOVER"/g $WINBUILD/windows-nrdk.iss
-		sed -i s/CVARCH/x32/g $WINBUILD/windows-nrdk.iss
-		sed -i s/JAVAARCH/HKLM/g $WINBUILD/windows-nrdk.iss
+		cp $WINBUILD/TEMPLATEwindows-nrdk.iss $WINBUILD/windows-nrdk_32.iss
+		sed -i s/VER/"$STUDIOVER"/g $WINBUILD/windows-nrdk_32.iss
+		sed -i s/CVARCH/x32/g $WINBUILD/windows-nrdk_32.iss
+		sed -i s/JAVAARCH/HKLM/g $WINBUILD/windows-nrdk_32.iss
 		echo adding Bowler Studio
 		unzip -qq  $BUILD.zip -d $WINBUILD
 		echo adding Opencv
@@ -291,7 +292,7 @@ if ( test -n "$VERSION" ) then
 		fi
 		
 		echo Running wine
-		if ( wine "C:\Program Files (x86)\Inno Setup 5\Compil32.exe" /cc "C:\installer-scripts\windows\windows-nrdk.iss") then
+		if ( wine "C:\Program Files (x86)\Inno Setup 5\Compil32.exe" /cc "C:\installer-scripts\windows\windows-nrdk_32.iss") then
 			echo wine ok
 		else
 			wine $START/tools/isetup-5.4.3.exe
@@ -316,7 +317,11 @@ if ( test -n "$VERSION" ) then
 	java -jar GithubPublish.jar BowlerStudio NeuronRobotics $STUDIOVER $WINFINAL64 
 	java -jar GithubPublish.jar BowlerStudio NeuronRobotics $STUDIOVER $WINFINAL32
 	
-	 
+	cd $TL/$NRSDK/ 
+	#gradle -b ~/gradle.properties uploadArchives
+	
+	
+	cd $START/
 	sed -i s/VER/"$STUDIOVER"/g $START/index.md
 	cd $TL/NeuronRobotics.github.io/
 	git pull

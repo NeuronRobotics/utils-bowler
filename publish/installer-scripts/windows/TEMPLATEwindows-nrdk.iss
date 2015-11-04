@@ -227,6 +227,20 @@ begin
       end
     end
 
+   if Result = false then
+      if RegValueExists(HKLM, 'SOFTWARE\JavaSoft\Java Runtime Environment', 'CurrentVersion') then
+          begin
+            RegQueryStringValue(HKLM, 'SOFTWARE\JavaSoft\Java Runtime Environment', 'CurrentVersion', javaVersion);
+            if Length( javaVersion ) > 0 then
+            begin
+              if CompareVersion(javaVersion,'1.8') <= 0 then
+              begin
+                Result := true;
+              end
+            
+       end
+     end
+
     
     if Result = false then
       begin
