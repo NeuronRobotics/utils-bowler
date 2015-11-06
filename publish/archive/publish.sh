@@ -164,7 +164,7 @@ if ( test -n "$VERSION" ) then
 		cp $START/*.txt $BUILD
 	
 	
-		cp $LIB 								$BUILD/bin/
+		#cp $LIB 								$BUILD/bin/
 		cp $NRCONSOLE_JAR						        $BUILD/bin/
 		cp $START/NeuronRobotics.* 						$BUILD/bin/
 		cp -r $TL/$DyIO/FirmwarePublish/Release/*			$BUILD/firmware/
@@ -316,8 +316,6 @@ if ( test -n "$VERSION" ) then
 	java -jar GithubPublish.jar BowlerStudio NeuronRobotics $STUDIOVER $WINFINAL64 
 	java -jar GithubPublish.jar BowlerStudio NeuronRobotics $STUDIOVER $WINFINAL32
 	
-	cd $TL/$NRSDK/ 
-	#gradle -b ~/gradle.properties uploadArchives
 	
 	
 	cd $START/
