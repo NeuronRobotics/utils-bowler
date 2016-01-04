@@ -2,7 +2,7 @@
 title: "Neuron Robotics Documentation"
 menu: true
 menuorder: 0
-menuname: "Home"
+menuname: "Neuron Robotics Cooperitive"
 layout: landing
 winInstaller32: "https://github.com/NeuronRobotics/BowlerStudio/releases/download/VER/Windows-32-BowlerStudio-VER.exe"
 winInstaller64: "https://github.com/NeuronRobotics/BowlerStudio/releases/download/VER/Windows-64-BowlerStudio-VER.exe"
