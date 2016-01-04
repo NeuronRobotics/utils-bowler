@@ -319,13 +319,13 @@ if ( test -n "$VERSION" ) then
 	
 	
 	cd $START/
-	sed -i s/VER/"$STUDIOVER"/g $START/index.md
+	sed -e s/VER/"$STUDIOVER"/g $START/index_template.md >$START/index.md
 	cd $TL/NeuronRobotics.github.io/
 	git pull
 	cp $START/index.md $TL/NeuronRobotics.github.io/content/index.md
 	git commit -m"rev bump to $STUDIOVER" $TL/NeuronRobotics.github.io/content/index.md
 	git push
-	sed -i s/"$STUDIOVER"/VER/g $START/index.md
+	rm $START/index.md
 	
 	
 	
