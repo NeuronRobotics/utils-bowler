@@ -310,6 +310,7 @@ if ( test -n "$VERSION" ) then
 	
 	cd $START/
 	java -jar GithubPublish.jar BowlerStudio NeuronRobotics $STUDIOVER $XML
+	java -jar GithubPublish.jar BowlerStudio NeuronRobotics $STUDIOVER $NRCONSOLE_JAR
 	java -jar GithubPublish.jar BowlerStudio NeuronRobotics $STUDIOVER $LIB
 	java -jar GithubPublish.jar BowlerStudio NeuronRobotics $STUDIOVER $DEBFINAL 
 	java -jar GithubPublish.jar BowlerStudio NeuronRobotics $STUDIOVER $MACFINAL 
