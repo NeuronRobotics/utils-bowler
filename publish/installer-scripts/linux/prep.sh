@@ -8,8 +8,8 @@ if (! test -z "$VERSION" ) then
 	
 	mkdir rdk
 	unzip -qq bowlerstudio-*.zip -d rdk
-	unzip -qq ~/git/ZipArchive/linux/Slic3r_x64.zip -d rdk/Slic3r_x64/
-	unzip -qq ~/git/ZipArchive/linux/Slic3r_x86.zip -d rdk/Slic3r_x86/
+	#unzip -qq ~/git/ZipArchive/linux/Slic3r_x64.zip -d rdk/Slic3r_x64/
+	#unzip -qq ~/git/ZipArchive/linux/Slic3r_x86.zip -d rdk/Slic3r_x86/
 
 	mv rdk/bowlerstudio-*/* rdk/
 	rm -rf rdk/bowlerstudio-*
