@@ -51,7 +51,7 @@ if ( test -n "$VERSION" ) then
 		git clone https://github.com/NeuronRobotics/bowler-script-kernel.git
 	fi
 	cd $TL/$NRSDK/ 
-	git pull origin master
+	git pull origin development
 	if (! git checkout tags/$VERSION); then
 		git tag -l
 		echo "$NRSDK $VERSION Is not taged yet"
@@ -332,7 +332,7 @@ if ( test -n "$VERSION" ) then
 	
 	echo Cleanup $TL/$NRSDK/ 
 	cd $TL/$NRSDK/ 
-	git checkout master
+	git checkout development
 	echo Cleanup $TL/$NRConsole/
 	cd $TL/$NRConsole/
 	git checkout development
