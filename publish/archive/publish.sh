@@ -256,52 +256,7 @@ if ( test -n "$VERSION" ) then
 		mv $EXEWIN $WINFINAL64 
 	fi
 	
-	if (test -s "$WINFINAL32" ) then	
-		echo "Windows EXE exists $WINFINAL32 "
-		ls -al  $WINFINAL32
-	else
-		#Prepare the windows exe
-		echo preparing the windows 32 compile directory
-		WINBUILD=$START/../installer-scripts/windows/
-		WINDIR=$WINBUILD/$BUILDLOCAL
-		
-		#32 bit version
-		rm -rf $WINDIR
-		cp $WINBUILD/TEMPLATEwindows-nrdk.iss $WINBUILD/windows-nrdk_32.iss
-		sed -i s/VER/"$STUDIOVER"/g $WINBUILD/windows-nrdk_32.iss
-		sed -i s/CVARCH/x32/g $WINBUILD/windows-nrdk_32.iss
-		sed -i s/JAVAARCH/HKLM/g $WINBUILD/windows-nrdk_32.iss
-		echo adding Bowler Studio
-		unzip -qq  $BUILD.zip -d $WINBUILD
-		echo adding Opencv
-		unzip -qq ~/git/ZipArchive/win/OpenCV-Win-2.4.9_32/build.zip -d $WINDIR
-		echo adding Slic3r 32
-		unzip -qq ~/git/ZipArchive/win/Slic3r_x86.zip -d $WINDIR/Slic3r_x86/
-	
-		if ( test -e $EXEWIN) then
-			echo exe exists $EXEWIN
-			rm $EXEWIN
-		fi 
-		rm -rf $WINDIR/java/docs/
-		
-		echo 'Linking build dirs for wine'
-		if (! test -e /home/hephaestus/.wine/drive_c/installer-scripts) then
-			ln -s $START/../installer-scripts 	$HOME/.wine/drive_c/
-			ln -s $START/../archive 			$HOME/.wine/drive_c/
-		fi
-		
-		echo Running wine
-		if ( wine "C:\Program Files (x86)\Inno Setup 5\Compil32.exe" /cc "C:\installer-scripts\windows\windows-nrdk_32.iss") then
-			echo wine ok
-		else
-			wine $START/tools/isetup-5.4.3.exe
-			exit 1
-		fi
-		
-		rm -rf $WINDIR
-	
-		mv $EXEWIN $WINFINAL32 
-	fi
+
 	
 	if !(test -d $TL/$NRSDK/); then  
 		cd $TL/;
@@ -315,7 +270,6 @@ if ( test -n "$VERSION" ) then
 	java -jar GithubPublish.jar BowlerStudio NeuronRobotics $STUDIOVER $DEBFINAL 
 	java -jar GithubPublish.jar BowlerStudio NeuronRobotics $STUDIOVER $MACFINAL 
 	java -jar GithubPublish.jar BowlerStudio NeuronRobotics $STUDIOVER $WINFINAL64 
-	java -jar GithubPublish.jar BowlerStudio NeuronRobotics $STUDIOVER $WINFINAL32
 	
 	
 	
@@ -333,7 +287,7 @@ if ( test -n "$VERSION" ) then
 	echo Cleanup $TL/$NRSDK/ 
 	cd $TL/$NRSDK/ 
 	git checkout development
-	echo Cleanup $TL/$NRConsole/
+	echo Cleanup $TL/$NRConsole/would nee 
 	cd $TL/$NRConsole/
 	git checkout development
 	echo Cleanup $TL/$NRConsole/java-bowler/
