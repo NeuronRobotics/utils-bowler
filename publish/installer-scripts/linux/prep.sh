@@ -24,22 +24,24 @@ if (! test -z "$VERSION" ) then
 	rm -rf $TARBALL
 	rm -rf *.deb
 	if (test -e rdk/bin/BowlerStudio.jar) then
-		chmod +x $START/build/bowlerstudio
-		chmod +x $START/build/BowlerStudio.desktop
+		sudo chmod +x $START/build/bowlerstudio
+		sudo chmod +x $START/build/BowlerStudio.desktop
 		mkdir -p $START/rdk/usr/share/bowlerstudio/
 		mkdir -p $START/rdk/usr/share/doc/bowlerstudio/
-		cp $START/build/LICENSE.txts $START/rdk/usr/share/doc/bowlerstudio/copyright
+		cp $START/build/LICENSE.txt $START/rdk/usr/share/doc/bowlerstudio/copyright
 		cp $START/build/81-neuronrobotics.rules $START/rdk/usr/share/bowlerstudio/
 		cp $START/build/bowlerstudio $START/rdk/usr/share/bowlerstudio/
 		cp $START/build/BowlerStudio.desktop $START/rdk/usr/share/bowlerstudio/
 		cd $START/rdk/
+		rm LICENSE.txt
+		rm README.txt
 		mv firmware/ usr/share/bowlerstudio/
 		mv bin/* usr/share/bowlerstudio/
 		
 		tar -czf $TARBALL -C $START/rdk/ . --exclude-vcs --exclude=.DS_Store --exclude=__MACOSX
 		cd $START
 		#sudo apt-get install python-enum34
-		#sudo apt-get install checkinstall dh-make bzr-builddeb autoproject
+		#sudo apt-get install checkinstall dh-make bzr-builddeb autoproject git-buildpackage
 
 		#pbuilder-dist xenial create # only needed once
 		
@@ -47,7 +49,7 @@ if (! test -z "$VERSION" ) then
 		bzr launchpad-login mad-hephaestus
 
 		bzr dh-make bowlerstudio $VERSION $TARBALL
-		cd bowlerstudio
+		cd $START/bowlerstudio
 		echo "7" > debian/compat
 		#mkdir -p debian/source/
 		#echo "3.0" > debian/source/format
@@ -66,18 +68,27 @@ if (! test -z "$VERSION" ) then
 		echo usr/share/bowlerstudio/NeuronRobotics.png /usr/share/themes/base/neuronrobotics/icons/ >> debian/install
 		echo usr/share/bowlerstudio/BowlerStudio.desktop /usr/share/applications/ >> debian/install
 		echo usr/share/bowlerstudio/81-neuronrobotics.rules /etc/udev/rules.d/ >> debian/install
-		echo usr/share/doc/bowlerstudio/copyright /usr/share/doc/bowlerstudio/copyright >> debian/install
+		echo usr/share/doc/bowlerstudio/copyright /usr/share/doc/bowlerstudio/ >> debian/install
+		echo usr/share/doc/bowlerstudio/changelog.gz /usr/share/doc/bowlerstudio/ >> debian/install
 		cp $START/build/rules  debian/rules
-		cp debian/changelog .
-		cp debian/changelog usr/share/bowlerstudio/
+		cd ~/git/BowlerStudio/
+		gbp dch --ignore-branch --snapshot --auto --git-author
+		cd $START/bowlerstudio
+		cp ~/git/BowlerStudio/debian/changelog debian/changelog
+		gzip -9 debian/changelog
+		cp debian/changelog.gz usr/share/doc/bowlerstudio/
 		bzr commit -m "Initial commit of Debian packaging."
 		rm -rf bowlerstudio-$VERSION
 		rm -rf bin/
+		rmdir debian/source/
 		mv  debian/ DEBIAN/
 		mv .bzr/ ../
 		find ./ -type d -exec  chmod 755 {} \;
 		find ./ -type f -exec  chmod 644 {} \;
 		sudo chown -R root:root ./
+		sudo chmod +x usr/share/bowlerstudio/bowlerstudio
+		sudo chmod +x usr/share/bowlerstudio/BowlerStudio.jar
+		sudo chmod +x usr/share/bowlerstudio/BowlerStudio.desktop
 		cd ../
 		dpkg --build bowlerstudio
 		sudo mv .bzr/ bowlerstudio/
