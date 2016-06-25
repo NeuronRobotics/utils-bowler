@@ -1,3 +1,8 @@
 /nr-rdk-java_3.11.0-1_all.deb
 /nrdk-3.11.0.zip
 /bowlerstudio*
+/build-area/
+/testPackage/
+/rdk.tar.gz
+/signing.txt
+/signing.txt.asc

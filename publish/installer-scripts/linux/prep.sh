@@ -2,6 +2,10 @@
 
 START=$PWD
 VERSION=$1
+TARBALL=$START/rdk.tar.gz
+RDKINSTALL=/usr/share/bowlerstudio/
+#packaging info from http://xmodulo.com/how-to-create-deb-debian-package-for-java-web-application.html
+
 if (! test -z "$VERSION" ) then
 	rm -rf rdk
 	rm -rf bowlerstudio-$VERSION
@@ -11,40 +15,80 @@ if (! test -z "$VERSION" ) then
 	#unzip -qq ~/git/ZipArchive/linux/Slic3r_x64.zip -d rdk/Slic3r_x64/
 	#unzip -qq ~/git/ZipArchive/linux/Slic3r_x86.zip -d rdk/Slic3r_x86/
 
-	mv rdk/bowlerstudio-*/* rdk/
-	rm -rf rdk/bowlerstudio-*
+	mv $START/rdk/bowlerstudio-*/* $START/rdk/
+	#rm -rf rdk/bowlerstudio-*
 	
-	tar cf build/rdk.tar rdk/ --exclude-vcs --exclude=.DS_Store --exclude=__MACOSX
-	
+	rm -rf bowlerstudio
+	rm -rf bowlerstudio-$VERSION
+	rm -rf bowlerstudio_$VERSION.orig.tar.gz
+	rm -rf $TARBALL
+	rm -rf *.deb
 	if (test -e rdk/bin/BowlerStudio.jar) then
-		BUILD=bowlerstudio-$VERSION
-		echo Build = $BUILD
-		BUILDDIR=$PWD/$BUILD/
-		if (test -d $BUILDDIR) then 
-			echo "$BUILDDIR exists";
-			exit 1
-		else
-			echo "Making $BUILDDIR"
-			mkdir $BUILDDIR
-		fi
-		rm -rf $BUILDDIR*
-		cp -r build/* $BUILDDIR/
-		chmod +x $BUILDDIR/*-pak
-		rm -rf $BUILDDIR/doc-pak/.svn/
+		chmod +x $START/build/bowlerstudio
+		chmod +x $START/build/BowlerStudio.desktop
+		mkdir -p $START/rdk/usr/share/bowlerstudio/
+		cp $START/build/81-neuronrobotics.rules $START/rdk/usr/share/bowlerstudio/
+		cp $START/build/bowlerstudio $START/rdk/usr/share/bowlerstudio/
+		cp $START/build/BowlerStudio.desktop $START/rdk/usr/share/bowlerstudio/
+		cd $START/rdk/
+		mv firmware/ usr/share/bowlerstudio/
+		mv bin/* usr/share/bowlerstudio/
+		sudo chown -R root:root .
+		find . -type d -exec sudo chmod 755 {} \;
+		find . -type f -exec sudo chmod 644 {} \;
+		tar -czf $TARBALL -C $START/rdk/ . --exclude-vcs --exclude=.DS_Store --exclude=__MACOSX
+		cd $START
+		#sudo apt-get install python-enum34
+		#sudo apt-get install checkinstall dh-make bzr-builddeb autoproject
+
+		#pbuilder-dist xenial create # only needed once
 		
-		sudo rm  /usr/lib/libbluetooth.so
+		bzr whoami "Kevin Harrington <mad.hephaestus@gmail.com>"
+		bzr launchpad-login mad-hephaestus
+
+		bzr dh-make bowlerstudio $VERSION $TARBALL
+		cd bowlerstudio
+		echo "7" > debian/compat
+		mkdir -p debian/source/
+		echo "3.0" > debian/source/format
+		bzr add debian/source/format
+		rm -f debian/*.ex
+		sed -e s/BOWLERVERSION/$VERSION/g $START/build/control > debian/control
 		
-		cd $BUILDDIR/;sudo sh makeDeb.sh;cd ..
+		grep -v makefile debian/rules > debian/rules.temp
+		mv debian/rules.temp debian/rules
 		
-		cp $BUILDDIR/*.deb $BUILDDIR/../
+		echo usr/share/bowlerstudio/BowlerStudio.jar $RDKINSTALL > debian/install
+		echo usr/share/bowlerstudio/NeuronRobotics.ico $RDKINSTALL >> debian/install
+		echo usr/share/bowlerstudio/NeuronRobotics.png $RDKINSTALL >> debian/install
+		echo usr/share/bowlerstudio/dyio-3.14.6.xml $RDKINSTALL >> debian/install
+		echo usr/share/bowlerstudio/bowlerstudio $RDKINSTALL >> debian/install
+		echo usr/share/bowlerstudio/NeuronRobotics.png /usr/share/themes/base/neuronrobotics/icons/ >> debian/install
+		echo usr/share/bowlerstudio/BowlerStudio.desktop /usr/share/applications/ >> debian/install
+		echo usr/share/bowlerstudio/81-neuronrobotics.rules /etc/udev/rules.d/ >> debian/install
+		cp $START/build/rules  debian/rules
+		cp debian/changelog .
+		cp debian/changelog usr/share/bowlerstudio/
+		bzr commit -m "Initial commit of Debian packaging."
+		rm -rf bowlerstudio-$VERSION
+		
+		mv  debian/ DEBIAN/
+		mv .bzr/ ../
+	
+		cd ../
+		dpkg --build bowlerstudio
+		mv .bzr/ bowlerstudio/
+		lintian bowlerstudio.deb
+		echo "Installing built package"
+		sudo dpkg --install *.deb
 		
 		echo "Cleaning up the directory.."
 		rm -rf rdk
 		
-		rm build/rdk.tar
-		rm *.zip
+		#rm build/rdk.tar
+		#rm *.zip
 		
-		rm -rf $BUILDDIR
+		#rm -rf $BUILDDIR
 		
 		echo Done!
 	

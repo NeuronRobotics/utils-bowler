@@ -1,5 +1,5 @@
 #!/bin/bash
-INSTALL=/usr/local/NeuronRobotics/RDK/
+INSTALL=/usr/local/CommonwealthRobotics/RDK/
 echo "Neuron Robotics Post Install Script..."
 cd $INSTALL
 rm -rf rdk-java
@@ -33,7 +33,7 @@ rm rdk.tar
 service udev restart
 udevadm control --reload-rules
 
-NRDIR=/usr/local/NeuronRobotics/RDK/bin/
+NRDIR=/usr/local/CommonwealthRobotics/RDK/bin/
 
 chmod 777 $(NRDIR)/firmware/*.xml
 
