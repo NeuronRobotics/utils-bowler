@@ -24,8 +24,6 @@ if (! test -z "$VERSION" ) then
 	rm -rf $TARBALL
 	rm -rf *.deb
 	if (test -e rdk/bin/BowlerStudio.jar) then
-		sudo chmod +x $START/build/bowlerstudio
-		sudo chmod +x $START/build/BowlerStudio.desktop
 		mkdir -p $START/rdk/usr/share/bowlerstudio/
 		mkdir -p $START/rdk/usr/share/doc/bowlerstudio/
 		mkdir -p $START/rdk/usr/bin/
@@ -48,9 +46,10 @@ if (! test -z "$VERSION" ) then
 		
 		bzr whoami "Kevin Harrington <mad.hephaestus@gmail.com>"
 		bzr launchpad-login mad-hephaestus
-
+		
 		bzr dh-make bowlerstudio $VERSION $TARBALL
 		cd $START/bowlerstudio
+		bzr init
 		echo "7" > debian/compat
 		#mkdir -p debian/source/
 		#echo "3.0" > debian/source/format
@@ -71,28 +70,31 @@ if (! test -z "$VERSION" ) then
 		echo usr/share/bowlerstudio/81-neuronrobotics.rules /etc/udev/rules.d/ >> debian/install
 		echo usr/share/doc/bowlerstudio/copyright /usr/share/doc/bowlerstudio/ >> debian/install
 		echo usr/share/doc/bowlerstudio/changelog.gz /usr/share/doc/bowlerstudio/ >> debian/install
+		#create the change log
 		cp $START/build/rules  debian/rules
 		cd ~/git/BowlerStudio/
 		gbp dch --ignore-branch --snapshot --auto --git-author
 		cd $START/bowlerstudio
-		cp ~/git/BowlerStudio/debian/changelog debian/changelog
-		gzip -9 debian/changelog
-		cp debian/changelog.gz usr/share/doc/bowlerstudio/
+		#place the change log in the build dir
+		cp ~/git/BowlerStudio/debian/changelog $START/bowlerstudio/debian/changelog
+		gzip -9 $START/bowlerstudio/debian/changelog
+		cp ~/git/BowlerStudio/debian/changelog $START/bowlerstudio/debian/changelog
+		cp $START/bowlerstudio/debian/changelog.gz $START/bowlerstudio/usr/share/doc/bowlerstudio/
+		
 		bzr commit -m "Initial commit of Debian packaging."
 		rm -rf bowlerstudio-$VERSION
 		rm -rf bin/
 		rmdir debian/source/
-		mv  debian/ DEBIAN/
-		mv .bzr/ ../
-		find ./ -type d -exec  chmod 755 {} \;
-		find ./ -type f -exec  chmod 644 {} \;
+		find $START/bowlerstudio/ -type d -exec  chmod 755 {} \;
+		find $START/bowlerstudio/ -type f -exec  chmod 644 {} \;
 		sudo chown -R root:root ./
 		sudo chmod +x usr/bin/bowlerstudio
 		sudo chmod +x usr/share/bowlerstudio/BowlerStudio.jar
 		sudo chmod +x usr/share/bowlerstudio/BowlerStudio.desktop
-		cd ../
-		dpkg --build bowlerstudio
-		sudo mv .bzr/ bowlerstudio/
+		
+		# build the debian file
+		bzr builddeb -S
+
 		lintian bowlerstudio.deb
 		echo "Installing built package"
 		sudo dpkg --install *.deb
