@@ -10,4 +10,5 @@ Provides: bowlerstudio
 Conflicts: modemmanager,nr-rdk-java
 Replaces: modemmanager,nr-rdk-java
 Description: Robotics Development Engironment and runtime. 
- A scripting platform for writing, designing, simulating and manufacturing robots. 
+ A scripting platform for writing, designing, simulating 
+ and manufacturing robots.  

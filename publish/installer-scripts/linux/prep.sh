@@ -28,9 +28,10 @@ if (! test -z "$VERSION" ) then
 		sudo chmod +x $START/build/BowlerStudio.desktop
 		mkdir -p $START/rdk/usr/share/bowlerstudio/
 		mkdir -p $START/rdk/usr/share/doc/bowlerstudio/
+		mkdir -p $START/rdk/usr/bin/
 		cp $START/build/LICENSE.txt $START/rdk/usr/share/doc/bowlerstudio/copyright
 		cp $START/build/81-neuronrobotics.rules $START/rdk/usr/share/bowlerstudio/
-		cp $START/build/bowlerstudio $START/rdk/usr/share/bowlerstudio/
+		cp $START/build/bowlerstudio $START/rdk/usr/bin/
 		cp $START/build/BowlerStudio.desktop $START/rdk/usr/share/bowlerstudio/
 		cd $START/rdk/
 		rm LICENSE.txt
@@ -64,7 +65,7 @@ if (! test -z "$VERSION" ) then
 		echo usr/share/bowlerstudio/NeuronRobotics.ico $RDKINSTALL >> debian/install
 		echo usr/share/bowlerstudio/NeuronRobotics.png $RDKINSTALL >> debian/install
 		echo usr/share/bowlerstudio/dyio-3.14.6.xml $RDKINSTALL >> debian/install
-		echo usr/share/bowlerstudio/bowlerstudio $RDKINSTALL >> debian/install
+		echo usr/bin/bowlerstudio /usr/bin/ >> debian/install
 		echo usr/share/bowlerstudio/NeuronRobotics.png /usr/share/themes/base/neuronrobotics/icons/ >> debian/install
 		echo usr/share/bowlerstudio/BowlerStudio.desktop /usr/share/applications/ >> debian/install
 		echo usr/share/bowlerstudio/81-neuronrobotics.rules /etc/udev/rules.d/ >> debian/install
@@ -86,7 +87,7 @@ if (! test -z "$VERSION" ) then
 		find ./ -type d -exec  chmod 755 {} \;
 		find ./ -type f -exec  chmod 644 {} \;
 		sudo chown -R root:root ./
-		sudo chmod +x usr/share/bowlerstudio/bowlerstudio
+		sudo chmod +x usr/bin/bowlerstudio
 		sudo chmod +x usr/share/bowlerstudio/BowlerStudio.jar
 		sudo chmod +x usr/share/bowlerstudio/BowlerStudio.desktop
 		cd ../
@@ -95,7 +96,7 @@ if (! test -z "$VERSION" ) then
 		lintian bowlerstudio.deb
 		echo "Installing built package"
 		sudo dpkg --install *.deb
-		
+		ls -al /usr/bin/bowlerstudio
 		echo "Cleaning up the directory.."
 		sudo rm -rf rdk
 		

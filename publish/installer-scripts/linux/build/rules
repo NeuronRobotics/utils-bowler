@@ -3,9 +3,6 @@ JAVA_HOME=/usr/lib/jvm/default-java
 %:
     dh $@ --with javahelper
 
-override_dh_link:
-    dh_link usr/local/NeuronRobotics/RDK/bowlerstudio usr/bin/bowlerstudio
-
 override_dh_auto_build:
     dh_auto_build -- dist
 
