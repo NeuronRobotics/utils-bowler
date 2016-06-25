@@ -7,8 +7,8 @@ RDKINSTALL=/usr/share/bowlerstudio/
 #packaging info from http://xmodulo.com/how-to-create-deb-debian-package-for-java-web-application.html
 
 if (! test -z "$VERSION" ) then
-	rm -rf rdk
-	rm -rf bowlerstudio-$VERSION
+	sudo rm -rf rdk
+	sudo rm -rf bowlerstudio-$VERSION
 	
 	mkdir rdk
 	unzip -qq bowlerstudio-*.zip -d rdk
@@ -18,8 +18,8 @@ if (! test -z "$VERSION" ) then
 	mv $START/rdk/bowlerstudio-*/* $START/rdk/
 	#rm -rf rdk/bowlerstudio-*
 	
-	rm -rf bowlerstudio
-	rm -rf bowlerstudio-$VERSION
+	sudo rm -rf bowlerstudio
+	sudo rm -rf bowlerstudio-$VERSION
 	rm -rf bowlerstudio_$VERSION.orig.tar.gz
 	rm -rf $TARBALL
 	rm -rf *.deb
@@ -27,15 +27,15 @@ if (! test -z "$VERSION" ) then
 		chmod +x $START/build/bowlerstudio
 		chmod +x $START/build/BowlerStudio.desktop
 		mkdir -p $START/rdk/usr/share/bowlerstudio/
+		mkdir -p $START/rdk/usr/share/doc/bowlerstudio/
+		cp $START/build/LICENSE.txts $START/rdk/usr/share/doc/bowlerstudio/copyright
 		cp $START/build/81-neuronrobotics.rules $START/rdk/usr/share/bowlerstudio/
 		cp $START/build/bowlerstudio $START/rdk/usr/share/bowlerstudio/
 		cp $START/build/BowlerStudio.desktop $START/rdk/usr/share/bowlerstudio/
 		cd $START/rdk/
 		mv firmware/ usr/share/bowlerstudio/
 		mv bin/* usr/share/bowlerstudio/
-		sudo chown -R root:root .
-		find . -type d -exec sudo chmod 755 {} \;
-		find . -type f -exec sudo chmod 644 {} \;
+		
 		tar -czf $TARBALL -C $START/rdk/ . --exclude-vcs --exclude=.DS_Store --exclude=__MACOSX
 		cd $START
 		#sudo apt-get install python-enum34
@@ -49,9 +49,9 @@ if (! test -z "$VERSION" ) then
 		bzr dh-make bowlerstudio $VERSION $TARBALL
 		cd bowlerstudio
 		echo "7" > debian/compat
-		mkdir -p debian/source/
-		echo "3.0" > debian/source/format
-		bzr add debian/source/format
+		#mkdir -p debian/source/
+		#echo "3.0" > debian/source/format
+		#bzr add debian/source/format
 		rm -f debian/*.ex
 		sed -e s/BOWLERVERSION/$VERSION/g $START/build/control > debian/control
 		
@@ -66,24 +66,27 @@ if (! test -z "$VERSION" ) then
 		echo usr/share/bowlerstudio/NeuronRobotics.png /usr/share/themes/base/neuronrobotics/icons/ >> debian/install
 		echo usr/share/bowlerstudio/BowlerStudio.desktop /usr/share/applications/ >> debian/install
 		echo usr/share/bowlerstudio/81-neuronrobotics.rules /etc/udev/rules.d/ >> debian/install
+		echo usr/share/doc/bowlerstudio/copyright /usr/share/doc/bowlerstudio/copyright >> debian/install
 		cp $START/build/rules  debian/rules
 		cp debian/changelog .
 		cp debian/changelog usr/share/bowlerstudio/
 		bzr commit -m "Initial commit of Debian packaging."
 		rm -rf bowlerstudio-$VERSION
-		
+		rm -rf bin/
 		mv  debian/ DEBIAN/
 		mv .bzr/ ../
-	
+		find ./ -type d -exec  chmod 755 {} \;
+		find ./ -type f -exec  chmod 644 {} \;
+		sudo chown -R root:root ./
 		cd ../
 		dpkg --build bowlerstudio
-		mv .bzr/ bowlerstudio/
+		sudo mv .bzr/ bowlerstudio/
 		lintian bowlerstudio.deb
 		echo "Installing built package"
 		sudo dpkg --install *.deb
 		
 		echo "Cleaning up the directory.."
-		rm -rf rdk
+		sudo rm -rf rdk
 		
 		#rm build/rdk.tar
 		#rm *.zip
