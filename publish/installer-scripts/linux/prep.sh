@@ -51,6 +51,7 @@ if (! test -z "$VERSION" ) then
 		cd $START/bowlerstudio
 		bzr init
 		echo "7" > debian/compat
+		echo "2.0\n" > debian/debian-binary
 		#mkdir -p debian/source/
 		#echo "3.0" > debian/source/format
 		#bzr add debian/source/format
@@ -93,21 +94,29 @@ if (! test -z "$VERSION" ) then
 		sudo chmod +x usr/share/bowlerstudio/BowlerStudio.desktop
 		
 		# build the debian file
-		bzr builddeb -S
+#		bzr builddeb -S
+		sudo mv .bzr/ ../
+		sudo debuild -S
+			sudo mv debian/ DEBIAN/ 
+			sed -e s/BOWLERVERSION/$VERSION/g $START/build/BINARYcontrol > DEBIAN/control
+			cd ../
+			sudo dpkg --build bowlerstudio
+		
+			lintian bowlerstudio*.deb
+			echo "Installing built package"
+			sudo dpkg --install bowlerstudio*.deb
+			ls -al /usr/bin/bowlerstudio
+			sudo mv .bzr/ bowlerstudio
+			echo "Cleaning up the directory.."
+			sudo rm -rf rdk
+		
+			#rm build/rdk.tar
+			#rm *.zip
+		
+			#rm -rf $BUILDDIR
+		
+			echo Done!
 
-		lintian bowlerstudio.deb
-		echo "Installing built package"
-		sudo dpkg --install *.deb
-		ls -al /usr/bin/bowlerstudio
-		echo "Cleaning up the directory.."
-		sudo rm -rf rdk
-		
-		#rm build/rdk.tar
-		#rm *.zip
-		
-		#rm -rf $BUILDDIR
-		
-		echo Done!
 	
 	else
 		echo "No jar found"
