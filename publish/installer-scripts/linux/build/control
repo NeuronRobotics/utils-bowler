@@ -13,6 +13,5 @@ Depends:  oracle-java8-set-default | openjfx , libopencv2.4-java , libopencv2.4-
 Provides: bowlerstudio
 Conflicts: modemmanager,nr-rdk-java
 Replaces: modemmanager,nr-rdk-java
-Description: Robotics Development Engironment and runtime. 
- A scripting platform for writing, designing, simulating 
- and manufacturing robots.
+Description: A Robotics IDE designed to ramp up knowledge of how to design systems for distributed production. 
+ Detailed description at https://github.com/NeuronRobotics/BowlerStudio/blob/master/README.md
