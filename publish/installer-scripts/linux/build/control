@@ -3,7 +3,8 @@ Section: utils
 Priority: extra
 Maintainer: Customer Support <mad.hephaestus@gmail.com>
 Homepage: http://neuronrobotics.com/
-Build-Depends: bash-completion, debhelper (>= 8.0.0) | debhelper (>= 9.0.0)
+Standards-Version: 8
+Build-Depends: autotools-dev, bash-completion, debhelper (>= 8.0.0) | debhelper (>= 9.0.0)
 
 Package: bowlerstudio
 Section: utils
