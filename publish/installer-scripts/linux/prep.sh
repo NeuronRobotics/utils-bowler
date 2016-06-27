@@ -42,6 +42,9 @@ if (! test -z "$VERSION" ) then
 	mv bin/* usr/share/bowlerstudio/
 	rm  -rf bowlerstudio-$VERSION
 	rm  -rf bin
+
+	find $START/rdk/ -type d -exec  chmod 755 {} \;
+	find $START/rdk/ -type f -exec  chmod 644 {} \;
 	chmod +x usr/bin/bowlerstudio
 	chmod +x usr/share/bowlerstudio/BowlerStudio.jar
 	chmod +x usr/share/bowlerstudio/BowlerStudio.desktop
@@ -66,15 +69,13 @@ if (! test -z "$VERSION" ) then
 		echo "1.0" > debian/source/format
 	
 		#mkdir -p debian/source/
-		#echo "3.0" > debian/source/format
+		echo "3.0 (native)" > debian/source/format
 		#bzr add debian/source/format
 		rm -f debian/*.ex
 		rm debian/control
 		sed -e s/BOWLERVERSION/$VERSION/g $START/build/control > debian/control
 		cp ~/git/BowlerStudio/debian/changelog $START/bowlerstudio/debian/changelog
 		echo "\n" >> $START/bowlerstudio/debian/changelog
-		grep -v makefile debian/rules > debian/rules.temp
-		mv debian/rules.temp debian/rules
 	
 		echo usr/share/bowlerstudio/BowlerStudio.jar $RDKINSTALL > debian/install
 		echo usr/share/bowlerstudio/NeuronRobotics.ico $RDKINSTALL >> debian/install
@@ -95,14 +96,6 @@ if (! test -z "$VERSION" ) then
 		#place the change log in the build dir
 		
 		cp ~/git/BowlerStudio/debian/changelog $START/bowlerstudio/debian/changelog
-
-		bzr add usr/share/bowlerstudio/BowlerStudio.jar
-		bzr add usr/share/bowlerstudio/BowlerStudio.desktop
-		bzr add usr/share/bowlerstudio/NeuronRobotics.ico
-		bzr add usr/share/bowlerstudio/NeuronRobotics.png
-		find $START/bowlerstudio/ -type d -exec  chmod 755 {} \;
-		find $START/bowlerstudio/ -type f -exec  chmod 644 {} \;
-
 		echo 'usr/share/bowlerstudio/BowlerStudio.jar' > debian/source/include-binaries
 		echo 'usr/share/bowlerstudio/NeuronRobotics.ico' >> debian/source/include-binaries
 		echo 'usr/share/bowlerstudio/NeuronRobotics.png' >> debian/source/include-binaries
@@ -111,8 +104,10 @@ if (! test -z "$VERSION" ) then
 		dpkg-source --commit --extend-diff-ignore="(^|/)(usr/share/bowlerstudio/.*\.ico)$"
 		dpkg-source --commit --extend-diff-ignore="(^|/)(usr/share/bowlerstudio/.*\.png)$"
 		#
+		find debian/ -type d -exec  chmod 755 {} \;
+		find debian/ -type f -exec  chmod 644 {} \;
 		cd ..
-		dpkg-source --include-binaries -b bowlerstudio
+		dpkg-source --commit --include-binaries -b bowlerstudio
 		cd -
 		bzr commit -m "Initial commit of Debian packaging."
 		# build the debian file
