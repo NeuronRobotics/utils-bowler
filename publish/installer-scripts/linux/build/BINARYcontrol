@@ -2,6 +2,8 @@ Package: bowlerstudio
 Section: utils
 Binary: bowlerstudio
 Architecture: all
+Maintainer: Customer Support <mad.hephaestus@gmail.com>
+Homepage: http://neuronrobotics.com/
 Version: BOWLERVERSION
 Depends:  oracle-java8-set-default | openjfx , libopencv2.4-java , libopencv2.4-jni , slic3r , jarwrapper , arduino
 Provides: bowlerstudio

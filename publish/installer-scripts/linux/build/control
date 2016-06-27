@@ -7,9 +7,7 @@ Build-Depends: bash-completion, debhelper (>= 8.0.0) | debhelper (>= 9.0.0)
 
 Package: bowlerstudio
 Section: utils
-Binary: bowlerstudio
 Architecture: all
-Version: BOWLERVERSION
 Depends:  oracle-java8-set-default | openjfx , libopencv2.4-java , libopencv2.4-jni , slic3r , jarwrapper , arduino
 Provides: bowlerstudio
 Conflicts: modemmanager,nr-rdk-java

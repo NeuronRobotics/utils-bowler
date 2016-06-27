@@ -7,3 +7,7 @@
 /CSGdatabase.json
 /rdk.tar.gz
 /rdk*
+/*.build
+/*.gz
+/*.dsc
+/*.changes
