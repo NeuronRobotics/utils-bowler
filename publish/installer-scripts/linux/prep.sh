@@ -5,17 +5,10 @@ VERSION=$1
 TARBALL=$START/rdk.tar.gz
 RDKINSTALL=/usr/share/bowlerstudio/
 #packaging info from http://xmodulo.com/how-to-create-deb-debian-package-for-java-web-application.html
-BUILDIR=$START/bowlerstudio-$VERSION/
+BUILDIR=$START/bowlerstudio_$VERSION/
 if (! test -z "$VERSION" ) then
 	sudo rm -rf rdk
-	mkdir rdk
-	unzip -qq bowlerstudio-*.zip -d rdk
-	#unzip -qq ~/git/ZipArchive/linux/Slic3r_x64.zip -d rdk/Slic3r_x64/
-	#unzip -qq ~/git/ZipArchive/linux/Slic3r_x86.zip -d rdk/Slic3r_x86/
-
-	mv $START/rdk/bowlerstudio-*/* $START/rdk/
-	#rm -rf rdk/bowlerstudio-*
-	
+	sudo rm -rf $START/bowlerstudio/
 	sudo rm -rf $BUILDIR
 	sudo rm -rf $START/*.dsc
 	sudo rm -rf $START/*.changes
@@ -27,15 +20,27 @@ if (! test -z "$VERSION" ) then
 	sudo rm -rf $START/.bzr
 	sudo rm -rf $TARBALL
 	sudo rm -rf *.deb
-	
 
+	mkdir rdk
+	unzip -qq bowlerstudio-*.zip -d rdk
+	#unzip -qq ~/git/ZipArchive/linux/Slic3r_x64.zip -d rdk/Slic3r_x64/
+	#unzip -qq ~/git/ZipArchive/linux/Slic3r_x86.zip -d rdk/Slic3r_x86/
+
+	mv $START/rdk/bowlerstudio-*/* $START/rdk/
+	#rm -rf rdk/bowlerstudio-*
 	mkdir -p $START/rdk/usr/share/bowlerstudio/
 	mkdir -p $START/rdk/usr/share/doc/bowlerstudio/
 	mkdir -p $START/rdk/usr/bin/
+
+	
+
+
 	cp $START/build/LICENSE.txt $START/rdk/usr/share/doc/bowlerstudio/copyright
 	cp $START/build/81-neuronrobotics.rules $START/rdk/usr/share/bowlerstudio/
 	cp $START/build/bowlerstudio $START/rdk/usr/bin/
 	cp $START/build/BowlerStudio.desktop $START/rdk/usr/share/bowlerstudio/
+	cp ~/git/BowlerStudio/debian/changelog $START/rdk/usr/share/doc/bowlerstudio/
+	gzip -9 $START/rdk/usr/share/doc/bowlerstudio/changelog
 	cd $START/rdk/
 	rm LICENSE.txt
 	rm README.txt
@@ -61,7 +66,7 @@ if (! test -z "$VERSION" ) then
 	bzr launchpad-login mad-hephaestus
 	
 	bzr dh-make bowlerstudio $VERSION $TARBALL
-	mv bowlerstudio bowlerstudio-$VERSION
+	mv bowlerstudio $BUILDIR
 	if cd $BUILDIR; then
 		
 		cd $BUILDIR
@@ -75,9 +80,13 @@ if (! test -z "$VERSION" ) then
 		echo "3.0 (native)" > debian/source/format
 		#bzr add debian/source/format
 		rm -f debian/*.ex
+		rm -f debian/*.EX
 		rm debian/control
 		sed -e s/BOWLERVERSION/$VERSION/g $START/build/control > debian/control
 		cp ~/git/BowlerStudio/debian/changelog $BUILDIR/debian/changelog
+		gzip -9 $BUILDIR/debian/changelog
+		cp ~/git/BowlerStudio/debian/changelog $BUILDIR/debian/changelog
+		
 		echo "\n" >> $BUILDIR/debian/changelog
 	
 		echo usr/share/bowlerstudio/BowlerStudio.jar $RDKINSTALL > debian/install
@@ -95,7 +104,7 @@ if (! test -z "$VERSION" ) then
 		cd ~/git/BowlerStudio/
 		gbp dch --ignore-branch --snapshot --auto --git-author
 		sed -i.bak s/'madhephaestus'/'Kevin Harrington'/g ~/git/BowlerStudio/debian/changelog
-		sed -i.bak s/'UNRELEASED'/$VERSION/g ~/git/BowlerStudio/debian/changelog
+		sed -i.bak s/'UNRELEASED'/xenial/g ~/git/BowlerStudio/debian/changelog
 		cd $BUILDIR
 		#place the change log in the build dir
 		
@@ -103,6 +112,7 @@ if (! test -z "$VERSION" ) then
 		echo 'usr/share/bowlerstudio/BowlerStudio.jar' > debian/source/include-binaries
 		echo 'usr/share/bowlerstudio/NeuronRobotics.ico' >> debian/source/include-binaries
 		echo 'usr/share/bowlerstudio/NeuronRobotics.png' >> debian/source/include-binaries
+		echo 'usr/share/doc/bowlerstudio/changelog.gz' >> debian/source/include-binaries
 		sudo mv .bzr/ ../
 		#dpkg-source --commit --extend-diff-ignore="(^|/)(usr/share/bowlerstudio/.*\.jar)$"
 		#dpkg-source --commit --extend-diff-ignore="(^|/)(usr/share/bowlerstudio/.*\.ico)$"
@@ -119,22 +129,23 @@ if (! test -z "$VERSION" ) then
 
 		if debuild -S -kFA7BCDE0; then
 			echo "Attepmting to publish"
+			cd ../
 			dput ppa:mad-hephaestus/commonwealthrobotics *.changes
+			cd $BUILDIR
 		## Now build the binary package
 			echo "Building binary..."
 			mv debian/ DEBIAN/ 
 			rm -rf  DEBIAN/source/
 			rm -rf  DEBIAN/control
-			gzip -9 $BUILDIR/DEBIAN/changelog
-			cp ~/git/BowlerStudio/debian/changelog $BUILDIR/DEBIAN/changelog
-			cp $BUILDIR/DEBIAN/changelog.gz $BUILDIR/usr/share/doc/bowlerstudio/
+			rm -rf  DEBIAN/README.*		
+			
 		
 			sudo sed -e s/BOWLERVERSION/$VERSION/g $START/build/BINARYcontrol > DEBIAN/control
 
 			sudo chown -R root:root ./
 			cd ../
 			
-			sudo dpkg --build bowlerstudio-$VERSION
+			sudo dpkg --build $BUILDIR
 	
 			lintian bowlerstudio*.deb
 			echo "Installing built package"
