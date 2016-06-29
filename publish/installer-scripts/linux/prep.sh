@@ -20,7 +20,11 @@ if (! test -z "$VERSION" ) then
 	sudo rm -rf $START/.bzr
 	sudo rm -rf $TARBALL
 	sudo rm -rf *.deb
-
+	cd ~/git/BowlerStudio/
+	gbp dch --ignore-branch  --release --new-version=$VERSION --auto --git-author
+	sed -i.bak s/'madhephaestus'/'Kevin Harrington'/g ~/git/BowlerStudio/debian/changelog
+	sed -i.bak s/'UNRELEASED'/xenial/g ~/git/BowlerStudio/debian/changelog
+	cd  $START/
 	mkdir rdk
 	unzip -qq bowlerstudio-*.zip -d rdk
 	#unzip -qq ~/git/ZipArchive/linux/Slic3r_x64.zip -d rdk/Slic3r_x64/
@@ -101,10 +105,7 @@ if (! test -z "$VERSION" ) then
 		echo usr/share/doc/bowlerstudio/changelog.gz /usr/share/doc/bowlerstudio/ >> debian/install
 		#create the change log
 		cp $START/build/rules  debian/rules
-		cd ~/git/BowlerStudio/
-		gbp dch --ignore-branch --snapshot --auto --git-author
-		sed -i.bak s/'madhephaestus'/'Kevin Harrington'/g ~/git/BowlerStudio/debian/changelog
-		sed -i.bak s/'UNRELEASED'/xenial/g ~/git/BowlerStudio/debian/changelog
+
 		cd $BUILDIR
 		#place the change log in the build dir
 		
@@ -126,7 +127,7 @@ if (! test -z "$VERSION" ) then
 		bzr commit -m "Initial commit of Debian packaging."
 		# build the debian file
 #		bzr builddeb -S
-
+		#debchange --newversion $VERSION
 		if debuild -S -kFA7BCDE0; then
 			echo "Attepmting to publish"
 			cd ../
@@ -141,10 +142,10 @@ if (! test -z "$VERSION" ) then
 			
 		
 			sudo sed -e s/BOWLERVERSION/$VERSION/g $START/build/BINARYcontrol > DEBIAN/control
-
+			#debchange --newversion $VERSION
 			sudo chown -R root:root ./
 			cd ../
-			
+
 			sudo dpkg --build $BUILDIR
 	
 			lintian bowlerstudio*.deb
