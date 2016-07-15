@@ -62,7 +62,7 @@ if (! test -z "$VERSION" ) then
 	tar -czf $TARBALL -C $START/rdk/ . --exclude-vcs --exclude=.DS_Store --exclude=__MACOSX
 	cd $START
 	#sudo apt-get install python-enum34
-	#sudo apt-get install checkinstall dh-make bzr-builddeb autoproject git-buildpackage
+	#sudo apt-get install checkinstall dh-make bzr-builddeb autoproject git-buildpackage arduino-ide
 
 	#pbuilder-dist xenial create # only needed once
 	
@@ -131,7 +131,7 @@ if (! test -z "$VERSION" ) then
 		if debuild -S -kFA7BCDE0; then
 			echo "Attepmting to publish"
 			cd ../
-			dput ppa:mad-hephaestus/commonwealthrobotics *.changes
+			#dput ppa:mad-hephaestus/commonwealthrobotics *.changes
 			cd $BUILDIR
 		## Now build the binary package
 			echo "Building binary..."
