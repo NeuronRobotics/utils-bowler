@@ -96,7 +96,7 @@ if (! test -z "$VERSION" ) then
 		echo usr/share/bowlerstudio/BowlerStudio.jar $RDKINSTALL > debian/install
 		echo usr/share/bowlerstudio/NeuronRobotics.ico $RDKINSTALL >> debian/install
 		echo usr/share/bowlerstudio/NeuronRobotics.png $RDKINSTALL >> debian/install
-		echo usr/share/bowlerstudio/dyio-3.14.6.xml $RDKINSTALL >> debian/install
+		#echo usr/share/bowlerstudio/dyio-3.14.6.xml $RDKINSTALL >> debian/install
 		echo usr/bin/bowlerstudio /usr/bin/ >> debian/install
 		echo usr/share/bowlerstudio/NeuronRobotics.png /usr/share/themes/base/neuronrobotics/icons/ >> debian/install
 		echo usr/share/bowlerstudio/BowlerStudio.desktop /usr/share/applications/ >> debian/install
@@ -131,7 +131,7 @@ if (! test -z "$VERSION" ) then
 		if debuild -S -kFA7BCDE0; then
 			echo "Attepmting to publish"
 			cd ../
-			#dput ppa:mad-hephaestus/commonwealthrobotics *.changes
+			dput ppa:mad-hephaestus/commonwealthrobotics *.changes
 			cd $BUILDIR
 		## Now build the binary package
 			echo "Building binary..."
