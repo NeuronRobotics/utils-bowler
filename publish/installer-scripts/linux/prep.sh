@@ -51,7 +51,7 @@ if (! test -z "$VERSION" ) then
 
 	rm -rf firmware/
 	mv bin/* usr/share/bowlerstudio/
-	rm  -rf bowlerstudio-$VERSION
+	rm  -rf bowlerstudio-*
 	rm  -rf bin
 
 	find $START/rdk/ -type d -exec  chmod 755 {} \;
