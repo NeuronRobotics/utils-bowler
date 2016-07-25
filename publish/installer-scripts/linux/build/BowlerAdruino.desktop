@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Arduino 1.6
+Exec=/usr/bin/arduino
+Categories=Application;Development;Programming;Education
+Icon=/usr/share/app-install/icons/arduino.png
+
