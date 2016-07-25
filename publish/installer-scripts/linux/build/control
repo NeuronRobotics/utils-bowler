@@ -5,12 +5,12 @@ Priority: extra
 Maintainer: Customer Support <mad.hephaestus@gmail.com>
 Homepage: http://neuronrobotics.com/
 Standards-Version: 3.9.7
-Build-Depends: make(>= 4.0.0),autotools-dev, bash-completion, debhelper (>= 8.0.0) | debhelper (>= 9.0.0)
+Build-Depends: make,autotools-dev, bash-completion, debhelper (>= 8.0.0) | debhelper (>= 9.0.0)
 
 Package: bowlerstudio
 Section: utils
 Architecture: all
-Depends:  oracle-java8-set-default | openjfx , libopencv2.4-java , libopencv2.4-jni , slic3r , jarwrapper , arduino-ide
+Depends:  make,oracle-java8-set-default | openjfx , libopencv2.4-java , libopencv2.4-jni , slic3r , jarwrapper , arduino-ide
 Provides: bowlerstudio
 Conflicts: modemmanager,nr-rdk-java,arduino
 Replaces: modemmanager,nr-rdk-java,arduino
