@@ -15,7 +15,6 @@ if (! test -z "$VERSION" ) then
 	unzip -qq ~/git/ZipArchive/mac/Slic3r.app.zip -d $DIR/
 	chmod +x $DIR/BowlerStudio.app/Contents/MacOS/BowlerStudio
 	rm *.zip
-	cp $2 $DIR/
 	
 	zip  -qq -r mac-$VERSION.zip $DIR
 	rm -rf $DIR/

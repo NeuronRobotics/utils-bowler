@@ -4,7 +4,6 @@ START=$PWD
 
 VERSION=$1
 STUDIOVER=$2
-DYIOVER=$3
 
 if ( test -z "$STUDIOVER" ) then
 	echo #####ERROR no BowlerStudio version specified, I.E. 3.7.0
@@ -15,10 +14,6 @@ if ( test -z "$VERSION" ) then
 	exit 1
 fi
 
-if ( test -z "$DYIOVER" ) then
-	echo #####DyIO version not specified
-	DYIOVER=$VERSION
-fi
 
 if ( test -n "$VERSION" ) then
 	#sudo apt-get install ant wine
@@ -75,37 +70,10 @@ if ( test -n "$VERSION" ) then
 		cd $TL/;
 		git clone https://github.com/NeuronRobotics/dyio.git
 	fi
-	cd $TL/dyio/
-	git pull origin development
-	if (! git checkout tags/$DYIOVER); then
-		if (! git checkout tags/v$DYIOVER); then
-			git tag -l
-			echo "DyIO $DYIOVER Is not taged yet"
-			exit 1;
-		fi
-		#Change the DyIO directory to the old location before the GIT transition
-		DyIO=microcontroller-bowler/firmware/device/DyIO/development/
-	else
-		DyIO=dyio/
-	fi
+
 	# make the output dirs for building the DyIO
 	
-	
 
-	mkdir -p $TL/$DyIO/pic/output/release/
-	mkdir -p $TL/$DyIO/pic/output/debug/
-	mkdir -p $TL/$DyIO/pic/output/bluetooth/
-
-	mkdir -p $TL/$DyIO/avr/output/atmega644p/
-	mkdir -p $TL/$DyIO/avr/output/atmega324p/
-
-	mkdir -p $TL/$DyIO/FirmwarePublish/Release/legacy/
-	mkdir -p $TL/$DyIO/FirmwarePublish/Dev/
-
-	XML=$TL/$DyIO/FirmwarePublish/Release/dyio-$DYIOVER.xml
-	
-
-	
 	cd $START
 	
 	if(test -e $DIST) then
@@ -135,12 +103,7 @@ if ( test -n "$VERSION" ) then
 	
 	
 		#Copy over data
-		
-		if (! test -e $XML) then
-			echo ERROR!! expected firmware file: $XML 
-			echo but none was found
-			#exit 1
-		fi
+	
 		if(test -e $DIST) then
 			echo previous build exists
 			rm -rf $DIST/java
@@ -188,7 +151,7 @@ if ( test -n "$VERSION" ) then
 		rm -rf $START/../installer-scripts/osx/*.zip
 		cp $ZIP $START/../installer-scripts/osx/
 		cd $START/../installer-scripts/osx/
-		sh prep.sh $STUDIOVER $XML
+		sh prep.sh $STUDIOVER 
 		mv $START/../installer-scripts/osx/*$STUDIOVER*.zip $MACFINAL
     fi
 
@@ -264,7 +227,6 @@ if ( test -n "$VERSION" ) then
 	fi
 	
 	cd $START/
-	java -jar GithubPublish.jar BowlerStudio NeuronRobotics $STUDIOVER $XML
 	java -jar GithubPublish.jar BowlerStudio NeuronRobotics $STUDIOVER $NRCONSOLE_JAR
 	java -jar GithubPublish.jar BowlerStudio NeuronRobotics $STUDIOVER $LIB
 	java -jar GithubPublish.jar BowlerStudio NeuronRobotics $STUDIOVER $DEBFINAL 
