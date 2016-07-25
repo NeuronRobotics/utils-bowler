@@ -48,7 +48,7 @@ if (! test -z "$VERSION" ) then
 	cd $START/rdk/
 	rm LICENSE.txt
 	rm README.txt
-	mv firmware/dyio-3.14.6.xml usr/share/bowlerstudio/
+
 	rm -rf firmware/
 	mv bin/* usr/share/bowlerstudio/
 	rm  -rf bowlerstudio-$VERSION
