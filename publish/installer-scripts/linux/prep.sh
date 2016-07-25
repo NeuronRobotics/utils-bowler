@@ -43,7 +43,6 @@ if (! test -z "$VERSION" ) then
 	cp $START/build/81-neuronrobotics.rules $START/rdk/usr/share/bowlerstudio/
 	cp $START/build/bowlerstudio $START/rdk/usr/bin/
 	cp $START/build/BowlerStudio.desktop $START/rdk/usr/share/bowlerstudio/
-	cp $START/build/BowlerArduino.desktop $START/rdk/usr/share/bowlerstudio/
 	cp ~/git/BowlerStudio/debian/changelog $START/rdk/usr/share/doc/bowlerstudio/
 	gzip -9 $START/rdk/usr/share/doc/bowlerstudio/changelog
 	cd $START/rdk/
@@ -101,7 +100,6 @@ if (! test -z "$VERSION" ) then
 		echo usr/bin/bowlerstudio /usr/bin/ >> debian/install
 		echo usr/share/bowlerstudio/NeuronRobotics.png /usr/share/themes/base/neuronrobotics/icons/ >> debian/install
 		echo usr/share/bowlerstudio/BowlerStudio.desktop /usr/share/applications/ >> debian/install
-		echo usr/share/bowlerstudio/BowlerArduino.desktop /usr/share/applications/ >> debian/install
 		echo usr/share/bowlerstudio/81-neuronrobotics.rules /etc/udev/rules.d/ >> debian/install
 		echo usr/share/doc/bowlerstudio/copyright /usr/share/doc/bowlerstudio/ >> debian/install
 		echo usr/share/doc/bowlerstudio/changelog.gz /usr/share/doc/bowlerstudio/ >> debian/install
