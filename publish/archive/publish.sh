@@ -28,7 +28,6 @@ if ( test -n "$VERSION" ) then
 	#LIB=$TL/$NRSDK/build/libs/nrsdk-$VERSION-jar-with-dependencies.jar
 	LIB=$TL/$NRSDK/build/libs/BowlerScriptingKernel-$VERSION.jar
 	NRCONSOLE_JAR=$TL/$NRConsole/build/libs/BowlerStudio.jar
-	OLDDYIO=false;
 	ZIP=$DIST/$ZIP
 	BUILD=$DIST/$BUILDLOCAL
 	EXEWIN=$DIST/bowlerstudio-$STUDIOVER.exe
@@ -38,8 +37,6 @@ if ( test -n "$VERSION" ) then
 	MACFINAL=$DIST/MacOSX-BowlerStudio-$STUDIOVER.zip
 	DEBFINAL=$DIST/Ubuntu-BowlerStudio-$STUDIOVER.deb
 	
-	
-	USE_PROVIDED_FIRMWARE=true;
 
 	if !(test -d $TL/$NRSDK/); then  
 		cd $TL/;
@@ -66,12 +63,6 @@ if ( test -n "$VERSION" ) then
 		exit 1;
 	fi
 
-	if !(test -d $TL/dyio); then  
-		cd $TL/;
-		git clone https://github.com/NeuronRobotics/dyio.git
-	fi
-
-	# make the output dirs for building the DyIO
 	
 
 	cd $START
@@ -79,8 +70,7 @@ if ( test -n "$VERSION" ) then
 	if(test -e $DIST) then
 		echo build dir exists
 	else
-		cd $TL/$DyIO/
-		make pub
+	
 	
 	
 	
@@ -123,15 +113,12 @@ if ( test -n "$VERSION" ) then
 
 		mkdir $BUILD
 		mkdir $BUILD/bin
-		mkdir $BUILD/firmware
 		cp $START/*.txt $BUILD
 	
 	
 		#cp $LIB 								$BUILD/bin/
 		cp $NRCONSOLE_JAR						        $BUILD/bin/
 		cp $START/NeuronRobotics.* 						$BUILD/bin/
-		cp -r $TL/$DyIO/FirmwarePublish/Release/*			$BUILD/firmware/
-		cp -r $TL/$NRConsole/BowlerBoard*.xml					$BUILD/firmware/
 		#rsync -avtP --exclude=.svn* $TL/$NRSDK/target/docs 		$BUILD/java/
 		#cp $START/index.html 							$BUILD/java/docs/api/
 		#rsync -avtP --exclude=.svn* $TL/$NRSDK/target/docs				$DIST/java
@@ -252,13 +239,6 @@ if ( test -n "$VERSION" ) then
 	echo Cleanup $TL/$NRConsole/would nee 
 	cd $TL/$NRConsole/
 	git checkout development
-	echo Cleanup $TL/$NRConsole/java-bowler/
-	cd $TL/$NRConsole/java-bowler/
-	git pull origin development
-	echo Cleanup $TL/dyio/
-	cd $TL/dyio/
-	git checkout development
-	
 	
 
 	exit 0
