@@ -225,7 +225,14 @@ if ( test -n "$VERSION" ) then
 	git push
 	rm $START/index.md
 	
-	
+	cd $START/
+	sed -e s/VER/"$STUDIOVER"/g $START/index_template.md >$START/index.md
+	cd $TL/CommonWealthRobotics.github.io/
+	git pull
+	cp $START/index.md $TL/CommonWealthRobotics.github.io/content/index.md
+	git commit -m"rev bump to $STUDIOVER" $TL/CommonWealthRobotics.github.io/content/index.md
+	git push
+	rm $START/index.md
 	
 	echo Cleanup $TL/$NRSDK/ 
 	cd $TL/$NRSDK/ 
