@@ -40,7 +40,7 @@ if ( test -n "$VERSION" ) then
 
 	if !(test -d $TL/$NRSDK/); then  
 		cd $TL/;
-		git clone https://github.com/NeuronRobotics/bowler-script-kernel.git
+		git clone https://github.com/CommonWealthRobotics/bowler-script-kernel.git
 	fi
 	cd $TL/$NRSDK/ 
 	git pull origin development
@@ -53,7 +53,7 @@ if ( test -n "$VERSION" ) then
 
 	if !(test -d $TL/$NRConsole/); then  
 		cd $TL/;
-		git clone https://github.com/NeuronRobotics/BowlerStudio.git
+		git clone https://github.com/CommonWealthRobotics/BowlerStudio.git
 	fi
 	cd $TL/$NRConsole/
 	git pull origin development
@@ -206,19 +206,13 @@ if ( test -n "$VERSION" ) then
 		mv $EXEWIN $WINFINAL64 
 	fi
 	
-
-	
-	if !(test -d $TL/$NRSDK/); then  
-		cd $TL/;
-		git clone https://github.com/NeuronRobotics/java-bowler.git
-	fi
 	
 	cd $START/
-	java -jar GithubPublish.jar BowlerStudio NeuronRobotics $STUDIOVER $NRCONSOLE_JAR
-	java -jar GithubPublish.jar BowlerStudio NeuronRobotics $STUDIOVER $LIB
-	java -jar GithubPublish.jar BowlerStudio NeuronRobotics $STUDIOVER $DEBFINAL 
-	java -jar GithubPublish.jar BowlerStudio NeuronRobotics $STUDIOVER $MACFINAL 
-	java -jar GithubPublish.jar BowlerStudio NeuronRobotics $STUDIOVER $WINFINAL64 
+	java -jar GithubPublish.jar BowlerStudio CommonWealthRobotics $STUDIOVER $NRCONSOLE_JAR
+	java -jar GithubPublish.jar BowlerStudio CommonWealthRobotics $STUDIOVER $LIB
+	java -jar GithubPublish.jar BowlerStudio CommonWealthRobotics $STUDIOVER $DEBFINAL 
+	java -jar GithubPublish.jar BowlerStudio CommonWealthRobotics $STUDIOVER $MACFINAL 
+	java -jar GithubPublish.jar BowlerStudio CommonWealthRobotics $STUDIOVER $WINFINAL64 
 	
 	
 	
@@ -236,7 +230,6 @@ if ( test -n "$VERSION" ) then
 	echo Cleanup $TL/$NRSDK/ 
 	cd $TL/$NRSDK/ 
 	git checkout development
-	echo Cleanup $TL/$NRConsole/would nee 
 	cd $TL/$NRConsole/
 	git checkout development
 	
