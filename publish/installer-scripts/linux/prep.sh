@@ -6,6 +6,9 @@ TARBALL=$START/rdk.tar.gz
 RDKINSTALL=/usr/share/bowlerstudio/
 #packaging info from http://xmodulo.com/how-to-create-deb-debian-package-for-java-web-application.html
 BUILDIR=$START/bowlerstudio_$VERSION/
+sudo dpkg --add-architecture i386
+sudo apt-get install git-buildpackage bzr-builddeb dh-make bzr wine unzip
+dh_make -e mad.hephaestus@gmail.com
 if (! test -z "$VERSION" ) then
 	sudo rm -rf rdk
 	sudo rm -rf $START/bowlerstudio/
@@ -21,15 +24,17 @@ if (! test -z "$VERSION" ) then
 	sudo rm -rf $TARBALL
 	sudo rm -rf *.deb
 	cd ~/git/BowlerStudio/
+	echo "Building change log"
 	gbp dch --ignore-branch  --release --new-version=$VERSION --auto --git-author
 	sed -i.bak s/'madhephaestus'/'Kevin Harrington'/g ~/git/BowlerStudio/debian/changelog
 	sed -i.bak s/'UNRELEASED'/xenial/g ~/git/BowlerStudio/debian/changelog
 	cd  $START/
 	mkdir rdk
+	echo "Loading Jar"
 	unzip -qq bowlerstudio-*.zip -d rdk
 	#unzip -qq ~/git/ZipArchive/linux/Slic3r_x64.zip -d rdk/Slic3r_x64/
 	#unzip -qq ~/git/ZipArchive/linux/Slic3r_x86.zip -d rdk/Slic3r_x86/
-
+	echo "Adjusting up directory"
 	mv $START/rdk/bowlerstudio-*/* $START/rdk/
 	#rm -rf rdk/bowlerstudio-*
 	mkdir -p $START/rdk/usr/share/bowlerstudio/
@@ -50,6 +55,7 @@ if (! test -z "$VERSION" ) then
 	rm README.txt
 
 	rm -rf firmware/
+	echo "Moving Jar to the jar directory"
 	mv bin/* usr/share/bowlerstudio/
 	rm  -rf bowlerstudio-*
 	rm  -rf bin
@@ -65,7 +71,7 @@ if (! test -z "$VERSION" ) then
 	#sudo apt-get install checkinstall dh-make bzr-builddeb autoproject git-buildpackage arduino-ide
 
 	#pbuilder-dist xenial create # only needed once
-	
+	alias dh-make=dh_make
 	bzr whoami "Kevin Harrington <mad.hephaestus@gmail.com>"
 	bzr launchpad-login mad-hephaestus
 	
