@@ -43,6 +43,7 @@ if ( test -n "$VERSION" ) then
 		git clone https://github.com/CommonWealthRobotics/bowler-script-kernel.git
 	fi
 	cd $TL/$NRSDK/ 
+	git fetch --tags
 	git pull origin development
 	if (! git checkout tags/$VERSION); then
 		git tag -l
