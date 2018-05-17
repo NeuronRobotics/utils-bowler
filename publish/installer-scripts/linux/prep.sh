@@ -7,7 +7,7 @@ RDKINSTALL=/usr/share/bowlerstudio/
 #packaging info from http://xmodulo.com/how-to-create-deb-debian-package-for-java-web-application.html
 BUILDIR=$START/bowlerstudio_$VERSION/
 sudo dpkg --add-architecture i386
-sudo apt-get install git-buildpackage bzr-builddeb dh-make bzr wine unzip
+sudo apt-get install git-buildpackage bzr-builddeb dh-make bzr  unzip
 dh_make -e mad.hephaestus@gmail.com
 if (! test -z "$VERSION" ) then
 	sudo rm -rf rdk

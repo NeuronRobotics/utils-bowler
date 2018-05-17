@@ -16,9 +16,9 @@ if ( test -z "$VERSION" ) then
 	exit 1
 fi
 
+sudo apt install wine libgphoto2-6:i386 libgd3:i386   libjpeg8:i386   wine1.6-i386
 
 if ( test -n "$VERSION" ) then
-	#sudo apt-get install ant wine
 	
 	echo ok $VERSION
 	ZIP=bowlerstudio-$STUDIOVER.zip
