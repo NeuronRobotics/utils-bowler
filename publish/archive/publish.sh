@@ -5,6 +5,8 @@ START=$PWD
 VERSION=$1
 STUDIOVER=$2
 
+echo "bash publish.sh <Kernel version > <Studio Version>"
+
 if ( test -z "$STUDIOVER" ) then
 	echo #####ERROR no BowlerStudio version specified, I.E. 3.7.0
 	exit 1
