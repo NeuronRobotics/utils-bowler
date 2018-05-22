@@ -17,9 +17,9 @@ if ( test -z "$VERSION" ) then
 fi
 
 sudo apt install wine libgphoto2-6:i386 libgd3:i386   libjpeg8:i386   wine1.6-i386
-
-if ( test -n "$VERSION" ) then
-	
+run () {
+	VERSION=$1
+	STUDIOVER=$2
 	echo ok $VERSION
 	ZIP=bowlerstudio-$STUDIOVER.zip
 	BUILDLOCAL=bowlerstudio-$STUDIOVER
@@ -244,7 +244,12 @@ if ( test -n "$VERSION" ) then
 	git checkout development
 	
 
-	exit 0
+	exit 0	
+	
+}
+
+if ( test -n "$VERSION" ) then
+	run $VERSION $STUDIOVER
 fi
 echo #####ERROR no version specified, I.E. 3.7.0
 exit 1
