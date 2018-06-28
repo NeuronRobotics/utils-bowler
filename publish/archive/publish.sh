@@ -43,6 +43,8 @@ run () {
 	if !(test -d $TL/$NRSDK/); then  
 		cd $TL/;
 		git clone https://github.com/CommonWealthRobotics/bowler-script-kernel.git
+		git submodule init
+		git submodule update
 	fi
 	cd $TL/$NRSDK/ 
 	git fetch --tags
@@ -57,6 +59,8 @@ run () {
 	if !(test -d $TL/$NRConsole/); then  
 		cd $TL/;
 		git clone https://github.com/CommonWealthRobotics/BowlerStudio.git
+		git submodule init
+		git submodule update
 	fi
 	cd $TL/$NRConsole/
 	git pull origin development
@@ -236,6 +240,10 @@ run () {
 	git commit -m"rev bump to $STUDIOVER" $TL/CommonWealthRobotics.github.io/content/index.md
 	git push
 	rm $START/index.md
+	
+	cd $TL/$NRConsole/libraries/bowler-script-kernel/
+	./gradlew uploadArchives
+	
 	
 	echo Cleanup $TL/$NRSDK/ 
 	cd $TL/$NRSDK/ 
