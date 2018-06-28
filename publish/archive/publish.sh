@@ -83,7 +83,8 @@ run () {
 	
 		#Build all depandancies
 		cd $TL/$NRSDK/;
-
+		git submodule init
+		git submodule update
 		gradle jar
 		if (! test -e $LIB) then
 			echo ERROR!! expected lib file: $LIB 
@@ -92,6 +93,8 @@ run () {
 		fi
 
 		cd $TL/$NRConsole/;
+		git submodule init
+		git submodule update
 		gradle jar
 		if( ! test -e $NRCONSOLE_JAR) then
 			echo ERROR!! expected lib file: $NRCONSOLE_JAR 
