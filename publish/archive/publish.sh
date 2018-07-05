@@ -69,7 +69,9 @@ run () {
 		echo "NRConsole $STUDIOVER Is not taged yet"
 		exit 1;
 	fi
-
+	
+	cd $TL/$NRConsole/libraries/bowler-script-kernel/
+	./gradlew uploadArchives
 	
 
 	cd $START
@@ -243,9 +245,7 @@ run () {
 	git commit -m"rev bump to $STUDIOVER" $TL/CommonWealthRobotics.github.io/content/index.md
 	git push
 	rm $START/index.md
-	
-	cd $TL/$NRConsole/libraries/bowler-script-kernel/
-	./gradlew uploadArchives
+
 	
 	
 	echo Cleanup $TL/$NRSDK/ 
