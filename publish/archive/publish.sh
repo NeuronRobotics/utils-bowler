@@ -187,10 +187,6 @@ run () {
 		sed -i s/JAVAARCH/HKLM64/g $WINBUILD/windows-nrdk.iss
 		echo adding Bowler Studio
 		unzip -qq  $BUILD.zip -d $WINBUILD
-		echo adding Opencv
-		unzip -qq ~/git/ZipArchive/win/OpenCV-Win-2.4.9_64/build.zip -d $WINDIR
-		echo adding Slic3r 64
-		unzip -qq ~/git/ZipArchive/win/Slic3r_x64.zip -d $WINDIR/Slic3r_x64/
 	
 		if ( test -e $EXEWIN) then
 			echo exe exists $EXEWIN
@@ -226,16 +222,7 @@ run () {
 	java -jar GithubPublish.jar BowlerStudio CommonWealthRobotics $STUDIOVER $MACFINAL 
 	java -jar GithubPublish.jar BowlerStudio CommonWealthRobotics $STUDIOVER $WINFINAL64 
 	
-	
-	
-	cd $START/
-	sed -e s/VER/"$STUDIOVER"/g $START/index_template.md >$START/index.md
-	cd $TL/NeuronRobotics.github.io/
-	git pull
-	cp $START/index.md $TL/NeuronRobotics.github.io/content/index.md
-	git commit -m"rev bump to $STUDIOVER" $TL/NeuronRobotics.github.io/content/index.md
-	git push
-	rm $START/index.md
+
 	
 	cd $START/
 	sed -e s/VER/"$STUDIOVER"/g $START/index_template.md >$START/index.md
