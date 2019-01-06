@@ -10,9 +10,9 @@ Build-Depends: make,autotools-dev, bash-completion, debhelper (>= 8.0.0) | debhe
 Package: bowlerstudio
 Section: utils
 Architecture: all
-Depends:  make,oracle-java8-set-default | openjfx , libopencv2.4-java , libopencv2.4-jni , slic3r , jarwrapper , arduino-ide
+Depends:  make,oracle-java8-set-default | openjfx 
 Provides: bowlerstudio
-Conflicts: modemmanager,nr-rdk-java,arduino
-Replaces: modemmanager,nr-rdk-java,arduino
+Conflicts: modemmanager,nr-rdk-java
+Replaces: modemmanager,nr-rdk-java
 Description: A Robotics IDE designed to ramp up knowledge of how to design systems for distributed production. 
  Detailed description at https://github.com/NeuronRobotics/BowlerStudio/blob/master/README.md
