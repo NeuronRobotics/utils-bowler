@@ -25,8 +25,9 @@ run () {
 	BUILDLOCAL=bowlerstudio-$STUDIOVER
 	DIST=$START/$STUDIOVER
 	TL=$START/../../../
-	NRSDK=bowler-script-kernel/
 	NRConsole=BowlerStudio/
+	NRSDK=$NRConsole/libraries/bowler-script-kernel/
+	
 	#LIB=$TL/$NRSDK/build/libs/nrsdk-$VERSION-jar-with-dependencies.jar
 	LIB=$TL/$NRSDK/build/libs/BowlerScriptingKernel-$VERSION.jar
 	NRCONSOLE_JAR=$TL/$NRConsole/build/libs/BowlerStudio.jar
@@ -71,7 +72,7 @@ run () {
 	fi
 	
 	cd $TL/$NRConsole/libraries/bowler-script-kernel/
-	./gradlew uploadArchives
+	#./gradlew uploadArchives
 	
 
 	cd $START
@@ -216,6 +217,7 @@ run () {
 	
 	
 	cd $START/
+	echo "Begin uploading binaries" 
 	java -jar GithubPublish.jar BowlerStudio CommonWealthRobotics $STUDIOVER $NRCONSOLE_JAR
 	java -jar GithubPublish.jar BowlerStudio CommonWealthRobotics $STUDIOVER $LIB
 	java -jar GithubPublish.jar BowlerStudio CommonWealthRobotics $STUDIOVER $DEBFINAL 
