@@ -29,8 +29,9 @@ run () {
 	NRSDK=$NRConsole/../bowler-script-kernel/
 	
 	#LIB=$TL/$NRSDK/build/libs/nrsdk-$VERSION-jar-with-dependencies.jar
-	LIB=$TL/$NRSDK/build/libs/BowlerScriptingKernel-$VERSION.jar
+	LIB=$TL/$NRSDK/build/libs/BowlerScriptingKernel-$VERSION-fat.jar
 	NRCONSOLE_JAR=$TL/$NRConsole/build/libs/BowlerStudio.jar
+	NRCONSOLE_JAR_FAT=$TL/$NRConsole/build/libs/BowlerStudio-$STUDIOVER-fat.jar
 	ZIP=$DIST/$ZIP
 	BUILD=$DIST/$BUILDLOCAL
 	EXEWIN=$DIST/bowlerstudio-$STUDIOVER.exe
@@ -87,9 +88,10 @@ run () {
 	
 		#Build all depandancies
 		cd $TL/$NRSDK/;
-		git submodule init
-		git submodule update
-		gradle jar
+		if ( test -e $LIB) then
+			echo No kernel $LIB, building...
+			./gradlew shadowJar
+		fi
 		if (! test -e $LIB) then
 			echo ERROR!! expected lib file: $LIB 
 			echo but none was found
@@ -97,14 +99,16 @@ run () {
 		fi
 
 		cd $TL/$NRConsole/;
-		git submodule init
-		git submodule update
-		gradle jar
-		if( ! test -e $NRCONSOLE_JAR) then
-			echo ERROR!! expected lib file: $NRCONSOLE_JAR 
+		if(  test -e $NRCONSOLE_JAR_FAT) then
+			echo No application $NRCONSOLE_JAR_FAT, building...
+			./gradlew shadowJar
+		fi
+		if( ! test -e $NRCONSOLE_JAR_FAT) then
+			echo ERROR!! expected lib file: $NRCONSOLE_JAR_FAT
 			exit 1
 		fi
-	
+		rm -rf $NRCONSOLE_JAR
+		cp $NRCONSOLE_JAR_FAT $NRCONSOLE_JAR
 	
 		#Copy over data
 	
