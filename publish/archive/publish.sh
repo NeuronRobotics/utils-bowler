@@ -26,7 +26,7 @@ run () {
 	DIST=$START/$STUDIOVER
 	TL=$START/../../../
 	NRConsole=BowlerStudio/
-	NRSDK=$NRConsole/libraries/bowler-script-kernel/
+	NRSDK=$NRConsole/../bowler-script-kernel/
 	
 	#LIB=$TL/$NRSDK/build/libs/nrsdk-$VERSION-jar-with-dependencies.jar
 	LIB=$TL/$NRSDK/build/libs/BowlerScriptingKernel-$VERSION.jar
@@ -44,24 +44,25 @@ run () {
 	if !(test -d $TL/$NRSDK/); then  
 		cd $TL/;
 		git clone https://github.com/CommonWealthRobotics/bowler-script-kernel.git
-		git submodule init
-		git submodule update
+		git submodule update --init --recursive
+		git submodule update  --recursive
 	fi
 	cd $TL/$NRSDK/ 
 	git fetch --tags
-	git pull origin development
 	if (! git checkout tags/$VERSION); then
 		git tag -l
 		echo "$NRSDK $VERSION Is not taged yet"
 		exit 1;
 	fi
-
-
+	git checkout master
+	git pull origin development
+	git push origin master
+	
 	if !(test -d $TL/$NRConsole/); then  
 		cd $TL/;
 		git clone https://github.com/CommonWealthRobotics/BowlerStudio.git
-		git submodule init
-		git submodule update
+		git submodule update --init --recursive
+		git submodule update  --recursive
 	fi
 	cd $TL/$NRConsole/
 	git pull origin development
