@@ -3,12 +3,12 @@ Section: utils
 Binary: bowlerstudio
 Architecture: all
 Maintainer: Customer Support <mad.hephaestus@gmail.com>
-Homepage: http://neuronrobotics.com/
+Homepage: http://CommonwealthRobotics.com/
 Build-Depends: make,autotools-dev, bash-completion, debhelper (>= 8.0.0) | debhelper (>= 9.0.0)
 Version: BOWLERVERSION
-Depends: openjfx (<=8u161-b12-1ubuntu2) ,openjdk-8-jdk
+Depends:  make, openjfx (<=8u161-b12-1ubuntu2) ,openjdk-8-jdk
 Provides: bowlerstudio
 Conflicts: modemmanager,nr-rdk-java
 Replaces: modemmanager,nr-rdk-java
 Description: A Robotics IDE designed to ramp up knowledge of how to design systems for distributed production. 
- Detailed description at https://github.com/NeuronRobotics/BowlerStudio/blob/master/README.md
+ Detailed description at https://github.com/CommonwealthRobotics/BowlerStudio/blob/master/README.md
