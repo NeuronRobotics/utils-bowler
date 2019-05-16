@@ -36,7 +36,7 @@ if (! test -z "$VERSION" ) then
 	
 	if [ ! -d "$JVM_CONTENT" ]; then
 	 unzip -qq jvm.zip -d $JVM_CONTENT
-	 else
+	else
 	 echo "Existing jvm : $JVM_CONTENT"
 	fi
 #	$PACKER    -deploy -Bruntime=$JVM_CONTENT \
