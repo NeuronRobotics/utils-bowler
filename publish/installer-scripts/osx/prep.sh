@@ -18,6 +18,7 @@ if (! test -z "$VERSION" ) then
     	if [ -f "$JVMIMG" ]; then
 	    	echo "$JVMIMG exist"
 	    else
+	    	echo Downloading from https://www.azul.com/downloads/zulu/zulufx/ 
 	    	wget https://cdn.azul.com/zulu/bin/$JVMIMG
 		fi
     	tar xzf $JVMIMG && zip jvm.zip $(tar tf $JVMIMG)
