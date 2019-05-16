@@ -11,14 +11,15 @@ if (! test -z "$VERSION" ) then
 	
 	#cp -r BowlerStudio.app $DIR/
 	unzip -qq $PWD/../../archive/$VERSION/bowlerstudio-$VERSION.zip -d .
-	if [ -f "$JVMIMG" ]; then
-    	echo "$JVMIMG exist"
-    else
-    	wget https://cdn.azul.com/zulu/bin/$JVMIMG
-	fi
+
 	if [ -f jvm.zip ]; then
     	echo "$JVMIMG exist"
     else
+    	if [ -f "$JVMIMG" ]; then
+	    	echo "$JVMIMG exist"
+	    else
+	    	wget https://cdn.azul.com/zulu/bin/$JVMIMG
+		fi
     	tar xzf $JVMIMG && zip jvm.zip $(tar tf $JVMIMG)
     	rm -rf $JVMDIR*
 	fi
@@ -31,13 +32,9 @@ if (! test -z "$VERSION" ) then
      --mainclass com.neuronrobotics.bowlerstudio.BowlerStudio \
      --vmargs Xmx8G \
      --icon $DIR/bin/NeuronRobotics.ico \
-     --output $DIR/BowlerStudio.app
-	#mv $DIR/BowlerStudio.app/Contents/MacOS/$DIR/* $DIR/BowlerStudio.app/Contents/MacOS/
-
-	#chmod +x $DIR/BowlerStudio.app/Contents/MacOS/BowlerStudio
-	#rm *.zip
+     --output $DIR/BowlerStudio.app\
+     --verbose
 	
 	zip  -qq -r mac-$VERSION.zip $DIR/BowlerStudio.app/
-	rm -rf $DIR/
 
 fi

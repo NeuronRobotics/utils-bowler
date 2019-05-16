@@ -153,11 +153,10 @@ run () {
 	else
 		#Build the OSX bundle
 		echo setting up build dirs for OSX builder
-		rm -rf $START/../installer-scripts/osx/*.zip
-		cp $ZIP $START/../installer-scripts/osx/
 		cd $START/../installer-scripts/osx/
 		sh prep.sh $STUDIOVER 
-		mv $START/../installer-scripts/osx/*$STUDIOVER*.zip $MACFINAL
+		mv $START/../installer-scripts/osx/mac-$STUDIOVER.zip $MACFINAL
+		rm $START/../installer-scripts/osx/mac-$STUDIOVER.zip
     fi
 
 	if (test -s "$DEBFINAL" ) then
