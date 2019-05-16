@@ -71,6 +71,9 @@ if (! test -z "$VERSION" ) then
      --icon $DIR/bin/NeuronRobotics.ico \
      --output BowlerStudio.app\
      --verbose
+    rm  BowlerStudio.app/Contents/MacOS/BowlerStudio
+    cp BowlerStudio BowlerStudio.app/Contents/MacOS/
+    chmod +x BowlerStudio.app/Contents/MacOS/BowlerStudio
     echo "Zipping ..."
     rm -rf mac-installer-$VERSION.zip
 	zip  -qq -r mac-installer-$VERSION.zip $DIR/installer/
