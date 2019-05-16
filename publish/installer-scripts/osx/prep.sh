@@ -39,26 +39,25 @@ if (! test -z "$VERSION" ) then
 	 else
 	 echo "Existing jvm : $JVM_CONTENT"
 	fi
-	rm -rf $DIR/installer/
-	$PACKER    -deploy -Bruntime=$JVM_CONTENT \
-			   -native image \
-			   -name BowlerStudio \
-			   -BappVersion=$VERSION \
-			   -Bicon=icons.icns \
-			   -Bmac.CFBundleVersion=1.0 \
-			   -Bmac.CFBundleIdentifier=com.neuronrobotics.bowlerstudio.BowlerStudio \
-			   -Bmac.category=Education \
-			   -BjvmOptions=-Xms8g \
-			   -BjvmOptions=-XX:+UseConcMarkSweepGC \
-			   -BjvmOptions=-Dapple.laf.useScreenMenuBar=true \
-			   -BjvmOptions=-Dcom.apple.smallTabs=true \
-			   -srcdir $DIR/ \
-			   -srcfiles $DIR/bin/BowlerStudio.jar \
-			   -appclass com.neuronrobotics.bowlerstudio.BowlerStudio \
-			   -outdir $DIR/installer/ \
-			   -v \
-			   -nosign \
-			   -outfile BowlerStudio.app
+#	$PACKER    -deploy -Bruntime=$JVM_CONTENT \
+#			   -native image \
+#			   -name BowlerStudio \
+#			   -BappVersion=$VERSION \
+#			   -Bicon=icons.icns \
+#			   -Bmac.CFBundleVersion=1.0 \
+#			   -Bmac.CFBundleIdentifier=com.neuronrobotics.bowlerstudio.BowlerStudio \
+#			   -Bmac.category=Education \
+#			   -BjvmOptions=-Xms8g \
+#			   -BjvmOptions=-XX:+UseConcMarkSweepGC \
+#			   -BjvmOptions=-Dapple.laf.useScreenMenuBar=true \
+#			   -BjvmOptions=-Dcom.apple.smallTabs=true \
+#			   -srcdir $DIR/ \
+#			   -srcfiles $DIR/bin/BowlerStudio.jar \
+#			   -appclass com.neuronrobotics.bowlerstudio.BowlerStudio \
+#			   -outdir $DIR/installer/ \
+#			   -v \
+#			   -nosign \
+#			   -outfile BowlerStudio.app
 	echo "Second packer"
 	rm -rf BowlerStudio.app/
 	java -jar packr.jar \
@@ -75,8 +74,8 @@ if (! test -z "$VERSION" ) then
     cp BowlerStudio BowlerStudio.app/Contents/MacOS/
     chmod +x BowlerStudio.app/Contents/MacOS/BowlerStudio
     echo "Zipping ..."
-    rm -rf mac-installer-$VERSION.zip
-	zip  -qq -r mac-installer-$VERSION.zip $DIR/installer/
+#    rm -rf mac-installer-$VERSION.zip
+#	zip  -qq -r mac-installer-$VERSION.zip $DIR/installer/
 	rm -rf mac-$VERSION.zip
 	zip  -qq -r mac-$VERSION.zip BowlerStudio.app/
 	echo "Zipping Done!"
