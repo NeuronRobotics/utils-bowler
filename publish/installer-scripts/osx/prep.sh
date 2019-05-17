@@ -60,6 +60,7 @@ if (! test -z "$VERSION" ) then
 #			   -outfile BowlerStudio.app
 	echo "Second packer"
 	rm -rf BowlerStudio.app/
+	echo runing packr from https://github.com/libgdx/packr/
 	java -jar packr.jar \
      --platform mac \
      --jdk jvm.zip \
