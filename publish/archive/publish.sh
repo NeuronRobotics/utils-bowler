@@ -58,6 +58,8 @@ run () {
 	git checkout master
 	git pull origin development
 	git push origin master
+	git submodule update --init --recursive
+	git submodule update  --recursive
 	
 	if !(test -d $TL/$NRConsole/); then  
 		cd $TL/;
@@ -72,6 +74,8 @@ run () {
 		echo "NRConsole $STUDIOVER Is not taged yet"
 		exit 1;
 	fi
+	git submodule update --init --recursive
+	git submodule update  --recursive
 	
 	cd $TL/$NRConsole/libraries/bowler-script-kernel/
 	#./gradlew uploadArchives
@@ -90,6 +94,7 @@ run () {
 		cd $TL/$NRSDK/;
 		if (! test -e $LIB) then
 			echo No kernel $LIB, building...
+
 			./gradlew shadowJar
 		fi
 		if (! test -e $LIB) then
