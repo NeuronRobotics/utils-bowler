@@ -88,7 +88,7 @@ run () {
 	
 		#Build all depandancies
 		cd $TL/$NRSDK/;
-		if ( test -e $LIB) then
+		if (! test -e $LIB) then
 			echo No kernel $LIB, building...
 			./gradlew shadowJar
 		fi
