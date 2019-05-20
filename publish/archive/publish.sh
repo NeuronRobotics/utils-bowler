@@ -7,11 +7,11 @@ STUDIOVER=$2
 
 echo "bash publish.sh <Kernel version > <Studio Version>"
 
-if ( test -z "$STUDIOVER" ) then
+if( test -z "$STUDIOVER" ) then
 	echo #####ERROR no BowlerStudio version specified, I.E. 3.7.0
 	exit 1
 fi
-if ( test -z "$VERSION" ) then
+if( test -z "$VERSION" ) then
 	echo #####ERROR no bowler-script-kernel version specified, I.E. 3.7.0
 	exit 1
 fi
@@ -30,8 +30,9 @@ run () {
 	
 	#LIB=$TL/$NRSDK/build/libs/nrsdk-$VERSION-jar-with-dependencies.jar
 	LIB=$TL/$NRSDK/build/libs/BowlerScriptingKernel-$VERSION-fat.jar
-	NRCONSOLE_JAR=$TL/$NRConsole/build/libs/BowlerStudio.jar
-	NRCONSOLE_JAR_FAT=$TL/$NRConsole/build/libs/BowlerStudio-$STUDIOVER-fat.jar
+	BOWLERSTUDIO_LOCATION=$TL/$NRConsole/build/libs/
+	NRCONSOLE_JAR=$BOWLERSTUDIO_LOCATION/BowlerStudio.jar
+	NRCONSOLE_JAR_FAT=$BOWLERSTUDIO_LOCATION/BowlerStudio-$STUDIOVER-fat.jar
 	ZIP=$DIST/$ZIP
 	BUILD=$DIST/$BUILDLOCAL
 	EXEWIN=$DIST/bowlerstudio-$STUDIOVER.exe
@@ -42,7 +43,7 @@ run () {
 	DEBFINAL=$DIST/Ubuntu-BowlerStudio-$STUDIOVER.deb
 	
 
-	if !(test -d $TL/$NRSDK/); then  
+	if!(test -d $TL/$NRSDK/); then  
 		cd $TL/;
 		git clone https://github.com/CommonWealthRobotics/bowler-script-kernel.git
 		git submodule update --init --recursive
@@ -50,7 +51,7 @@ run () {
 	fi
 	cd $TL/$NRSDK/ 
 	git fetch --tags
-	if (! git checkout tags/$VERSION); then
+	if(! git checkout tags/$VERSION); then
 		git tag -l
 		echo "$NRSDK $VERSION Is not taged yet"
 		exit 1;
@@ -61,7 +62,7 @@ run () {
 	git submodule update --init --recursive
 	git submodule update  --recursive
 	
-	if !(test -d $TL/$NRConsole/); then  
+	if!(test -d $TL/$NRConsole/); then  
 		cd $TL/;
 		git clone https://github.com/CommonWealthRobotics/BowlerStudio.git
 		git submodule update --init --recursive
@@ -69,7 +70,7 @@ run () {
 	fi
 	cd $TL/$NRConsole/
 	git pull origin development
-	if (! git checkout $STUDIOVER); then
+	if(! git checkout $STUDIOVER); then
 		git tag -l
 		echo "NRConsole $STUDIOVER Is not taged yet"
 		exit 1;
@@ -92,20 +93,21 @@ run () {
 	
 		#Build all depandancies
 		cd $TL/$NRSDK/;
-		if (! test -e $LIB) then
+		if(! test -e $LIB) then
 			echo No kernel $LIB, building...
 
 			./gradlew shadowJar
 		fi
-		if (! test -e $LIB) then
+		if(! test -e $LIB) then
 			echo ERROR!! expected lib file: $LIB 
 			echo but none was found
 			exit 1
 		fi
 
 		cd $TL/$NRConsole/;
-		if(  test -e $NRCONSOLE_JAR_FAT) then
+		if( ! test -e $NRCONSOLE_JAR_FAT) then
 			echo No application $NRCONSOLE_JAR_FAT, building...
+			rm -rf $BOWLERSTUDIO_LOCATION/*.jar
 			./gradlew shadowJar
 		fi
 		if( ! test -e $NRCONSOLE_JAR_FAT) then
@@ -113,6 +115,7 @@ run () {
 			exit 1
 		fi
 		rm -rf $NRCONSOLE_JAR
+		
 		cp $NRCONSOLE_JAR_FAT $NRCONSOLE_JAR
 	
 		#Copy over data
