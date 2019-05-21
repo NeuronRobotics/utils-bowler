@@ -43,7 +43,7 @@ run () {
 	DEBFINAL=$DIST/Ubuntu-BowlerStudio-$STUDIOVER.deb
 	
 
-	if!(test -d $TL/$NRSDK/); then  
+	if(! test -d $TL/$NRSDK/); then  
 		cd $TL/;
 		git clone https://github.com/CommonWealthRobotics/bowler-script-kernel.git
 		git submodule update --init --recursive
@@ -62,7 +62,7 @@ run () {
 	git submodule update --init --recursive
 	git submodule update  --recursive
 	
-	if!(test -d $TL/$NRConsole/); then  
+	if(! test -d $TL/$NRConsole/); then  
 		cd $TL/;
 		git clone https://github.com/CommonWealthRobotics/BowlerStudio.git
 		git submodule update --init --recursive
