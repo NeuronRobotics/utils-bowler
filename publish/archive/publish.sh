@@ -64,7 +64,7 @@ run () {
 	
 	if(! test -d $TL/$NRConsole/); then  
 		cd $TL/;
-		git clone https://github.com/CommonWealthRobotics/BowlerStudio.git
+		git clone git@github.com:CommonWealthRobotics/BowlerStudio.git
 		git submodule update --init --recursive
 		git submodule update  --recursive
 	fi
