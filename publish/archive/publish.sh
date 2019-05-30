@@ -46,8 +46,29 @@ run () {
 	if(! test -d $TL/$NRSDK/); then  
 		cd $TL/;
 		git clone git@github.com:CommonWealthRobotics/bowler-script-kernel.git
+		cd $TL/bowler-script-kernel/
 		git submodule update --init --recursive
 		git submodule update  --recursive
+		
+		gedit build.gradle
+		git update-index --assume-unchanged build.gradle
+		ln -s ~/gradle.properties .
+		
+		cd $TL/bowler-script-kernel/JCSG/
+		gedit build.gradle
+		git update-index --assume-unchanged build.gradle
+		git update-index --assume-unchanged gradle.properties
+		rm gradle.properties
+		ln -s ~/gradle.properties .
+		
+		cd $TL/bowler-script-kernel/java-bowler/
+		gedit build.gradle
+		git update-index --assume-unchanged build.gradle
+		ln -s ~/gradle.properties .
+		
+		cd $TL/bowler-script-kernel/
+		./gradlew uploadArchives
+		
 	fi
 	cd $TL/$NRSDK/ 
 	git fetch --tags
