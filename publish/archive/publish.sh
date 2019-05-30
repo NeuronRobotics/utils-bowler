@@ -45,7 +45,7 @@ run () {
 
 	if(! test -d $TL/$NRSDK/); then  
 		cd $TL/;
-		git clone https://github.com/CommonWealthRobotics/bowler-script-kernel.git
+		git clone git@github.com:CommonWealthRobotics/bowler-script-kernel.git
 		git submodule update --init --recursive
 		git submodule update  --recursive
 	fi
