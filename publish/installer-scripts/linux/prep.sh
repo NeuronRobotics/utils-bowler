@@ -155,7 +155,7 @@ if (! test -z "$VERSION" ) then
 		if debuild -S -kFA7BCDE0; then
 			echo "Attepmting to publish"
 			cd $BUILDIR/../
-			#dput ppa:mad-hephaestus/commonwealthrobotics *.changes
+			dput ppa:mad-hephaestus/commonwealthrobotics *.changes
 			cd $BUILDIR
 		## Now build the binary package
 			echo "Building binary..."
