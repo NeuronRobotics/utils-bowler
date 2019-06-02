@@ -8,6 +8,9 @@ RDKINSTALL=/usr/share/bowlerstudio/
 BUILDIR=$START/bowlerstudio_$VERSION/
 sudo dpkg --add-architecture i386
 sudo apt-get install git-buildpackage bzr-builddeb dh-make bzr  unzip
+DEBEMAIL="mad.hephaestus@gmail.com"
+DEBFULLNAME="Kevin Harrington"
+export DEBEMAIL DEBFULLNAME
 dh_make -e mad.hephaestus@gmail.com
 if (! test -z "$VERSION" ) then
 	sudo rm -rf rdk
@@ -81,7 +84,7 @@ if (! test -z "$VERSION" ) then
 		
 		cd $BUILDIR
 		#bzr init
-		mkdir -P debian/source/
+		mkdir -p debian/source/
 		echo "7" > debian/compat
 		echo "2.0\n" > debian/debian-binary
 		echo "1.0" > debian/source/format
@@ -120,24 +123,39 @@ if (! test -z "$VERSION" ) then
 		echo 'usr/share/bowlerstudio/NeuronRobotics.ico' >> debian/source/include-binaries
 		echo 'usr/share/bowlerstudio/NeuronRobotics.png' >> debian/source/include-binaries
 		echo 'usr/share/doc/bowlerstudio/changelog.gz' >> debian/source/include-binaries
-		sudo mv .bzr/ ../
+		#sudo mv .bzr/ ../
 		#dpkg-source --commit --extend-diff-ignore="(^|/)(usr/share/bowlerstudio/.*\.jar)$"
 		#dpkg-source --commit --extend-diff-ignore="(^|/)(usr/share/bowlerstudio/.*\.ico)$"
 		#dpkg-source --commit --extend-diff-ignore="(^|/)(usr/share/bowlerstudio/.*\.png)$"
 		#
 		find debian/ -type d -exec  chmod 755 {} \;
 		find debian/ -type f -exec  chmod 644 {} \;
-		cd ..
-		dpkg-source --commit --include-binaries -b bowlerstudio
-		cd -
+		cd $BUILDIR
+		echo "\n\nRunning  dpkg-source... "
+		if dpkg-source --commit --include-binaries; then
+			echo " dpkg-source  --commit success! "
+		else
+			echo " dpkg-source  --commit  ERROR! $PWD"
+			exit 1
+		fi
+		cd $BUILDIR/../
+		if dpkg-source -b $BUILDIR; then
+			echo " dpkg-source  -b success! "
+		else
+			echo " dpkg-source -b  ERROR! "
+			exit 1
+		fi
+		cd $BUILDIR
 		bzr commit -m "Initial commit of Debian packaging."
 		# build the debian file
 #		bzr builddeb -S
 		#debchange --newversion $VERSION
+		gpg --import ~/.gnupg/secring.gpg 
+		gpg --import ~/.gnupg/pubring.gpg
 		if debuild -S -kFA7BCDE0; then
 			echo "Attepmting to publish"
-			cd ../
-			dput ppa:mad-hephaestus/commonwealthrobotics *.changes
+			cd $BUILDIR/../
+			#dput ppa:mad-hephaestus/commonwealthrobotics *.changes
 			cd $BUILDIR
 		## Now build the binary package
 			echo "Building binary..."
