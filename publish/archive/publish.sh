@@ -16,7 +16,7 @@ if( test -z "$VERSION" ) then
 	exit 1
 fi
 
-sudo apt install wine libgphoto2-6:i386 libgd3:i386   libjpeg8:i386   wine1.6-i386
+sudo apt install wine-stable libgphoto2-6:i386 libgd3:i386   libjpeg8:i386   wine1.6-i386
 run () {
 	VERSION=$1
 	STUDIOVER=$2
