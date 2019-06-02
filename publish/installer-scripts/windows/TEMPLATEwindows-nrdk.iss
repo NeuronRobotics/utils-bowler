@@ -1,12 +1,12 @@
-#define MyAppName "Neuron Robotics Bowler Studio"
+#define MyAppName "Commonwealth Robotics BowlerStudio"
 #define MyAppSlug "bowlerstudio"
 #define JDKREG "SOFTWARE\JavaSoft\Java Development Kit"
-#define MyAppPublisher "Neuron Robotics Cooperative"
-#define MyAppURL "http://www.neuronrobotics.com"
+#define MyAppPublisher "Commonwealth Robotics"
+#define MyAppURL "http://www.commonwealthrobotics.com"
 #define MyAppOutput "C:\archive\VER"
 
 #define MyAppVersion "VER"
-#define MyAppVerName "Neuron Robotics Bowler Studio VER"
+#define MyAppVerName "Commonwealth Robotics BowlerStudio VER"
 #define MyAppPath "C:\installer-scripts\windows\bowlerstudio-VER"
 
 
