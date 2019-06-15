@@ -8,7 +8,7 @@ Build-Depends: make,autotools-dev, bash-completion, debhelper (>= 8.0.0) | debhe
 Version: BOWLERVERSION
 Depends:  make, openjfx (<=8u161-b12-1ubuntu2) ,openjdk-8-jdk,libopenjfx-java (<=8u161-b12-1ubuntu2), libopenjfx-jni (<=8u161-b12-1ubuntu2)
 Provides: bowlerstudio
-Conflicts: modemmanager,nr-rdk-java
+Conflicts: modemmanager,nr-rdk-java,openjdk-11-jdk
 Replaces: modemmanager,nr-rdk-java
 Description: A Robotics IDE designed to ramp up knowledge of how to design systems for distributed production. 
  Detailed description at https://github.com/CommonwealthRobotics/BowlerStudio/blob/master/README.md
