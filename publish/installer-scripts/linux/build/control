@@ -12,7 +12,7 @@ Section: utils
 Architecture: all
 Depends:  make ,openjdk-8-jdk , openjfx (<=8u161-b12-1ubuntu2),libopenjfx-java (<=8u161-b12-1ubuntu2), libopenjfx-jni (<=8u161-b12-1ubuntu2)
 Provides: bowlerstudio
-Conflicts: modemmanager,nr-rdk-java,openjdk-11-jdk
+Conflicts: modemmanager,nr-rdk-java,openjdk-9-jdk,openjdk-10-jdk,openjdk-11-jdk,openjdk-12-jdk,openjdk-13-jdk
 Replaces: modemmanager,nr-rdk-java
 Description: A Robotics IDE designed to ramp up knowledge of how to design systems for distributed production. 
  Detailed description at https://github.com/CommonWealthRobotics/BowlerStudio/blob/master/README.md
