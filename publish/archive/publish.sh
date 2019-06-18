@@ -72,12 +72,16 @@ run () {
 	fi
 	cd $TL/$NRSDK/ 
 	git fetch --tags
+	echo "   Checking out version"
 	if(! git checkout tags/$VERSION); then
 		git tag -l
 		echo "$NRSDK $VERSION Is not taged yet"
 		exit 1;
 	fi
+	echo "   Checking out master"
+	git stash -m"build"
 	git checkout master
+	echo "   Pull development"
 	git pull origin development
 	git push origin master
 	git submodule update --init --recursive
@@ -125,7 +129,6 @@ run () {
 			echo but none was found
 			exit 1
 		fi
-
 		cd $TL/$NRConsole/;
 		if( ! test -e $NRCONSOLE_JAR_FAT) then
 			echo No application $NRCONSOLE_JAR_FAT, building...
@@ -198,7 +201,7 @@ run () {
 		rm -rf $START/../installer-scripts/linux/*.zip
 		cp $ZIP $START/../installer-scripts/linux/
 		cd $START/../installer-scripts/linux/
-		sh prep.sh $STUDIOVER
+		#sh prep.sh $STUDIOVER
 		if ( test -e $DIST/*.deb) then
 			rm $DIST/*.deb
 		fi
