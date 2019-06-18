@@ -86,6 +86,7 @@ run () {
 	if(! test -d $TL/$NRConsole/); then  
 		cd $TL/;
 		git clone git@github.com:CommonWealthRobotics/BowlerStudio.git
+		cd $TL/$NRConsole/
 		git submodule update --init --recursive
 		git submodule update  --recursive
 	fi
@@ -117,7 +118,7 @@ run () {
 		if(! test -e $LIB) then
 			echo No kernel $LIB, building...
 
-			./gradlew shadowJar
+			./gradlew  --offline  shadowJar
 		fi
 		if(! test -e $LIB) then
 			echo ERROR!! expected lib file: $LIB 
@@ -129,7 +130,7 @@ run () {
 		if( ! test -e $NRCONSOLE_JAR_FAT) then
 			echo No application $NRCONSOLE_JAR_FAT, building...
 			rm -rf $BOWLERSTUDIO_LOCATION/*.jar
-			./gradlew shadowJar
+			./gradlew  --offline  shadowJar
 		fi
 		if( ! test -e $NRCONSOLE_JAR_FAT) then
 			echo ERROR!! expected lib file: $NRCONSOLE_JAR_FAT
@@ -275,7 +276,8 @@ run () {
 	git checkout development
 	cd $TL/$NRConsole/
 	git checkout development
-	
+	git commit -m"changelog" debian/changelog
+	git push
 
 	exit 0	
 	
