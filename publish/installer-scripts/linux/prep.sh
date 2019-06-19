@@ -34,7 +34,7 @@ if (! test -z "$VERSION" ) then
 	cd  $START/
 	mkdir rdk
 	echo "Loading Jar"
-	unzip -qq bowlerstudio-*.zip -d rdk
+	unzip -qq $PWD/../../archive/$VERSION/bowlerstudio-$VERSION.zip -d rdk
 	#unzip -qq ~/git/ZipArchive/linux/Slic3r_x64.zip -d rdk/Slic3r_x64/
 	#unzip -qq ~/git/ZipArchive/linux/Slic3r_x86.zip -d rdk/Slic3r_x86/
 	echo "Adjusting up directory"
@@ -43,14 +43,15 @@ if (! test -z "$VERSION" ) then
 	mkdir -p $START/rdk/usr/share/bowlerstudio/
 	mkdir -p $START/rdk/usr/share/doc/bowlerstudio/
 	mkdir -p $START/rdk/usr/bin/
-
+	mkdir -p $START/rdk/usr/share/applications/
+	mkdir -p $START/rdk/usr/share/themes/base/bowlerstudio/icons/
+	mkdir -p $START/rdk/etc/udev/rules.d/
 	
-
-
+	
 	cp $START/build/LICENSE.txt $START/rdk/usr/share/doc/bowlerstudio/copyright
-	cp $START/build/81-neuronrobotics.rules $START/rdk/usr/share/bowlerstudio/
+	cp $START/build/81-neuronrobotics.rules $START/rdk/etc/udev/rules.d/
 	cp $START/build/bowlerstudio $START/rdk/usr/bin/
-	cp $START/build/BowlerStudio.desktop $START/rdk/usr/share/bowlerstudio/
+	cp $START/build/BowlerStudio.desktop $START/rdk/usr/share/applications/
 	cp ~/git/BowlerStudio/debian/changelog $START/rdk/usr/share/doc/bowlerstudio/
 	gzip -9 $START/rdk/usr/share/doc/bowlerstudio/changelog
 	cd $START/rdk/
@@ -59,7 +60,8 @@ if (! test -z "$VERSION" ) then
 
 	rm -rf firmware/
 	echo "Moving Jar to the jar directory"
-	mv bin/* usr/share/bowlerstudio/
+	cp bin/BowlerStudio.jar $START/rdk/usr/share/bowlerstudio/
+	cp bin/splash.png $START/rdk/usr/share/themes/base/bowlerstudio/icons/
 	rm  -rf bowlerstudio-*
 	rm  -rf bin
 
@@ -67,7 +69,7 @@ if (! test -z "$VERSION" ) then
 	find $START/rdk/ -type f -exec  chmod 644 {} \;
 	chmod +x usr/bin/bowlerstudio
 	chmod +x usr/share/bowlerstudio/BowlerStudio.jar
-	chmod +x usr/share/bowlerstudio/BowlerStudio.desktop
+	chmod +x usr/share/applications/BowlerStudio.desktop
 	tar -czf $TARBALL -C $START/rdk/ . --exclude-vcs --exclude=.DS_Store --exclude=__MACOSX
 	cd $START
 	#sudo apt-get install python-enum34
@@ -77,7 +79,7 @@ if (! test -z "$VERSION" ) then
 	alias dh-make=dh_make
 	bzr whoami "Kevin Harrington <mad.hephaestus@gmail.com>"
 	bzr launchpad-login mad-hephaestus
-	
+
 	bzr dh-make bowlerstudio $VERSION $TARBALL
 	mv bowlerstudio $BUILDIR
 	if cd $BUILDIR; then
@@ -103,13 +105,10 @@ if (! test -z "$VERSION" ) then
 		echo "\n" >> $BUILDIR/debian/changelog
 	
 		echo usr/share/bowlerstudio/BowlerStudio.jar $RDKINSTALL > debian/install
-		echo usr/share/bowlerstudio/splash.ico $RDKINSTALL >> debian/install
-		echo usr/share/bowlerstudio/splash.png $RDKINSTALL >> debian/install
-		#echo usr/share/bowlerstudio/dyio-3.14.6.xml $RDKINSTALL >> debian/install
 		echo usr/bin/bowlerstudio /usr/bin/ >> debian/install
-		echo usr/share/bowlerstudio/splash.png /usr/share/themes/base/bowlerstudio/icons/ >> debian/install
-		echo usr/share/bowlerstudio/BowlerStudio.desktop /usr/share/applications/ >> debian/install
-		echo usr/share/bowlerstudio/81-neuronrobotics.rules /etc/udev/rules.d/ >> debian/install
+		echo usr/share/themes/base/bowlerstudio/icons/splash.png /usr/share/themes/base/bowlerstudio/icons/ >> debian/install
+		echo usr/share/applications/BowlerStudio.desktop /usr/share/applications/ >> debian/install
+		echo etc/udev/rules.d/81-neuronrobotics.rules /etc/udev/rules.d/ >> debian/install
 		echo usr/share/doc/bowlerstudio/copyright /usr/share/doc/bowlerstudio/ >> debian/install
 		echo usr/share/doc/bowlerstudio/changelog.gz /usr/share/doc/bowlerstudio/ >> debian/install
 		#create the change log
@@ -120,8 +119,7 @@ if (! test -z "$VERSION" ) then
 		
 		cp ~/git/BowlerStudio/debian/changelog $BUILDIR/debian/changelog
 		echo 'usr/share/bowlerstudio/BowlerStudio.jar' > debian/source/include-binaries
-		echo 'usr/share/bowlerstudio/splash.ico' >> debian/source/include-binaries
-		echo 'usr/share/bowlerstudio/splash.png' >> debian/source/include-binaries
+		echo 'usr/share/themes/base/bowlerstudio/icons/splash.png' >> debian/source/include-binaries
 		echo 'usr/share/doc/bowlerstudio/changelog.gz' >> debian/source/include-binaries
 		#sudo mv .bzr/ ../
 		#dpkg-source --commit --extend-diff-ignore="(^|/)(usr/share/bowlerstudio/.*\.jar)$"
@@ -155,7 +153,7 @@ if (! test -z "$VERSION" ) then
 		if debuild -S -kFA7BCDE0; then
 			echo "Attepmting to publish"
 			cd $BUILDIR/../
-			dput ppa:mad-hephaestus/commonwealthrobotics *.changes
+			#dput ppa:mad-hephaestus/commonwealthrobotics *.changes
 			cd $BUILDIR
 		## Now build the binary package
 			echo "Building binary..."
