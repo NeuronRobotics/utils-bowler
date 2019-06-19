@@ -180,7 +180,8 @@ if (! test -z "$VERSION" ) then
 			mv .bzr/ $BUILDIR
 			echo "Cleaning up the directory.."
 			sudo rm -rf rdk
-	
+			sudo rm -rf $START/bowlerstudio*
+			sudo rm rdk.tar.gz
 			#rm build/rdk.tar
 			#rm *.zip
 	
@@ -189,5 +190,5 @@ if (! test -z "$VERSION" ) then
 			echo Done!
 		fi
 	fi
-	sudo rm -rf $BUILDIR
+	
 fi

@@ -214,7 +214,7 @@ run () {
 	else
 
 		echo Running wine
-		cd $WINBUILD/
+		cd $START/../installer-scripts/windows/
 		bash prep.sh $STUDIOVER
 
 	fi
