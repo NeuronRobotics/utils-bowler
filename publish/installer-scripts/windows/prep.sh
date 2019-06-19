@@ -19,26 +19,26 @@ if (! test -z "$VERSION" ) then
     	wget https://cdn.azul.com/zulu/bin/$JVMIMG
 	fi
 	
-	cp $WINBUILD/TEMPLATEwindows-nrdk.iss $WINBUILD/windows-nrdk.iss
-	sed -i s/VER/"$STUDIOVER"/g $WINBUILD/windows-nrdk.iss
-	sed -i s/CVARCH/x64/g $WINBUILD/windows-nrdk.iss
-	sed -i s/JAVAARCH/HKLM64/g $WINBUILD/windows-nrdk.iss
+	cp TEMPLATEwindows.iss windows.iss
+	sed -i s/VER/"$VERSION"/g windows.iss
+	sed -i s/CVARCH/x64/g windows.iss
+	sed -i s/JAVAARCH/HKLM64/g windows.iss
 	echo adding Bowler Studio For Windows
 	
 	
-	java -jar ../packr.jar \
+	java -jar ../osx/packr.jar \
      --platform windows64 \
      --jdk $JVMIMG \
      --executable BowlerStudio \
      --classpath $DIR/bin/BowlerStudio.jar \
      --mainclass com.neuronrobotics.bowlerstudio.BowlerStudio \
      --vmargs Xmx8G \
-     --output $DIR/BowlerStudioApp\
+     --output BowlerStudioApp\
      --verbose
-	
+	cp splash.png BowlerStudioApp/
 	echo Running wine
-	
-	#if ( wine "C:\Program Files (x86)\Inno Setup 5\Compil32.exe" /cc "C:\installer-scripts\windows\windows-nrdk.iss") then
+	wine "C:\Program Files (x86)\Inno Setup 5\ISCC.exe" /cc "C:\installer-scripts\windows\windows.iss"
+	#if ( wine "C:\Program Files (x86)\Inno Setup 5\Compil32.exe" /cc "C:\installer-scripts\windows\windows.iss") then
 	#	echo wine ok
 	#else
 	#	wine $START/tools/isetup-5.4.3.exe
