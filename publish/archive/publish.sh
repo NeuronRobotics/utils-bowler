@@ -212,26 +212,6 @@ run () {
 		echo "Windows EXE exists $WINFINAL64 "
 		ls -al  $WINFINAL64
 	else
-		#Prepare the windows exe
-		echo preparing the windows 64 compile directory
-		WINBUILD=$START/../installer-scripts/windows/
-		WINDIR=$WINBUILD/$BUILDLOCAL
-		
-		#64 bit version
-		rm -rf $WINDIR
-		cp $WINBUILD/TEMPLATEwindows-nrdk.iss $WINBUILD/windows-nrdk.iss
-		sed -i s/VER/"$STUDIOVER"/g $WINBUILD/windows-nrdk.iss
-		sed -i s/CVARCH/x64/g $WINBUILD/windows-nrdk.iss
-		sed -i s/JAVAARCH/HKLM64/g $WINBUILD/windows-nrdk.iss
-		echo adding Bowler Studio
-		unzip -qq  $BUILD.zip -d $WINBUILD
-	
-		if ( test -e $EXEWIN) then
-			echo exe exists $EXEWIN
-			rm $EXEWIN
-		fi 
-		rm -rf $WINDIR/java/docs/
-		
 		echo 'Linking build dirs for wine'
 		if (! test -e /home/hephaestus/.wine/drive_c/installer-scripts) then
 			ln -s $START/../installer-scripts 	$HOME/.wine/drive_c/
@@ -239,17 +219,9 @@ run () {
 		fi
 		
 		echo Running wine
-		
-		if ( wine "C:\Program Files (x86)\Inno Setup 5\Compil32.exe" /cc "C:\installer-scripts\windows\windows-nrdk.iss") then
-			echo wine ok
-		else
-			wine $START/tools/isetup-5.4.3.exe
-			exit 1
-		fi
-		
-		rm -rf $WINDIR
-	
-		mv $EXEWIN $WINFINAL64 
+		cd $WINBUILD/
+		bash prep.sh $STUDIOVER
+
 	fi
 	
 	
