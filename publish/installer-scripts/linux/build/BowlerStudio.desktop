@@ -3,4 +3,4 @@ Type=Application
 Name=Bowler Studio
 Exec=/usr/bin/bowlerstudio
 Categories=Application;Development;Programming;3DGraphics;Education;Network;WebBrowser;
-Icon=/usr/share/themes/base/neuronrobotics/icons/NeuronRobotics.png
+Icon=/usr/share/themes/base/bowlerstudio/icons/splash.png

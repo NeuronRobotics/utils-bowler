@@ -107,7 +107,7 @@ if (! test -z "$VERSION" ) then
 		echo usr/share/bowlerstudio/splash.png $RDKINSTALL >> debian/install
 		#echo usr/share/bowlerstudio/dyio-3.14.6.xml $RDKINSTALL >> debian/install
 		echo usr/bin/bowlerstudio /usr/bin/ >> debian/install
-		echo usr/share/bowlerstudio/splash.png /usr/share/themes/base/neuronrobotics/icons/ >> debian/install
+		echo usr/share/bowlerstudio/splash.png /usr/share/themes/base/bowlerstudio/icons/ >> debian/install
 		echo usr/share/bowlerstudio/BowlerStudio.desktop /usr/share/applications/ >> debian/install
 		echo usr/share/bowlerstudio/81-neuronrobotics.rules /etc/udev/rules.d/ >> debian/install
 		echo usr/share/doc/bowlerstudio/copyright /usr/share/doc/bowlerstudio/ >> debian/install
