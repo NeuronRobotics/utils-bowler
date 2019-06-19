@@ -18,7 +18,7 @@ if (! test -z "$VERSION" ) then
     	echo Downloading from https://www.azul.com/downloads/zulu/zulufx/ 
     	wget https://cdn.azul.com/zulu/bin/$JVMIMG
 	fi
-	
+	rm windows.iss
 	cp TEMPLATEwindows.iss windows.iss
 	sed -i s/VER/"$VERSION"/g windows.iss
 	sed -i s/CVARCH/x64/g windows.iss
@@ -35,7 +35,7 @@ if (! test -z "$VERSION" ) then
      --vmargs Xmx8G \
      --output BowlerStudioApp\
      --verbose
-	cp splash.png BowlerStudioApp/
+	cp splash.ico BowlerStudioApp/
 	echo Running wine
 	wine "C:\Program Files (x86)\Inno Setup 5\ISCC.exe" /cc "C:\installer-scripts\windows\windows.iss"
 	#if ( wine "C:\Program Files (x86)\Inno Setup 5\Compil32.exe" /cc "C:\installer-scripts\windows\windows.iss") then
