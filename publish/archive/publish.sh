@@ -169,7 +169,7 @@ run () {
 	
 		#cp $LIB 								$BUILD/bin/
 		cp $NRCONSOLE_JAR						        $BUILD/bin/
-		cp $START/NeuronRobotics.* 						$BUILD/bin/
+		cp $START/splash.* 						$BUILD/bin/
 		#rsync -avtP --exclude=.svn* $TL/$NRSDK/target/docs 		$BUILD/java/
 		#cp $START/index.html 							$BUILD/java/docs/api/
 		#rsync -avtP --exclude=.svn* $TL/$NRSDK/target/docs				$DIST/java
@@ -212,12 +212,7 @@ run () {
 		echo "Windows EXE exists $WINFINAL64 "
 		ls -al  $WINFINAL64
 	else
-		echo 'Linking build dirs for wine'
-		if (! test -e /home/hephaestus/.wine/drive_c/installer-scripts) then
-			ln -s $START/../installer-scripts 	$HOME/.wine/drive_c/
-			ln -s $START/../archive 			$HOME/.wine/drive_c/
-		fi
-		
+
 		echo Running wine
 		cd $WINBUILD/
 		bash prep.sh $STUDIOVER

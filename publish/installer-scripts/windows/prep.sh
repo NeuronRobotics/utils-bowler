@@ -8,7 +8,13 @@ JVMDIR="${JVMIMG%%.*}"
 echo "Dir = $JVMDIR"
 if (! test -z "$VERSION" ) then
 	rm -rf $DIR
-	
+	START=$PWD/../../archive/ 	
+	if (! test -e /home/hephaestus/.wine/drive_c/installer-scripts) then
+		echo 'Linking build dirs for wine'
+		ln -s $START/../installer-scripts 	$HOME/.wine/drive_c/
+		ln -s $START/../archive 			$HOME/.wine/drive_c/
+	fi
+		
 	#cp -r BowlerStudio.app $DIR/
 	unzip -qq $PWD/../../archive/$VERSION/bowlerstudio-$VERSION.zip -d .
 

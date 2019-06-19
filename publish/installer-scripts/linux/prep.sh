@@ -103,11 +103,11 @@ if (! test -z "$VERSION" ) then
 		echo "\n" >> $BUILDIR/debian/changelog
 	
 		echo usr/share/bowlerstudio/BowlerStudio.jar $RDKINSTALL > debian/install
-		echo usr/share/bowlerstudio/NeuronRobotics.ico $RDKINSTALL >> debian/install
-		echo usr/share/bowlerstudio/NeuronRobotics.png $RDKINSTALL >> debian/install
+		echo usr/share/bowlerstudio/splash.ico $RDKINSTALL >> debian/install
+		echo usr/share/bowlerstudio/splash.png $RDKINSTALL >> debian/install
 		#echo usr/share/bowlerstudio/dyio-3.14.6.xml $RDKINSTALL >> debian/install
 		echo usr/bin/bowlerstudio /usr/bin/ >> debian/install
-		echo usr/share/bowlerstudio/NeuronRobotics.png /usr/share/themes/base/neuronrobotics/icons/ >> debian/install
+		echo usr/share/bowlerstudio/splash.png /usr/share/themes/base/neuronrobotics/icons/ >> debian/install
 		echo usr/share/bowlerstudio/BowlerStudio.desktop /usr/share/applications/ >> debian/install
 		echo usr/share/bowlerstudio/81-neuronrobotics.rules /etc/udev/rules.d/ >> debian/install
 		echo usr/share/doc/bowlerstudio/copyright /usr/share/doc/bowlerstudio/ >> debian/install
@@ -120,8 +120,8 @@ if (! test -z "$VERSION" ) then
 		
 		cp ~/git/BowlerStudio/debian/changelog $BUILDIR/debian/changelog
 		echo 'usr/share/bowlerstudio/BowlerStudio.jar' > debian/source/include-binaries
-		echo 'usr/share/bowlerstudio/NeuronRobotics.ico' >> debian/source/include-binaries
-		echo 'usr/share/bowlerstudio/NeuronRobotics.png' >> debian/source/include-binaries
+		echo 'usr/share/bowlerstudio/splash.ico' >> debian/source/include-binaries
+		echo 'usr/share/bowlerstudio/splash.png' >> debian/source/include-binaries
 		echo 'usr/share/doc/bowlerstudio/changelog.gz' >> debian/source/include-binaries
 		#sudo mv .bzr/ ../
 		#dpkg-source --commit --extend-diff-ignore="(^|/)(usr/share/bowlerstudio/.*\.jar)$"
