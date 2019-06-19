@@ -11,7 +11,7 @@ $PACKER    -version
 JVM_CONTENT="jvmcontents"
 echo "Dir = $JVMDIR packaged by: $PACKER"
 if (! test -z "$VERSION" ) then
-	rm -rf $DIR
+	
 	
 	#cp -r BowlerStudio.app $DIR/
 	unzip -qq $PWD/../../archive/$VERSION/bowlerstudio-$VERSION.zip -d .
@@ -81,4 +81,5 @@ if (! test -z "$VERSION" ) then
 	rm -rf mac-$VERSION.zip
 	zip  -qq -r mac-$VERSION.zip BowlerStudio.app/
 	echo "Zipping Done!"
+	rm -rf $DIR
 fi

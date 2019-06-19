@@ -35,9 +35,11 @@ if (! test -z "$VERSION" ) then
      --vmargs Xmx8G \
      --output BowlerStudioApp\
      --verbose
+    cp $DIR/LICENSE.txt .
 	cp splash.ico BowlerStudioApp/
 	echo Running wine
 	wine "C:\Program Files (x86)\Inno Setup 5\ISCC.exe" /cc "C:\installer-scripts\windows\windows.iss"
+	rm -rf $DIR
 	#if ( wine "C:\Program Files (x86)\Inno Setup 5\Compil32.exe" /cc "C:\installer-scripts\windows\windows.iss") then
 	#	echo wine ok
 	#else

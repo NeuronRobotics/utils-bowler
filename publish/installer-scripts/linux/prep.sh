@@ -189,5 +189,5 @@ if (! test -z "$VERSION" ) then
 			echo Done!
 		fi
 	fi
-
+	sudo rm -rf $BUILDIR
 fi
