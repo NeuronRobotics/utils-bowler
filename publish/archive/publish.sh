@@ -201,10 +201,10 @@ run () {
 		rm -rf $START/../installer-scripts/linux/*.zip
 		cp $ZIP $START/../installer-scripts/linux/
 		cd $START/../installer-scripts/linux/
-		sh prep.sh $STUDIOVER
 		if ( test -e $DIST/*.deb) then
 			rm $DIST/*.deb
 		fi
+		sh prep.sh $STUDIOVER
 		mv $START/../installer-scripts/linux/*$STUDIOVER*.deb $DEBFINAL
  	fi
 

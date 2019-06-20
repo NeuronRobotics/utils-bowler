@@ -175,7 +175,7 @@ if (! test -z "$VERSION" ) then
 			sudo dpkg --install bowlerstudio*.deb
 			sudo chown -R 1000:1000 $BUILDIR
 			ls -al /usr/bin/bowlerstudio
-			mv $START/bowlerstudio_$VERSION.deb $START/../../archive/$VERSION/Ubuntu-BowlerStudio-$VERSION.deb
+			mv bowlerstudio_$VERSION.deb Ubuntu-BowlerStudio-$VERSION.deb
 			echo "Cleaning up the directory.."
 			sudo rm -rf rdk
 			sudo rm -rf $START/bowlerstudio*
