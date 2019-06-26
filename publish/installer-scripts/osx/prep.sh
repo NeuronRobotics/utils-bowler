@@ -60,6 +60,7 @@ if (! test -z "$VERSION" ) then
 #			   -outfile BowlerStudio.app
 	echo "Second packer"
 	rm -rf BowlerStudio.app/
+	cp -R BowlerStudio-example.app/ BowlerStudio.app/
 	echo runing packr from https://github.com/libgdx/packr/
 	java -jar packr.jar \
      --platform mac \
@@ -68,7 +69,7 @@ if (! test -z "$VERSION" ) then
      --classpath $DIR/bin/BowlerStudio.jar \
      --mainclass com.neuronrobotics.bowlerstudio.BowlerStudio \
      --vmargs Xmx8G \
-     --icon $DIR/bin/NeuronRobotics.ico \
+     --icon splash.icns \
      --output BowlerStudio.app\
      --verbose
     #rm  BowlerStudio.app/Contents/MacOS/BowlerStudio
