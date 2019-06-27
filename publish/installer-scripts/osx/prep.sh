@@ -68,7 +68,7 @@ if (! test -z "$VERSION" ) then
      --executable BowlerStudio \
      --classpath $DIR/bin/BowlerStudio.jar \
      --mainclass com.neuronrobotics.bowlerstudio.BowlerStudio \
-     --vmargs Xmx8G \
+     --vmargs Xmx2G \
      --icon splash.icns \
      --output BowlerStudio.app\
      --verbose
