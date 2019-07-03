@@ -232,6 +232,7 @@ run () {
 	
 	cd $START/
 	sed -e s/VER/"$STUDIOVER"/g $START/index_template.md >$START/index.md
+	sed -e s/KERN/"$VERSION"/g $START/index.md >$START/index.md
 	cd $TL/CommonWealthRobotics.github.io/
 	git pull
 	cp $START/index.md $TL/CommonWealthRobotics.github.io/content/index.md
