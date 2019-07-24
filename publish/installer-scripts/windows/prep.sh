@@ -45,6 +45,7 @@ if (! test -z "$VERSION" ) then
 	cp splash.ico BowlerStudioApp/
         cp BowlerStudio.bat BowlerStudioApp/
 	cp BowlerStudio.vbs BowlerStudioApp/
+	rm BowlerStudioApp/BowlerStudio.exe
 	echo Running wine
 	wine "C:\Program Files (x86)\Inno Setup 5\ISCC.exe" /cc "C:\installer-scripts\windows\windows.iss"
 	rm -rf $DIR
