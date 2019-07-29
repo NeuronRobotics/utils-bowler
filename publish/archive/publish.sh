@@ -67,6 +67,7 @@ run () {
 		ln -s ~/gradle.properties .
 		
 		cd $TL/bowler-script-kernel/
+		./gradlew  --offline  shadowJar
 		./gradlew uploadArchives
 		
 	fi
