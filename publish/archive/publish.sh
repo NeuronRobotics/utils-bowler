@@ -114,7 +114,7 @@ run () {
 
 		./gradlew  --offline  shadowJar
 	fi
-	exit 0
+	#exit 0
 	if(! test -e $LIB) then
 		echo ERROR!! expected lib file: $LIB 
 		echo but none was found
