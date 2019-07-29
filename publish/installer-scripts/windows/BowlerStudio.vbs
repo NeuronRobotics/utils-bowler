@@ -6,7 +6,6 @@ Dim exeFullPath
 Set objFSO = CreateObject("Scripting.FileSystemObject")
 Set objFile = objFSO.GetFile(WScript.ScriptFullName)
 Set objFolder = objFile.ParentFolder 
-WScript.Echo objFolder 
 dim shell
 Set shell=createobject("wscript.shell")
 shell.CurrentDirectory =objFolder 
