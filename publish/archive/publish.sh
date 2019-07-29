@@ -108,38 +108,36 @@ run () {
 	cd $TL/$NRConsole/libraries/bowler-script-kernel/
 	#./gradlew uploadArchives
 	
+	cd $TL/$NRSDK/;
+	if(! test -e $LIB) then
+		echo No kernel $LIB, building...
 
+		./gradlew  --offline  shadowJar
+	fi
+	exit 0
+	if(! test -e $LIB) then
+		echo ERROR!! expected lib file: $LIB 
+		echo but none was found
+		exit 1
+	fi
+	cd $TL/$NRConsole/;
+	if( ! test -e $NRCONSOLE_JAR_FAT) then
+		echo No application $NRCONSOLE_JAR_FAT, building...
+		rm -rf $BOWLERSTUDIO_LOCATION/*.jar
+		./gradlew  --offline  shadowJar
+	fi
+	if( ! test -e $NRCONSOLE_JAR_FAT) then
+		echo ERROR!! expected lib file: $NRCONSOLE_JAR_FAT
+		exit 1
+	fi
 	cd $START
 	
 	if(test -e $DIST) then
 		echo build dir exists
 	else
 	
-	
-	
-	
 		#Build all depandancies
-		cd $TL/$NRSDK/;
-		if(! test -e $LIB) then
-			echo No kernel $LIB, building...
 
-			./gradlew  --offline  shadowJar
-		fi
-		if(! test -e $LIB) then
-			echo ERROR!! expected lib file: $LIB 
-			echo but none was found
-			exit 1
-		fi
-		cd $TL/$NRConsole/;
-		if( ! test -e $NRCONSOLE_JAR_FAT) then
-			echo No application $NRCONSOLE_JAR_FAT, building...
-			rm -rf $BOWLERSTUDIO_LOCATION/*.jar
-			./gradlew  --offline  shadowJar
-		fi
-		if( ! test -e $NRCONSOLE_JAR_FAT) then
-			echo ERROR!! expected lib file: $NRCONSOLE_JAR_FAT
-			exit 1
-		fi
 		rm -rf $NRCONSOLE_JAR
 		
 		cp $NRCONSOLE_JAR_FAT $NRCONSOLE_JAR
