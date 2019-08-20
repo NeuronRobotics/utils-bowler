@@ -51,26 +51,35 @@ Name: {commondesktop}\BowlerStudio; Filename: {app}\BowlerStudioApp\BowlerStudio
 // Utility functions for Inno Setup
 //   used to add/remove programs from the windows firewall rules
 // Code originally from http://news.jrsoftware.org/news/innosetup/msg43799.html
+// https://www.activexperts.com/admin/vbscript-collection/networking/windowsfirewall/
 
-procedure SetFirewallException(AppName,FileName:string);
+procedure setfirewallexception(appname,filename:string);
 var
-  FirewallObject: Variant;
-  FirewallManager: Variant;
-  FirewallProfile: Variant;
+  firewallobject: variant;
+  firewallmanager: variant;
+  firewallprofile: variant;
+  objPolicy:       variant;
+  objProfile:      variant;
 begin
   try
-    FirewallObject := CreateOleObject('HNetCfg.FwAuthorizedApplication');
-    FirewallObject.ProcessImageFileName := FileName;
-    FirewallObject.Name := AppName;
-    FirewallObject.Scope := 0;
-    FirewallObject.IpVersion := 2;
-    FirewallObject.Enabled := True;
-    FirewallManager := CreateOleObject('HNetCfg.FwMgr');
-    FirewallProfile := FirewallManager.LocalPolicy.CurrentProfile;
-    FirewallProfile.AuthorizedApplications.Add(FirewallObject);
+    firewallobject := createoleobject('hnetcfg.fwauthorizedapplication');
+    firewallobject.processimagefilename := filename;
+    firewallobject.name := appname;
+    firewallobject.scope := 0;
+    firewallobject.ipversion := 2;
+    firewallobject.enabled := true;
+    firewallmanager := createoleobject('hnetcfg.fwmgr');
+    objPolicy := firewallmanager.LocalPolicy
+    objProfile := objPolicy.GetProfileByType(1)
+
+    firewallprofile := firewallmanager.localpolicy.currentprofile;
+    firewallprofile.authorizedapplications.add(firewallobject);
+    objProfile.AuthorizedApplications.Add(firewallobject);
+    
   except
   end;
 end;
+
 
 procedure RemoveFirewallException( FileName:string );
 var
@@ -102,14 +111,14 @@ end;
 procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
 begin
   if CurUninstallStep=usPostUninstall then
-     SetFirewallException('BowlerStudioBAT', ExpandConstant('{app}\')+'\BowlerStudioApp\BowlerStudio.vbs');
+     RemoveFirewallException( ExpandConstant('{app}\')+'\BowlerStudioApp\BowlerStudio.vbs');
   if CurUninstallStep=usPostUninstall then
-     SetFirewallException('BowlerStudioBAT', ExpandConstant('{app}\')+'\BowlerStudioApp\BowlerStudio.bat');
+     RemoveFirewallException( ExpandConstant('{app}\')+'\BowlerStudioApp\BowlerStudio.bat');
   if CurUninstallStep=usPostUninstall then
-     SetFirewallException('BowlerStudioEXE', ExpandConstant('{app}\')+'\BowlerStudioApp\BowlerStudio.exe');
+     RemoveFirewallException( ExpandConstant('{app}\')+'\BowlerStudioApp\BowlerStudio.exe');
   if CurUninstallStep=usPostUninstall then 
-     SetFirewallException('BowlerStudioJAVA', ExpandConstant('{app}\')+'\BowlerStudioApp\jre\bin\java.exe');
+     RemoveFirewallException( ExpandConstant('{app}\')+'\BowlerStudioApp\jre\bin\java.exe');
   if CurUninstallStep=usPostUninstall then 
-     SetFirewallException('BowlerStudioJAVAW', ExpandConstant('{app}\')+'\BowlerStudioApp\jre\bin\javaw.exe');
+     RemoveFirewallException( ExpandConstant('{app}\')+'\BowlerStudioApp\jre\bin\javaw.exe');
 end;
 
