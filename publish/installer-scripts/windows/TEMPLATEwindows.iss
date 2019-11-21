@@ -48,35 +48,59 @@ Name: {commondesktop}\BowlerStudio; Filename: {app}\BowlerStudioApp\BowlerStudio
 
 [Code]
 
-// Utility functions for Inno Setup
+// utility functions for inno setup
 //   used to add/remove programs from the windows firewall rules
-// Code originally from http://news.jrsoftware.org/news/innosetup/msg43799.html
-// https://www.activexperts.com/admin/vbscript-collection/networking/windowsfirewall/
-
-procedure setfirewallexception(appname,filename:string);
+// code originally from http://news.jrsoftware.org/news/innosetup/msg43799.html
+procedure setfirewallexceptionLocal(appname,filename:string);
 var
-  firewallobject: variant;
-  firewallmanager: variant;
-  firewallprofile: variant;
-  objPolicy:       variant;
-  objProfile:      variant;
+  objApplication: variant;
+  objFirewall: variant;
+  objPolicyLocal: variant;
+	objProfile: variant;
+	colApplications: variant; 
+	objPolicy: variant;
 begin
   try
-    firewallobject := createoleobject('hnetcfg.fwauthorizedapplication');
-    firewallobject.processimagefilename := filename;
-    firewallobject.name := appname;
-    firewallobject.scope := 0;
-    firewallobject.ipversion := 2;
-    firewallobject.enabled := true;
-    firewallmanager := createoleobject('hnetcfg.fwmgr');
-    objPolicy := firewallmanager.LocalPolicy
-    objProfile := objPolicy.GetProfileByType(1)
+    objApplication := createoleobject('hnetcfg.fwauthorizedapplication');
+    objApplication.processimagefilename := filename;
+    objApplication.name := appname;
+    objApplication.scope := 0;
+    objApplication.ipversion := 2;
+    objApplication.enabled := true;
+    objFirewall := createoleobject('hnetcfg.fwmgr');
+    //objFirewall.LocalPolicy.objPolicyLocal.GetProfileByType(1).AuthorizedApplications.Add(objApplication);
+    objPolicyLocal := objFirewall.localpolicy.currentprofile;
+    objPolicyLocal.authorizedapplications.add(objApplication);
+   except
+  end;
+end;
 
-    firewallprofile := firewallmanager.localpolicy.currentprofile;
-    firewallprofile.authorizedapplications.add(firewallobject);
-    objProfile.AuthorizedApplications.Add(firewallobject);
-    
-  except
+// utility functions for inno setup
+//   used to add/remove programs from the windows firewall rules
+// code originally from http://news.jrsoftware.org/news/innosetup/msg43799.html
+procedure setfirewallexception(appname,filename:string);
+var
+  objApplication: variant;
+  objFirewall: variant;
+  objPolicyLocal: variant;
+	objProfile: variant;
+	colApplications: variant; 
+	objPolicy: variant;
+begin
+  try
+    objApplication := createoleobject('hnetcfg.fwauthorizedapplication');
+    objApplication.processimagefilename := filename;
+    objApplication.name := appname;
+    objApplication.scope := 0;
+    objApplication.ipversion := 2;
+    objApplication.enabled := true;
+    objFirewall := createoleobject('hnetcfg.fwmgr');
+		objPolicy := objFirewall.LocalPolicy ;
+    objProfile := objPolicy.GetProfileByType(1) ;
+		colApplications := objProfile.AuthorizedApplications ;
+		colApplications.Add(objApplication) ;
+    setfirewallexceptionLocal(appname,filename);
+   except
   end;
 end;
 

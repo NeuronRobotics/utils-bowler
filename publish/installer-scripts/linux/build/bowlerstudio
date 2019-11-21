@@ -1,10 +1,34 @@
 #!/bin/bash
 
+JVERELEASE=zulu8.42.0.23-ca-fx-jdk8.0.232-linux_x64
+
+unzipifiy(){
+	testget 
+	echo "Unzipping $1 to $2"
+	tar -xzf $1.tar.gz -C $2
+	mv $2/$1/* $2/
+	rmdir $2/$1/
+}
+
+testget () {
+   if [ -f $JVERELEASE.tar.gz ]; then
+    	echo "$JVERELEASE.tar.gz exist"
+    else
+    	wget https://cdn.azul.com/zulu/bin/zulu8.42.0.23-ca-fx-jdk8.0.232-linux_x64.tar.gz
+    fi
+}
+
 NRDIR=/usr/share/bowlerstudio/
+JVMDIR=$HOME/bin/java8/
 JAR=BowlerStudio.jar
 
+if (! test -e $JVMDIR) then
+	mkdir -p $JVMDIR
+	unzipifiy $JVERELEASE $JVMDIR
+fi
 if (test -d $NRDIR)then
-	java -jar $NRDIR$JAR "$@"
+	echo $JVMDIR/jre/bin/java -jar $NRDIR$JAR "$@"
+	$JVMDIR/bin/java -jar $NRDIR$JAR "$@"
 else
 	zenity --error  --text="#ERROR: $JAR is not where i expect it to be, $NRDIR"
 fi
