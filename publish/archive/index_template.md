@@ -10,5 +10,6 @@ linInstaller: "https://github.com/CommonWealthRobotics/BowlerStudio/releases/dow
 macInstaller: "https://github.com/CommonWealthRobotics/BowlerStudio/releases/download/VER/MacOSX-BowlerStudio-VER.zip"
 kernelJAR:    "https://github.com/CommonWealthRobotics/BowlerStudio/releases/download/VER/BowlerScriptingKernel-KERN-fat.jar"
 studioJar:    "https://github.com/CommonWealthRobotics/BowlerStudio/releases/download/VER/BowlerStudio.jar"
+studioScript:    "https://github.com/CommonWealthRobotics/BowlerStudio/releases/download/VER/bowlerstudio"
 ---
 
