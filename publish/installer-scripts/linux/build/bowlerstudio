@@ -1,5 +1,7 @@
 #!/bin/bash
 
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
 #https://cdn.azul.com/zulu/bin/zulu8.42.0.23-ca-fx-jre8.0.232-linux_x64.tar.gz
 #JVERELEASE=zulu8.42.0.23-ca-fx-jdk8.0.232-linux_x64
 JVERELEASE=zulu8.42.0.23-ca-fx-jre8.0.232-linux_x64
@@ -63,6 +65,25 @@ fi
 BOWLERVERSION=$(cat $CURRENTVERSION)
 NRDIR=$BOWLERROOT/$BOWLERVERSION/
 MYJAR=$NRDIR$JAR
+
+if [ "$DIR" != "$BOWLERROOT" ]; then
+	echo copy script to $BOWLERROOT from $DIR
+	if ( ! test -e $BOWLERROOT/bowlerstudio )then
+		cp $DIR/bowlerstudio $BOWLERROOT/bowlerstudio
+	fi
+	chmod +x $BOWLERROOT/bowlerstudio
+	GREPFORPATH=$(grep  $BOWLERROOT ~/.bashrc)
+	if [[ $GREPFORPATH == *$BOWLERROOT* ]]; then
+		echo "Path is in ~/.bashrc"
+	else
+		echo $BOWLERROOT missing from $HOME/.bashrc
+		echo PATH=\$PATH:$BOWLERROOT >>$HOME/.bashrc
+		source $HOME/.bashrc
+	fi
+else
+	echo Running from $DIR
+fi
+
 if ( ! test -e $MYJAR )then
 	rm $CURRENTVERSION 
 	rm $DONTASKAGAIN
@@ -70,5 +91,6 @@ if ( ! test -e $MYJAR )then
 else
 	echo $JVMDIR/jre/bin/java -jar $NRDIR$JAR "$@"
 	$JVMDIR/bin/java -jar $NRDIR$JAR "$@"
-
 fi
+
+
