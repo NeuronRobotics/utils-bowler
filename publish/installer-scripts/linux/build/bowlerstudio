@@ -31,7 +31,7 @@ JVMDIR=$HOME/bin/java8/
 JAR=BowlerStudio.jar
 
 if (! test -e $JVMDIR) then
-	mkdir -p $JVMDIR
+	mkdir -P $JVMDIR
 	unzipifiy $JVERELEASE $JVMDIR
 fi
 if ( ! test -e $DONTASKAGAIN ) then
@@ -40,7 +40,7 @@ if ( ! test -e $DONTASKAGAIN ) then
 			zenity --question --text="A new Version of BowlerStudio is availible, would you like to download it?"
 		fi
 		if [ $? = 0 ]; then
-			mkdir -p $HOME/bin/bowlerstudio/$BOWLERVERSION/
+			mkdir -P $HOME/bin/bowlerstudio/$BOWLERVERSION/
 			echo wget https://github.com/CommonWealthRobotics/BowlerStudio/releases/download/$BOWLERVERSION/$JAR  -O $NRDIR$JAR
 			wget https://github.com/CommonWealthRobotics/BowlerStudio/releases/download/$BOWLERVERSION/$JAR  -O $NRDIR$JAR
 			echo $BOWLERVERSION >$CURRENTVERSION
