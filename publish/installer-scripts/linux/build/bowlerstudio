@@ -1,11 +1,12 @@
 #!/bin/bash
 
 JVERELEASE=zulu8.42.0.23-ca-fx-jdk8.0.232-linux_x64
+BOWLERVERSION=$(curl -s https://api.github.com/repos/CommonWealthRobotics/BowlerStudio/releases/latest | grep "tag_name"| cut -d : -f2|tr -d \" |tr -d ,|tr -d ' ')
 
 unzipifiy(){
-	testget 
+	testget  $1 $2
 	echo "Unzipping $1 to $2"
-	tar -xzf $1.tar.gz -C $2
+	tar -xzf $2/$1.tar.gz -C $2
 	mv $2/$1/* $2/
 	rmdir $2/$1/
 }
@@ -14,11 +15,14 @@ testget () {
    if [ -f $JVERELEASE.tar.gz ]; then
     	echo "$JVERELEASE.tar.gz exist"
     else
-    	wget https://cdn.azul.com/zulu/bin/zulu8.42.0.23-ca-fx-jdk8.0.232-linux_x64.tar.gz
+    	wget https://cdn.azul.com/zulu/bin/zulu8.42.0.23-ca-fx-jdk8.0.232-linux_x64.tar.gz  -O $2$1.tar.gz
     fi
 }
 
-NRDIR=/usr/share/bowlerstudio/
+
+NRDIR=$HOME/bin/bowlerstudio/$BOWLERVERSION/
+DONTASKAGAIN=$HOME/bin/bowlerstudio/dontaskagain.txt
+CURRENTVERSION=$HOME/bin/bowlerstudio/currentversion.txt
 JVMDIR=$HOME/bin/java8/
 JAR=BowlerStudio.jar
 
@@ -26,9 +30,35 @@ if (! test -e $JVMDIR) then
 	mkdir -p $JVMDIR
 	unzipifiy $JVERELEASE $JVMDIR
 fi
-if (test -d $NRDIR)then
+if ( ! test -e $DONTASKAGAIN ) then
+	if (! test -e $NRDIR$JAR)then
+		if ( test -e $CURRENTVERSION ) then
+			zenity --question --text="A new Version of BowlerStudio is availible, would you like to download it?"
+		fi
+		if [ $? = 0 ]; then
+			mkdir -p $HOME/bin/bowlerstudio/$BOWLERVERSION/
+			echo wget https://github.com/CommonWealthRobotics/BowlerStudio/releases/download/$BOWLERVERSION/$JAR  -O $NRDIR$JAR
+			wget https://github.com/CommonWealthRobotics/BowlerStudio/releases/download/$BOWLERVERSION/$JAR  -O $NRDIR$JAR
+			echo $BOWLERVERSION >$CURRENTVERSION
+		else
+			touch $DONTASKAGAIN
+			echo "Ok geez..." > $DONTASKAGAIN	
+		fi
+	fi
+else
+	echo "Skipping update check because $DONTASKAGAIN exists"
+fi
+
+
+BOWLERVERSION=$(cat $CURRENTVERSION)
+NRDIR=$HOME/bin/bowlerstudio/$BOWLERVERSION/
+MYJAR=$NRDIR$JAR
+if ( ! test -e $MYJAR )then
+	rm $CURRENTVERSION 
+	rm $DONTASKAGAIN
+	zenity --error --text="Jar Missing! Cleaning up, Try again!"
+else
 	echo $JVMDIR/jre/bin/java -jar $NRDIR$JAR "$@"
 	$JVMDIR/bin/java -jar $NRDIR$JAR "$@"
-else
-	zenity --error  --text="#ERROR: $JAR is not where i expect it to be, $NRDIR"
+
 fi
