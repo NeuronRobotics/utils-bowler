@@ -15,7 +15,8 @@ testget () {
    if [ -f $JVERELEASE.tar.gz ]; then
     	echo "$JVERELEASE.tar.gz exist"
     else
-    	wget https://cdn.azul.com/zulu/bin/zulu8.42.0.23-ca-fx-jdk8.0.232-linux_x64.tar.gz  -O $2$1.tar.gz
+	echo downloading https://cdn.azul.com/zulu/bin/$JVERELEASE.tar.gz
+    	wget https://cdn.azul.com/zulu/bin/$JVERELEASE.tar.gz  -O $2$1.tar.gz
     fi
 }
 
