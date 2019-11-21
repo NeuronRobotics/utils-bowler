@@ -23,15 +23,20 @@ testget () {
     fi
 }
 
-
-NRDIR=$HOME/bin/bowlerstudio/$BOWLERVERSION/
-DONTASKAGAIN=$HOME/bin/bowlerstudio/$BOWLERVERSION.txt
-CURRENTVERSION=$HOME/bin/bowlerstudio/currentversion.txt
+BOWLERROOT=$HOME/bin/BowlerStudioInstall/
+NRDIR=$BOWLERROOT/$BOWLERVERSION/
+DONTASKAGAIN=$BOWLERROOT/$BOWLERVERSION.txt
+CURRENTVERSION=$BOWLERROOT/currentversion.txt
 JVMDIR=$HOME/bin/java8/
 JAR=BowlerStudio.jar
 
+echo root $BOWLERROOT
+echo latest = $NRDIR
+echo current = $(cat $CURRENTVERSION)
+mkdir -p $BOWLERROOT
+
 if (! test -e $JVMDIR) then
-	mkdir -P $JVMDIR
+	mkdir -p $JVMDIR
 	unzipifiy $JVERELEASE $JVMDIR
 fi
 if ( ! test -e $DONTASKAGAIN ) then
@@ -40,7 +45,8 @@ if ( ! test -e $DONTASKAGAIN ) then
 			zenity --question --text="A new Version of BowlerStudio is availible, would you like to download it?"
 		fi
 		if [ $? = 0 ]; then
-			mkdir -P $HOME/bin/bowlerstudio/$BOWLERVERSION/
+			echo mkdir -p $NRDIR
+			mkdir -p $NRDIR
 			echo wget https://github.com/CommonWealthRobotics/BowlerStudio/releases/download/$BOWLERVERSION/$JAR  -O $NRDIR$JAR
 			wget https://github.com/CommonWealthRobotics/BowlerStudio/releases/download/$BOWLERVERSION/$JAR  -O $NRDIR$JAR
 			echo $BOWLERVERSION >$CURRENTVERSION
@@ -55,7 +61,7 @@ fi
 
 
 BOWLERVERSION=$(cat $CURRENTVERSION)
-NRDIR=$HOME/bin/bowlerstudio/$BOWLERVERSION/
+NRDIR=$BOWLERROOT/$BOWLERVERSION/
 MYJAR=$NRDIR$JAR
 if ( ! test -e $MYJAR )then
 	rm $CURRENTVERSION 
