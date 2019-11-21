@@ -226,8 +226,7 @@ run () {
 	java -jar GithubPublish.jar BowlerStudio CommonWealthRobotics $STUDIOVER $DEBFINAL 
 	java -jar GithubPublish.jar BowlerStudio CommonWealthRobotics $STUDIOVER $MACFINAL 
 	java -jar GithubPublish.jar BowlerStudio CommonWealthRobotics $STUDIOVER $WINFINAL64 
-	
-
+	java -jar GithubPublish.jar BowlerStudio CommonWealthRobotics $STUDIOVER $START/../installer-scripts/linux/build/bowlerstudio
 	
 	cd $START/
 	bash updateVersion.sh $STUDIOVER $VERSION
