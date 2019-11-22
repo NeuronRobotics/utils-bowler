@@ -5,6 +5,9 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 #https://cdn.azul.com/zulu/bin/zulu8.42.0.23-ca-fx-jre8.0.232-linux_x64.tar.gz
 #JVERELEASE=zulu8.42.0.23-ca-fx-jdk8.0.232-linux_x64
 JVERELEASE=zulu8.42.0.23-ca-fx-jre8.0.232-linux_x64
+if [ ! $(which curl) ] ; then
+	sudo apt install curl
+fi
 BOWLERVERSION=$(curl -s https://api.github.com/repos/CommonWealthRobotics/BowlerStudio/releases/latest | grep "tag_name"| cut -d : -f2|tr -d \" |tr -d ,|tr -d ' ')
 
 unzipifiy(){
@@ -45,6 +48,7 @@ if ( ! test -e $DONTASKAGAIN ) then
 	if (! test -e $NRDIR$JAR)then
 		if ( test -e $CURRENTVERSION ) then
 			zenity --question --text="A new Version of BowlerStudio is availible, would you like to download it?"
+
 		fi
 		if [ $? = 0 ]; then
 			echo mkdir -p $NRDIR
@@ -65,24 +69,6 @@ fi
 BOWLERVERSION=$(cat $CURRENTVERSION)
 NRDIR=$BOWLERROOT/$BOWLERVERSION/
 MYJAR=$NRDIR$JAR
-
-if [ "$DIR" != "$BOWLERROOT" ]; then
-	echo copy script to $BOWLERROOT from $DIR
-	if ( ! test -e $BOWLERROOT/bowlerstudio )then
-		cp $DIR/bowlerstudio $BOWLERROOT/bowlerstudio
-	fi
-	chmod +x $BOWLERROOT/bowlerstudio
-	GREPFORPATH=$(grep  $BOWLERROOT ~/.bashrc)
-	if [[ $GREPFORPATH == *$BOWLERROOT* ]]; then
-		echo "Path is in ~/.bashrc"
-	else
-		echo $BOWLERROOT missing from $HOME/.bashrc
-		echo PATH=\$PATH:$BOWLERROOT >>$HOME/.bashrc
-		source $HOME/.bashrc
-	fi
-else
-	echo Running from $DIR
-fi
 
 if ( ! test -e $MYJAR )then
 	rm $CURRENTVERSION 
