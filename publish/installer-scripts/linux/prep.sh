@@ -119,14 +119,10 @@ if (! test -z "$VERSION" ) then
 		#place the change log in the build dir
 		
 		cp ~/git/BowlerStudio/debian/changelog $BUILDIR/debian/changelog
-		echo 'usr/share/bowlerstudio/BowlerStudio.jar' > debian/source/include-binaries
+		#echo 'usr/share/bowlerstudio/BowlerStudio.jar' > debian/source/include-binaries
 		echo 'usr/share/themes/base/bowlerstudio/icons/splash.png' >> debian/source/include-binaries
 		echo 'usr/share/doc/bowlerstudio/changelog.gz' >> debian/source/include-binaries
-		#sudo mv .bzr/ ../
-		#dpkg-source --commit --extend-diff-ignore="(^|/)(usr/share/bowlerstudio/.*\.jar)$"
-		#dpkg-source --commit --extend-diff-ignore="(^|/)(usr/share/bowlerstudio/.*\.ico)$"
-		#dpkg-source --commit --extend-diff-ignore="(^|/)(usr/share/bowlerstudio/.*\.png)$"
-		#
+
 		find debian/ -type d -exec  chmod 755 {} \;
 		find debian/ -type f -exec  chmod 644 {} \;
 		cd $BUILDIR
