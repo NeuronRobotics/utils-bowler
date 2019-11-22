@@ -68,7 +68,8 @@ if (! test -z "$VERSION" ) then
 	find $START/rdk/ -type d -exec  chmod 755 {} \;
 	find $START/rdk/ -type f -exec  chmod 644 {} \;
 	chmod +x usr/bin/bowlerstudio
-	chmod +x usr/share/bowlerstudio/BowlerStudio.jar
+	#chmod +x usr/share/bowlerstudio/BowlerStudio.jar
+	rm usr/share/bowlerstudio/BowlerStudio.jar
 	chmod +x usr/share/applications/BowlerStudio.desktop
 	tar -czf $TARBALL -C $START/rdk/ . --exclude-vcs --exclude=.DS_Store --exclude=__MACOSX
 	cd $START
@@ -104,7 +105,7 @@ if (! test -z "$VERSION" ) then
 		
 		echo "\n" >> $BUILDIR/debian/changelog
 	
-		echo usr/share/bowlerstudio/BowlerStudio.jar $RDKINSTALL > debian/install
+		#echo usr/share/bowlerstudio/BowlerStudio.jar $RDKINSTALL > debian/install
 		echo usr/bin/bowlerstudio /usr/bin/ >> debian/install
 		echo usr/share/themes/base/bowlerstudio/icons/splash.png /usr/share/themes/base/bowlerstudio/icons/ >> debian/install
 		echo usr/share/applications/BowlerStudio.desktop /usr/share/applications/ >> debian/install
