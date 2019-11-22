@@ -6,9 +6,7 @@ Maintainer: Customer Support <mad.hephaestus@gmail.com>
 Homepage: http://CommonwealthRobotics.com/
 Build-Depends: make,autotools-dev, bash-completion, debhelper (>= 8.0.0) | debhelper (>= 9.0.0)
 Version: BOWLERVERSION
-Depends:  make, openjfx (<=8u161-b12-1ubuntu2) ,openjdk-8-jdk,libopenjfx-java (<=8u161-b12-1ubuntu2), libopenjfx-jni (<=8u161-b12-1ubuntu2)
+Depends:  curl
 Provides: bowlerstudio
-Conflicts: modemmanager,nr-rdk-java,openjdk-9-jdk,openjdk-10-jdk,openjdk-11-jdk,openjdk-12-jdk,openjdk-13-jdk
-Replaces: modemmanager,nr-rdk-java
 Description: A Robotics IDE designed to ramp up knowledge of how to design systems for distributed production. 
  Detailed description at https://github.com/CommonwealthRobotics/BowlerStudio/blob/master/README.md
