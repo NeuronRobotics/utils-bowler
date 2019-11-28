@@ -67,8 +67,8 @@ run () {
 		ln -s ~/gradle.properties .
 		
 		cd $TL/bowler-script-kernel/
-		./gradlew  --offline  shadowJar
-		./gradlew uploadArchives
+		env JAVA_HOME=/home/hephaestus/bin/java8/jre/ ./gradlew  --offline  shadowJar
+		env JAVA_HOME=/home/hephaestus/bin/java8/jre/ ./gradlew uploadArchives
 		
 	fi
 	cd $TL/$NRSDK/ 
@@ -106,13 +106,13 @@ run () {
 	git submodule update  --recursive
 	
 	cd $TL/$NRConsole/libraries/bowler-script-kernel/
-	#./gradlew uploadArchives
+	#env JAVA_HOME=/home/hephaestus/bin/java8/jre/ ./gradlew uploadArchives
 	
 	cd $TL/$NRSDK/;
 	if(! test -e $LIB) then
 		echo No kernel $LIB, building...
 
-		./gradlew  --offline  shadowJar
+		env JAVA_HOME=/home/hephaestus/bin/java8/jre/ ./gradlew  --offline  shadowJar
 	fi
 	#exit 0
 	if(! test -e $LIB) then
@@ -124,7 +124,7 @@ run () {
 	if( ! test -e $NRCONSOLE_JAR_FAT) then
 		echo No application $NRCONSOLE_JAR_FAT, building...
 		rm -rf $BOWLERSTUDIO_LOCATION/*.jar
-		./gradlew  --offline  shadowJar
+		env JAVA_HOME=/home/hephaestus/bin/java8/jre/ ./gradlew  --offline  shadowJar
 	fi
 	if( ! test -e $NRCONSOLE_JAR_FAT) then
 		echo ERROR!! expected lib file: $NRCONSOLE_JAR_FAT
