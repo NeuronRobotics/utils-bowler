@@ -221,12 +221,12 @@ run () {
 	
 	cd $START/
 	echo "Begin uploading binaries" 
-	java -jar GithubPublish.jar BowlerStudio CommonWealthRobotics $STUDIOVER $NRCONSOLE_JAR
-	java -jar GithubPublish.jar BowlerStudio CommonWealthRobotics $STUDIOVER $LIB
-	java -jar GithubPublish.jar BowlerStudio CommonWealthRobotics $STUDIOVER $DEBFINAL 
-	java -jar GithubPublish.jar BowlerStudio CommonWealthRobotics $STUDIOVER $MACFINAL 
-	java -jar GithubPublish.jar BowlerStudio CommonWealthRobotics $STUDIOVER $WINFINAL64 
-	java -jar GithubPublish.jar BowlerStudio CommonWealthRobotics $STUDIOVER $START/../installer-scripts/linux/build/bowlerstudio
+	$JAVA_HOME/bin/java -jar GithubPublish.jar BowlerStudio CommonWealthRobotics $STUDIOVER $NRCONSOLE_JAR
+	$JAVA_HOME/bin/java -jar GithubPublish.jar BowlerStudio CommonWealthRobotics $STUDIOVER $LIB
+	$JAVA_HOME/bin/java -jar GithubPublish.jar BowlerStudio CommonWealthRobotics $STUDIOVER $DEBFINAL 
+	$JAVA_HOME/bin/java -jar GithubPublish.jar BowlerStudio CommonWealthRobotics $STUDIOVER $MACFINAL 
+	$JAVA_HOME/bin/java -jar GithubPublish.jar BowlerStudio CommonWealthRobotics $STUDIOVER $WINFINAL64 
+	$JAVA_HOME/bin/java -jar GithubPublish.jar BowlerStudio CommonWealthRobotics $STUDIOVER $START/../installer-scripts/linux/build/bowlerstudio
 	
 	cd $START/
 	bash updateVersion.sh $STUDIOVER $VERSION
