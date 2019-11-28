@@ -32,7 +32,7 @@ if (! test -z "$VERSION" ) then
 	echo adding Bowler Studio For Windows
 	
 	
-	java -jar ../osx/packr.jar \
+	$JAVA_HOME/bin/java -jar ../osx/packr.jar \
      --platform windows64 \
      --jdk $JVMIMG \
      --executable BowlerStudio \

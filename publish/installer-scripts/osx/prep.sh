@@ -62,7 +62,7 @@ if (! test -z "$VERSION" ) then
 	rm -rf BowlerStudio.app/
 	cp -R BowlerStudio-example.app/ BowlerStudio.app/
 	echo runing packr from https://github.com/libgdx/packr/
-	java -jar packr.jar \
+	$JAVA_HOME/bin/java -jar packr.jar \
      --platform mac \
      --jdk jvm.zip \
      --executable BowlerStudio \
