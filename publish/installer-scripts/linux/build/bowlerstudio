@@ -75,6 +75,9 @@ if ( ! test -e $MYJAR )then
 	rm $DONTASKAGAIN
 	zenity --error --text="Jar Missing! Cleaning up, Try again!"
 else
+	rm -rf $BOWLERROOT/BowlerStudio-current.jar
+	ln -s $NRDIR$JAR $BOWLERROOT/BowlerStudio-current.jar
+	chmod +x $BOWLERROOT/BowlerStudio-current.jar
 	echo $JVMDIR/jre/bin/java -jar $NRDIR$JAR "$@"
 	$JVMDIR/bin/java -jar $NRDIR$JAR "$@"
 fi
