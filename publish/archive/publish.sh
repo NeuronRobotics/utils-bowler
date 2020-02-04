@@ -72,11 +72,11 @@ run () {
 		
 	fi
 	cd $TL/$NRSDK/ 
-	git fetch --tags
+	git pull --tags
 	echo "   Checking out version"
 	if(! git checkout tags/$VERSION); then
 		git tag -l
-		echo "$NRSDK $VERSION Is not taged yet"
+		echo "Kernel $NRSDK $VERSION Is not taged yet"
 		exit 1;
 	fi
 	echo "   Checking out master"
@@ -99,7 +99,7 @@ run () {
 	git pull origin development
 	if(! git checkout $STUDIOVER); then
 		git tag -l
-		echo "NRConsole $STUDIOVER Is not taged yet"
+		echo "BowlerStudio $STUDIOVER Is not taged yet"
 		exit 1;
 	fi
 	git submodule update --init --recursive
