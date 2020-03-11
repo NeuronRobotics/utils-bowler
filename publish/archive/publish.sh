@@ -131,7 +131,7 @@ run () {
 		exit 1
 	fi
 	cd $START
-	
+
 	if(test -e $DIST) then
 		echo build dir exists
 	else
@@ -177,7 +177,10 @@ run () {
 		cd $DIST
 		zip -qq -r $ZIP $BUILDLOCAL
 	fi
-
+	echo "Begin uploading JAR" 
+	cd $START/
+	echo "Begin uploading binaries" 
+	$JAVA_HOME/bin/java -jar GithubPublish.jar BowlerStudio CommonWealthRobotics $STUDIOVER $NRCONSOLE_JAR
 
 	if (test -s "$MACFINAL" ) then
 		echo "MAC OSX .zip exists $MACFINAL" 
@@ -221,7 +224,7 @@ run () {
 	
 	cd $START/
 	echo "Begin uploading binaries" 
-	$JAVA_HOME/bin/java -jar GithubPublish.jar BowlerStudio CommonWealthRobotics $STUDIOVER $NRCONSOLE_JAR
+	#$JAVA_HOME/bin/java -jar GithubPublish.jar BowlerStudio CommonWealthRobotics $STUDIOVER $NRCONSOLE_JAR
 	$JAVA_HOME/bin/java -jar GithubPublish.jar BowlerStudio CommonWealthRobotics $STUDIOVER $LIB
 	$JAVA_HOME/bin/java -jar GithubPublish.jar BowlerStudio CommonWealthRobotics $STUDIOVER $DEBFINAL 
 	$JAVA_HOME/bin/java -jar GithubPublish.jar BowlerStudio CommonWealthRobotics $STUDIOVER $MACFINAL 
