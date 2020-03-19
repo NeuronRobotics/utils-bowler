@@ -8,7 +8,6 @@ JVERELEASE=zulu8.44.0.13-ca-fx-jdk8.0.242-linux_x64
 if [ ! $(which curl) ] ; then
 	sudo apt install curl
 fi
-BOWLERVERSION=$(curl -s https://api.github.com/repos/CommonWealthRobotics/BowlerStudio/releases/latest | grep "tag_name"| cut -d : -f2|tr -d \" |tr -d ,|tr -d ' ')
 
 unzipifiy(){
 	testget  $1 $2
@@ -28,10 +27,7 @@ testget () {
     fi
 }
 
-BOWLERROOT=$HOME/bin/BowlerStudioInstall/
-NRDIR=$BOWLERROOT/$BOWLERVERSION/
-DONTASKAGAIN=$BOWLERROOT/$BOWLERVERSION.txt
-CURRENTVERSION=$BOWLERROOT/currentversion.txt
+
 JVMDIR=$HOME/bin/java8/
 JAR=BowlerStudio.jar
 AUTOUPDATE=$JVMDIR/LatestFromGithubLaunch.jar

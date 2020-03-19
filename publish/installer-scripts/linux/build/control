@@ -10,7 +10,6 @@ Build-Depends: make,autotools-dev, bash-completion, debhelper (>= 8.0.0) | debhe
 Package: bowlerstudio
 Section: utils
 Architecture: all
-Depends:  curl
 Provides: bowlerstudio
 Description: A Robotics IDE designed to ramp up knowledge of how to design systems for distributed production. 
  Detailed description at https://github.com/CommonWealthRobotics/BowlerStudio/blob/master/README.md

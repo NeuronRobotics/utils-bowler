@@ -6,7 +6,6 @@ Maintainer: Customer Support <mad.hephaestus@gmail.com>
 Homepage: http://CommonwealthRobotics.com/
 Build-Depends: make,autotools-dev, bash-completion, debhelper (>= 8.0.0) | debhelper (>= 9.0.0)
 Version: BOWLERVERSION
-Depends:  curl
 Provides: bowlerstudio
 Description: A Robotics IDE designed to ramp up knowledge of how to design systems for distributed production. 
  Detailed description at https://github.com/CommonwealthRobotics/BowlerStudio/blob/master/README.md
