@@ -34,6 +34,8 @@ DONTASKAGAIN=$BOWLERROOT/$BOWLERVERSION.txt
 CURRENTVERSION=$BOWLERROOT/currentversion.txt
 JVMDIR=$HOME/bin/java8/
 JAR=BowlerStudio.jar
+AUTOUPDATE=$JVMDIR/LatestFromGithubLaunch.jar
+
 
 echo root $BOWLERROOT
 echo latest = $NRDIR
@@ -45,42 +47,8 @@ if (! test -e $JVMDIR/$JVERELEASE.tar.gz) then
 	mkdir -p $JVMDIR
 	unzipifiy $JVERELEASE $JVMDIR
 fi
-if ( ! test -e $DONTASKAGAIN ) then
-	if (! test -e $NRDIR$JAR)then
-		if ( test -e $CURRENTVERSION ) then
-			zenity --question --text="A new Version of BowlerStudio is availible, would you like to download it?"
-
-		fi
-		if [ $? = 0 ]; then
-			echo mkdir -p $NRDIR
-			mkdir -p $NRDIR
-			echo wget https://github.com/CommonWealthRobotics/BowlerStudio/releases/download/$BOWLERVERSION/$JAR  -O $NRDIR$JAR
-			wget https://github.com/CommonWealthRobotics/BowlerStudio/releases/download/$BOWLERVERSION/$JAR  -O $NRDIR$JAR
-			echo $BOWLERVERSION >$CURRENTVERSION
-		else
-			touch $DONTASKAGAIN
-			echo "Ok geez..." > $DONTASKAGAIN	
-		fi
-	fi
-else
-	echo "Skipping update check because $DONTASKAGAIN exists"
+if (! test -e $AUTOUPDATE) then
+	wget https://github.com/CommonWealthRobotics/LatestFromGithubLaunch/releases/download/0.0.1/LatestFromGithubLaunch.jar -O $AUTOUPDATE
 fi
 
-
-BOWLERVERSION=$(cat $CURRENTVERSION)
-NRDIR=$BOWLERROOT/$BOWLERVERSION/
-MYJAR=$NRDIR$JAR
-
-if ( ! test -e $MYJAR )then
-	rm $CURRENTVERSION 
-	rm $DONTASKAGAIN
-	zenity --error --text="Jar Missing! Cleaning up, Try again!"
-else
-	rm -rf $BOWLERROOT/BowlerStudio-current.jar
-	ln -s $NRDIR$JAR $BOWLERROOT/BowlerStudio-current.jar
-	chmod +x $BOWLERROOT/BowlerStudio-current.jar
-	echo $JVMDIR/jre/bin/java -jar $NRDIR$JAR "$@"
-	$JVMDIR/bin/java -jar $NRDIR$JAR "$@"
-fi
-
-
+$JVMDIR/bin/java -jar $AUTOUPDATE CommonWealthRobotics BowlerStudio BowlerStudio.jar $JVMDIR/bin/java -jar 
