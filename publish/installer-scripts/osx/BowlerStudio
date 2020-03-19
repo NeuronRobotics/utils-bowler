@@ -4,4 +4,4 @@ DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 JAVA=$DIR/../Resources/jre/bin/java
 
-$JAVA -jar "$DIR/Resources/BowlerStudio.jar" 
+$JAVA -jar "$DIR/Resources/LatestFromGithubLaunch.jar"  CommonWealthRobotics BowlerStudio BowlerStudio.jar $JAVA -jar 

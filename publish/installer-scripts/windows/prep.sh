@@ -30,20 +30,23 @@ if (! test -z "$VERSION" ) then
 	sed -i s/CVARCH/x64/g windows.iss
 	sed -i s/JAVAARCH/HKLM64/g windows.iss
 	echo adding Bowler Studio For Windows
-	
+	AUTOUPDATE=$DIR/bin/LatestFromGithubLaunch.jar
+	if (! test -e $AUTOUPDATE) then
+		wget https://github.com/CommonWealthRobotics/LatestFromGithubLaunch/releases/download/0.0.1/LatestFromGithubLaunch.jar -O $AUTOUPDATE
+	fi
 	
 	$JAVA_HOME/bin/java -jar ../osx/packr.jar \
      --platform windows64 \
      --jdk $JVMIMG \
      --executable BowlerStudio \
-     --classpath $DIR/bin/BowlerStudio.jar \
-     --mainclass com.neuronrobotics.bowlerstudio.BowlerStudio \
+     --classpath $DIR/bin/LatestFromGithubLaunch.jar \
+     --mainclass LatestFromGithubLaunch.Main \
      --vmargs Xmx8G \
      --output BowlerStudioApp\
      --verbose
         cp $DIR/LICENSE.txt .
 	cp splash.ico BowlerStudioApp/
-        cp BowlerStudio.bat BowlerStudioApp/
+    cp BowlerStudio.bat BowlerStudioApp/
 	cp BowlerStudio.vbs BowlerStudioApp/
 	rm BowlerStudioApp/BowlerStudio.exe
 	echo Running wine

@@ -30,7 +30,7 @@ testget () {
 
 JVMDIR=$HOME/bin/java8/
 JAR=BowlerStudio.jar
-AUTOUPDATE=$JVMDIR/LatestFromGithubLaunch.jar
+AUTOUPDATE=$HOME/bin/java8/LatestFromGithubLaunch.jar
 
 
 echo root $BOWLERROOT

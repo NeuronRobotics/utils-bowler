@@ -66,15 +66,15 @@ if (! test -z "$VERSION" ) then
      --platform mac \
      --jdk jvm.zip \
      --executable BowlerStudio \
-     --classpath $DIR/bin/BowlerStudio.jar \
-     --mainclass com.neuronrobotics.bowlerstudio.BowlerStudio \
-     --vmargs Xmx2G \
+      --classpath $DIR/bin/LatestFromGithubLaunch.jar \
+     --mainclass LatestFromGithubLaunch.Main \
+     --vmargs Xmx8G \
      --icon splash.icns \
      --output BowlerStudio.app\
      --verbose
-    #rm  BowlerStudio.app/Contents/MacOS/BowlerStudio
-    #cp BowlerStudio BowlerStudio.app/Contents/MacOS/
-    #chmod -R +x BowlerStudio.app/
+    rm  BowlerStudio.app/Contents/MacOS/BowlerStudio
+    cp  BowlerStudio BowlerStudio.app/Contents/MacOS/
+    chmod  +x BowlerStudio.app/Contents/MacOS/BowlerStudio
     
     echo "Zipping ..."
 #    rm -rf mac-installer-$VERSION.zip
