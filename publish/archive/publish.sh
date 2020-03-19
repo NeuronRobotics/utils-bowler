@@ -73,12 +73,7 @@ run () {
 	fi
 	cd $TL/$NRSDK/ 
 	git pull --tags
-	echo "   Checking out version"
-	if(! git checkout tags/$VERSION); then
-		git tag -l
-		echo "Kernel $NRSDK $VERSION Is not taged yet"
-		exit 1;
-	fi
+
 	echo "   Checking out master"
 	git stash -m"build"
 	git checkout master
