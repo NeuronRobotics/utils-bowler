@@ -5,9 +5,6 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 #https://cdn.azul.com/zulu/bin/zulu8.42.0.23-ca-fx-jre8.0.232-linux_x64.tar.gz
 JVERELEASE=zulu8.44.0.13-ca-fx-jdk8.0.242-linux_x64
 #JVERELEASE=zulu8.42.0.23-ca-fx-jre8.0.232-linux_x64
-if [ ! $(which curl) ] ; then
-	sudo apt install curl
-fi
 
 unzipifiy(){
 	testget  $1 $2
@@ -31,12 +28,6 @@ testget () {
 JVMDIR=$HOME/bin/java8/
 JAR=BowlerStudio.jar
 AUTOUPDATE=$HOME/bin/java8/LatestFromGithubLaunch.jar
-
-
-echo root $BOWLERROOT
-echo latest = $NRDIR
-echo current = $(cat $CURRENTVERSION)
-mkdir -p $BOWLERROOT
 
 if (! test -e $JVMDIR/$JVERELEASE.tar.gz) then
     rm -rf $JVMDIR
