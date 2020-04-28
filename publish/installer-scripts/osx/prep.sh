@@ -3,7 +3,8 @@
 START=$PWD
 VERSION=$1
 DIR=bowlerstudio-$VERSION
-JVMDIR=zulu8.38.0.13-ca-fx-jdk8.0.212-macosx_x64
+#https://cdn.azul.com/zulu/bin/zulu8.46.0.19-ca-fx-jdk8.0.252-macosx_x64.tar.gz
+JVMDIR=zulu8.46.0.19-ca-fx-jdk8.0.252-macosx_x64
 JVMIMG=$JVMDIR.tar.gz
 
 PACKER=$JAVA_HOME/../bin/javapackager
@@ -75,6 +76,10 @@ if (! test -z "$VERSION" ) then
     rm  BowlerStudio.app/Contents/MacOS/BowlerStudio
     cp  BowlerStudio BowlerStudio.app/Contents/MacOS/
     chmod  +x BowlerStudio.app/Contents/MacOS/BowlerStudio
+    mkdir BowlerStudio.app/Contents/MacOS/Resources/
+    cp $DIR/bin/LatestFromGithubLaunch.jar BowlerStudio.app/Contents/MacOS/Resources/
+    chmod +x BowlerStudio.app/Contents/MacOS/Resources/LatestFromGithubLaunch.jar
+    chmod +x BowlerStudio.app/Contents/Resources/jre/lib/jspawnhelper
     
     echo "Zipping ..."
 #    rm -rf mac-installer-$VERSION.zip
