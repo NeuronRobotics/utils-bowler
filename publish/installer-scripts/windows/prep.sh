@@ -31,8 +31,9 @@ if (! test -z "$VERSION" ) then
 	sed -i s/JAVAARCH/HKLM64/g windows.iss
 	echo adding Bowler Studio For Windows
 	AUTOUPDATE=$DIR/bin/LatestFromGithubLaunch.jar
+	rm $AUTOUPDATE
 	if (! test -e $AUTOUPDATE) then
-		wget https://github.com/CommonWealthRobotics/LatestFromGithubLaunch/releases/download/0.0.1/LatestFromGithubLaunch.jar -O $AUTOUPDATE
+		wget https://github.com/CommonWealthRobotics/LatestFromGithubLaunch/releases/download/0.0.2/LatestFromGithubLaunch.jar -O $AUTOUPDATE
 	fi
 	
 	$JAVA_HOME/bin/java -jar ../osx/packr.jar \
