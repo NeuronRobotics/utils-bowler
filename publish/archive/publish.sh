@@ -4,8 +4,9 @@ START=$PWD
 
 VERSION=$1
 STUDIOVER=$2
+NOINST=$3
 
-echo "bash publish.sh <Kernel version > <Studio Version>"
+echo "bash publish.sh <Kernel version > <Studio Version> <NOINSTALL>"
 
 if( test -z "$STUDIOVER" ) then
 	echo #####ERROR no BowlerStudio version specified, I.E. 3.7.0
@@ -42,7 +43,7 @@ run () {
 	MACFINAL=$DIST/MacOSX-BowlerStudio-$STUDIOVER.zip
 	DEBFINAL=$DIST/Ubuntu-BowlerStudio-$STUDIOVER.deb
 	
-
+    rm -rf $TL/$NRSDK/
 	if(! test -d $TL/$NRSDK/); then  
 		cd $TL/;
 		git clone git@github.com:CommonWealthRobotics/bowler-script-kernel.git
@@ -176,7 +177,11 @@ run () {
 	cd $START/
 	echo "Begin uploading binaries" 
 	$JAVA_HOME/bin/java -jar GithubPublish.jar BowlerStudio CommonWealthRobotics $STUDIOVER $NRCONSOLE_JAR
-
+	$JAVA_HOME/bin/java -jar GithubPublish.jar BowlerStudio CommonWealthRobotics $STUDIOVER $LIB
+		
+	if( test -z "$NOINST" ) then
+		exit 0
+	fi
 	if (test -s "$MACFINAL" ) then
 		echo "MAC OSX .zip exists $MACFINAL" 
 		ls $MACFINAL
@@ -220,7 +225,7 @@ run () {
 	cd $START/
 	echo "Begin uploading binaries" 
 	#$JAVA_HOME/bin/java -jar GithubPublish.jar BowlerStudio CommonWealthRobotics $STUDIOVER $NRCONSOLE_JAR
-	$JAVA_HOME/bin/java -jar GithubPublish.jar BowlerStudio CommonWealthRobotics $STUDIOVER $LIB
+
 	$JAVA_HOME/bin/java -jar GithubPublish.jar BowlerStudio CommonWealthRobotics $STUDIOVER $DEBFINAL 
 	$JAVA_HOME/bin/java -jar GithubPublish.jar BowlerStudio CommonWealthRobotics $STUDIOVER $MACFINAL 
 	$JAVA_HOME/bin/java -jar GithubPublish.jar BowlerStudio CommonWealthRobotics $STUDIOVER $WINFINAL64 
